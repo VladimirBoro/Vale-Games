@@ -1,0 +1,47 @@
+.card {
+    width: 120px;
+    height: 170px;
+    position: relative;
+    perspective: 150px;
+    cursor: pointer;
+}
+
+.card_face {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+
+
+.card.is_flipped .card_face {
+    transform: rotateY(180deg);
+}
+
+.card_face_front {
+    border-radius: 0.1em;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    /* background-color: black; */
+    border: 1px aliceblue solid;
+    backface-visibility: hidden;
+    transform: rotateY( 180deg );
+    font: 3em Luminari;
+}
+
+.card_face_back {
+    border-radius: 0.25em;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    background: url("../imgs/card\ back\ black.png") no-repeat;
+    background-size: contain;
+    overflow: hidden;
+}

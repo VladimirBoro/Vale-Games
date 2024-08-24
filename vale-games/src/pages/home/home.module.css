@@ -1,0 +1,8 @@
+.gamesDisplay {
+    columns: 4;
+}
+
+.gamesDisplay li {
+    margin: 1em;
+}
+

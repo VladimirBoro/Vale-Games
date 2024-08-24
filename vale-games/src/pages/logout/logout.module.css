@@ -1,0 +1,19 @@
+.noBtn {
+    background: none;
+    border: none;
+    padding: none;
+}
+
+.noBtn:hover {
+    cursor: default;
+    background: none;
+}
+
+.noBtn:active {
+    transition: none;
+    /* box-shadow: 2px 2px 5px #0a0705; */
+    box-shadow: none;
+      /* inset 2px 2px 1px black,
+      inset 2px 3px 5px rgb(0 0 0 / 30%),
+      inset -2px -3px 5px rgb(255 255 255 / 50%); */
+  }

@@ -1,0 +1,32 @@
+.signIn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+}
+
+.formContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.signUp {
+    margin-top: 2em;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* width: 15em; */
+}
+
+.form button {
+    margin-top: 1em;
+}
+
+.googleButton {
+    display: flex;
+    justify-content: center;
+}

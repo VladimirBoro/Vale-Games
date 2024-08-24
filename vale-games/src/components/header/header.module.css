@@ -1,0 +1,21 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    margin: 1em 1em 0 1em;
+}
+
+.nav li {
+    margin-right: 0.5em;
+}
+
+.home {
+    background: none;
+    font-size: larger;
+    border: 2px rgb(250, 241, 230) solid;
+
+}
+
+.home:hover {
+    background-color:rgba(240, 248, 255, 0);
+    font-size: 1.3em;
+}
