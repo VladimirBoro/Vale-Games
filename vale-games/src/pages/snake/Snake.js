@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import customAxios  from "../../util/customAxios";
+import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import game from "../../pages/game/game.module.css"
 import Timer from "../../components/timer/Timer";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
@@ -113,16 +113,13 @@ function Snake() {
     }, [gameStarted]);
     
     const fetchScores = useCallback(async () => {
-        await customAxios.get(LEADERBOARD_PATH)
-        .then(response => {
-            console.log(response.data);
-            setScores(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
-
+        setScores(await getLeaderboard(LEADERBOARD_PATH));
     }, [scores]);
+
+    const sendScore = async (username) => {
+        await sendLeaderboardData(ADD_SCORE_PATH, username, snakeBody.current.length, "score")
+        fetchScores();
+    }
 
     function translateSnake() { 
         // get queued direction
@@ -298,21 +295,7 @@ function Snake() {
 
         // if we logged in then save the score in the DB
         if (username) {
-            await customAxios.post(ADD_SCORE_PATH, null,
-                {
-                    params: {
-                        username: username,
-                        score: snakeBody.current.length
-                    }
-                }
-            )
-            .then(response => {
-                fetchScores();
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+            sendScore(username);
         }
     }
 

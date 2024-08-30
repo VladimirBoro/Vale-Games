@@ -5,7 +5,8 @@ import Timer from "../../components/timer/Timer"
 import GameOver from "../../components/gameover/GameOver"
 import Leaderboard from "../../components/leaderboard/Leaderboard"
 import { EASY, MEDIUM, HARD } from "./constants";
-import customAxios from "../../util/customAxios";
+import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+
 
 function CardMatch() {
     const [difficulty, setDifficulty] = useState(EASY);
@@ -17,20 +18,15 @@ function CardMatch() {
 
     const gameWon = useRef(false);
     const disabled = useRef(false);
-    // const leaderboard = useRef([]);
     const time = useRef("");
 
     // OPEN PAGE
     useEffect(() => {
-        const getLeaderboard = async () => {
-            await customAxios.get("/cardmatch/leaderboard-top10")
-            .then(response => {
-                setLeaderboard(response.data);
-            })
-            .catch(error => console.error(error));
+        const fetchLeaderboard = async () => {
+            setLeaderboard(await getLeaderboard("/cardmatch/leaderboard-top10"));
         }
 
-        getLeaderboard();
+        fetchLeaderboard();
         setMatchedCount(difficulty.pairs);
         setLives(difficulty.lives);
 
@@ -54,18 +50,9 @@ function CardMatch() {
     }, [matchedCount])
 
     const postTime = async () => {
-        let user = localStorage.getItem("user");
-        if (user && gameWon.current) {
-            await customAxios.post("/cardmatch/add", null,
-                {
-                    params: {
-                        username: user,
-                        time: time.current
-                    }
-                }
-            )
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error));
+        let username = localStorage.getItem("user");
+        if (username && gameWon.current) {
+            await sendLeaderboardData("/cardmatch/add", username, time.current, "time");
         }
     }
 

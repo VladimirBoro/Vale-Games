@@ -7,7 +7,7 @@ import GameOver from "../../components/gameover/GameOver";
 import sky from "./images/sky.png";
 import mountainRange from "./images/mountains.png"
 import Leaderboard from "../../components/leaderboard/Leaderboard";
-import customAxios from "../../util/customAxios";
+import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 
 function BirdyFlap () {
     const [gameStarted, setGameStarted] = useState(false);
@@ -43,6 +43,12 @@ function BirdyFlap () {
             document.body.removeEventListener("mousedown", onClick);
         };
     }, [])
+
+    useEffect(() => {
+        if (gameStarted) {
+            sendScore(score);
+        }
+    }, [gameOver])
 
     // MAIN LOOP
     useEffect(() => {
@@ -85,13 +91,13 @@ function BirdyFlap () {
             birdy.update();
             
             if (birdy.isHit() && !gameOver) {
+                console.log("im hit!");
+                
                 setGameOver(true);
             }
             
             if (birdy.isDead()) {
                 pauseGame();
-                // submit score and all dat...
-                sendScore(score);
             }
 
             // DRAW
@@ -211,32 +217,15 @@ function BirdyFlap () {
     }
 
     const fetchLeaderboard = async () => {
-        console.log("fetching scores...");
-        await customAxios.get("/birdyflap/leaderboard-top10")
-        .then(response => {
-            console.log(response.data);
-            setLeaderboard(response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+        setLeaderboard(await getLeaderboard("/birdyflap/leaderboard-top10"));
     }
 
     const sendScore = async () => {
         let username = localStorage.getItem("user");
-        console.log("sending...", username);
+        console.log("sending...", username, score);
 
         if (username !== null) {
-            await customAxios.post("/birdyflap/add", null,
-                {
-                    params: {
-                        username: username,
-                        score: score
-                    }
-                }
-            )
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error));
+            sendLeaderboardData("/birdyflap/add", username, score, "score");
         }
     }
 

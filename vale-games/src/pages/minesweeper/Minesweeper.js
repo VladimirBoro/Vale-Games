@@ -3,7 +3,7 @@ import Board from './components/Board';
 import Leaderboard from '../../components/leaderboard/Leaderboard';
 import GameOver from '../../components/gameover/GameOver';
 import game from "../../pages/game/game.module.css"
-import customAxios from '../../util/customAxios';
+import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import { ADD_PATH, LEADERBOARD_PATH } from "./utils/contants.js"
 
 
@@ -15,40 +15,20 @@ function Minesweeper() {
     const restart = useRef(null);
     const gameLost = useRef(false);
     
-    const getLeaderboard = async () => {
+    const fetchLeaderboard = async () => {
         console.log(LEADERBOARD_PATH);
-
-        await customAxios.get(LEADERBOARD_PATH)
-        .then(res => {
-            setTimes(res.data);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        setTimes(await getLeaderboard(LEADERBOARD_PATH));
     }
 
     // GET top ten leaderboard
     useEffect(() => {
-        getLeaderboard();
+        fetchLeaderboard();
     }, [gameOver]);
 
 
     // POST user's time to server db
     const postTime = async (time, username) => {
-        await customAxios.post(ADD_PATH, null, 
-            {
-                params: {
-                    time: time,
-                    username, username
-                }
-            }
-        )
-        .then(response => {
-            console.log(response);
-        })
-        .catch(error => {
-            console.error(error);
-        })
+        await sendLeaderboardData(ADD_PATH, username, time, "time");
     }
 
     // print row function to be passed into Leaderboard

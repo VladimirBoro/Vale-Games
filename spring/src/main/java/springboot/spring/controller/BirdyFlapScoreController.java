@@ -31,7 +31,7 @@ public class BirdyFlapScoreController {
         String response = "failed adding score";
         
         BirdyFlapScore oldScore = repo.findByUsername(username);
-        System.out.println(oldScore);
+        System.out.println(oldScore + " " +  score);
         if (oldScore != null && oldScore.getScore() < score) {
             System.out.println("Updating score...");
             response = "UPDATED highscore of: " + username;

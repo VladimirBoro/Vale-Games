@@ -5,7 +5,6 @@ import frogSpriteSheet from "./sprites/frog/frog.png";
 import Timer from "../../components/timer/Timer";
 import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from '../../components/leaderboard/Leaderboard';
-import customAxios from "../../util/customAxios";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 
 function Frogger() {
