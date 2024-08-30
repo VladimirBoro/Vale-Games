@@ -8,5 +8,5 @@ import springboot.spring.entities.CardMatchScore;
 
 public interface CardMatchScoreRepo extends JpaRepository<CardMatchScore, Long>{
     public CardMatchScore findByUsername(String username);
-    List<CardMatchScore> findTop10ByOrderByTimeDesc();
+    List<CardMatchScore> findTop10ByOrderByTime();
 }

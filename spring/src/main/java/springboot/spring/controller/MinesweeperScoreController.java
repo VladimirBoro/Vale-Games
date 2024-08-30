@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 @RestController
 @RequestMapping("/minesweeper")
 public class MinesweeperScoreController {
     private DateUtil date = new DateUtil();
+    
     @Autowired
     private MinesweeperScoreRepo repo;
 
@@ -54,12 +54,11 @@ public class MinesweeperScoreController {
 
     @GetMapping("/leaderboard-top10")
     public @ResponseBody Iterable<MinesweeperScore> getTop10Leaderboard() {
-        return repo.findTop10ByOrderByTimeDesc();
+        return repo.findTop10ByOrderByTime();
     }
 
     @GetMapping("/leaderboard")
     public @ResponseBody Iterable<MinesweeperScore> getLeaderboard() {
         return repo.findAll();
     }
-
 }

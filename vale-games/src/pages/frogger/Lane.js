@@ -52,7 +52,6 @@ function Lane({ laneNumber, laneYPosition, showHitboxes, isLevelScaled}) {
 
             if (i === laneSettings.batchSize - 1) {
                 setTimeout(respawn, (laneSettings.batchInterval) / multiplier.current);
-                console.log(laneNumber, multiplier.current);
             }
         }
         

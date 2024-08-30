@@ -6,6 +6,7 @@ import Timer from "../../components/timer/Timer";
 import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from '../../components/leaderboard/Leaderboard';
 import customAxios from "../../util/customAxios";
+import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 
 function Frogger() {
     const [gameStarted, setGameStarted] = useState(false);
@@ -103,15 +104,14 @@ function Frogger() {
 
         let animFrame;
         
-        console.log("STUFF", lanes);
+        fetchLeaderboard();
         drawGrid();
         updateGoals();
 
-        console.log(goals);
-        
         const gameLoop = () => {
-            if (lives === 0 && gameStarted) {
+            if (lives === 0 && gameStarted && !gameOver) {
                 //ggs
+                console.log("stop!");
                 loseGame();
             }
 
@@ -141,7 +141,7 @@ function Frogger() {
         return () => {
             cancelAnimationFrame(animFrame);
         };
-    }, [showGrid, showHitboxes, goals, lives]);
+    }, [showGrid, showHitboxes, goals, lives, gameOver]);
 
     const missGoal = () => {
         let topLeftOfFrog = {x: froggerPosition.current.x, y: froggerPosition.current.y};
@@ -465,7 +465,7 @@ function Frogger() {
     }
 
     const scoreUp = (upAmount) => {
-        setScore(prev => prev += upAmount);
+        setScore(prev => Math.floor(prev += upAmount));
     }
 
     const scoreGoal = () => {
@@ -487,12 +487,25 @@ function Frogger() {
         levelMultiplier.current += 0.25;
     }
 
-    const loseGame = () => {
+    const fetchLeaderboard = async () => {
+        setLeaderboard(await getLeaderboard("/frogger/leaderboard-top10"));
+    }
+
+    const sendScore = async () => {
+        let username = localStorage.getItem("user");
+        console.log(username);
+
+        if (username !== null) {
+            sendLeaderboardData("frogger/add", username, score, "score");
+        }
+    }
+
+    const loseGame =  () => {
         setGameOver(true);
         setGameStarted(false);
 
         // send score to server here
-        // customAxios.post();
+        sendScore();
     }
 
     const resetGame = () => {
@@ -535,7 +548,7 @@ function Frogger() {
             <>
                 <th scope="row">{entry.username}</th>
                 <td>{entry.date}</td>
-                <td>{entry.time}</td>
+                <td>{entry.score}</td>
             </>
         )
     }

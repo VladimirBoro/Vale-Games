@@ -6,12 +6,15 @@ import { Mountains } from "./mountinas";
 import GameOver from "../../components/gameover/GameOver";
 import sky from "./images/sky.png";
 import mountainRange from "./images/mountains.png"
+import Leaderboard from "../../components/leaderboard/Leaderboard";
+import customAxios from "../../util/customAxios";
 
 function BirdyFlap () {
     const [gameStarted, setGameStarted] = useState(false);
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
     const [gamePaused, setGamePaused] = useState(true);
+    const [leaderboard, setLeaderboard] = useState([]);
     
     const skyImage = new Image();
     skyImage.src = sky;
@@ -52,6 +55,8 @@ function BirdyFlap () {
         canvas.height = CANVAS.height;
         let context = canvas.getContext("2d"); 
 
+        fetchLeaderboard();
+
         let animationFrame;
         const gameLoop = () => {
             // UPDATES
@@ -82,10 +87,11 @@ function BirdyFlap () {
             if (birdy.isHit() && !gameOver) {
                 setGameOver(true);
             }
-
+            
             if (birdy.isDead()) {
                 pauseGame();
                 // submit score and all dat...
+                sendScore(score);
             }
 
             // DRAW
@@ -204,6 +210,46 @@ function BirdyFlap () {
         }
     }
 
+    const fetchLeaderboard = async () => {
+        console.log("fetching scores...");
+        await customAxios.get("/birdyflap/leaderboard-top10")
+        .then(response => {
+            console.log(response.data);
+            setLeaderboard(response.data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+
+    const sendScore = async () => {
+        let username = localStorage.getItem("user");
+        console.log("sending...", username);
+
+        if (username !== null) {
+            await customAxios.post("/birdyflap/add", null,
+                {
+                    params: {
+                        username: username,
+                        score: score
+                    }
+                }
+            )
+            .then(response => console.log(response.data))
+            .catch(error => console.error(error));
+        }
+    }
+
+    const printRow = (entry) => {
+        return (
+            <>
+                <th scope="row">{entry.username}</th>
+                <td>{entry.date}</td>
+                <td>{entry.score}</td>
+            </>
+        )
+    }
+
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center" }}>
             <h1>Birdy Flap</h1>
@@ -211,6 +257,7 @@ function BirdyFlap () {
                 <h2>Score: {score}</h2>
             </div>
             <canvas ref={canvasRef} />
+            <Leaderboard data={leaderboard} printRow={printRow} metric={"Score"}/>
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (

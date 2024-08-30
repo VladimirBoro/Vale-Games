@@ -5,14 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import springboot.spring.entities.FroggerScore;
-import springboot.spring.entities.SnakeScore;
 import springboot.spring.repo.FroggerScoreRepo;
 import springboot.spring.util.DateUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-
-
 
 @RestController
 @RequestMapping(path = "/frogger")
@@ -24,13 +21,14 @@ public class FroggerScoreController {
 
     @GetMapping("/leaderboard-top10")
     public Iterable<FroggerScore> getLeaderBoardTop10() {
+        System.out.println("yo");
         return froggerRepo.findTop10ByOrderByScoreDesc();
     }
 
-    @GetMapping("/leaderboard")
-    public Iterable<FroggerScore> getLeaderBoard() {
-        return froggerRepo.findAllByScoreDesc();
-    }
+    // @GetMapping("/leaderboard")
+    // public Iterable<FroggerScore> getLeaderBoard() {
+    //     return froggerRepo.findAllByScoreDesc();
+    // }
     
     @PostMapping("/add")
     public String postAdd(@RequestParam String username, @RequestParam int score) {
@@ -57,6 +55,4 @@ public class FroggerScoreController {
 
         return response;
     }
-    
-
 }

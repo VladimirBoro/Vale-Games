@@ -2,11 +2,15 @@ import React from "react";
 import "./leaderboard.css"
 
 function Leaderboard({ data, printRow, metric }) {
-    console.log("data!", data);
+    let emptyMsg = "";
+    if (data && data.length === 0) {
+        emptyMsg = "No one on the Leaderboard yet!";
+    }
 
     return (
         <div>
-            <section>
+            <div>
+                <p>{emptyMsg}</p>
                 <table>
                     <thead>
                         <tr>
@@ -25,7 +29,7 @@ function Leaderboard({ data, printRow, metric }) {
                         })}
                     </tbody>
                 </table>
-            </section>
+            </div>
         </div>
     );
 }

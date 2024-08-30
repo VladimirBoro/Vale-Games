@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
 @RestController
 @RequestMapping("/cardmatch")
 public class CardMatchScoreController {
@@ -54,10 +52,9 @@ public class CardMatchScoreController {
         return "server failed to upload/update time";
     }
     
-
     @GetMapping("/leaderboard-top10")
     public Iterable<CardMatchScore> getTop10() {
-        return cardMatchScoreRepo.findTop10ByOrderByTimeDesc();
+        return cardMatchScoreRepo.findTop10ByOrderByTime();
     }
 
     @GetMapping("/leaderboard")

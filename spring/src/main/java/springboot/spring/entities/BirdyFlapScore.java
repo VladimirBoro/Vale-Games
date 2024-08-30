@@ -8,10 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-@Data
 @Entity
-@Table(name = "frogger_score")
-public class FroggerScore {
+@Data
+@Table(name = "birdyflap_score")
+public class BirdyFlapScore {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long id;
