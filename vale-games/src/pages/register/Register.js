@@ -38,24 +38,26 @@ const Register = () => {
     }
 
     return (
-        <div>
-            <h1>Register</h1>
-            <section className={login.formContainer}>
-                {usernameError ? (
-                    <p>USERNAME IS IN USE ALREADY</p>
-                ) : (
-                    <></>
-                )}
-                <form onSubmit={registerUser} className={login.form}>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" name="username" ref={usernameRef} required/>
+        <div className={login.page}>
+            <div className={login.signIn}>
+                <h1>Register</h1>
+                <div className={login.formContainer}>
+                    {usernameError ? (
+                        <p>USERNAME IS IN USE ALREADY</p>
+                    ) : (
+                        <></>
+                    )}
+                    <form onSubmit={registerUser} className={login.form}>
+                        <label htmlFor="username">Username</label>
+                        <input type="text" name="username" ref={usernameRef} required/>
 
-                    <label htmlFor="password">Password</label>
-                    <input type="password" ref={passwordRef} required/>
+                        <label htmlFor="password">Password</label>
+                        <input type="password" ref={passwordRef} required/>
 
-                    <button type="submit">Register</button>
-                </form>
-            </section>
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+            </div>
         </div>
     )
 };

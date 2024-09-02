@@ -28,7 +28,6 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    /* background-color: black; */
     border: 1px aliceblue solid;
     backface-visibility: hidden;
     transform: rotateY( 180deg );
@@ -44,4 +43,11 @@
     background: url("../imgs/card\ back\ black.png") no-repeat;
     background-size: contain;
     overflow: hidden;
+}
+
+@media (min-width: 2000px) {
+    .card {
+        width: 138px;
+        height: 196px;
+    }
 }

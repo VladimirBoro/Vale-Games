@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import header from "./header.module.css"
+import styles from "./header.module.css"
 
 const Header = () => {
     const [user, setUser] = useState(localStorage.getItem("user"));
@@ -19,12 +19,12 @@ const Header = () => {
     });
 
     return (
-        <header>
+        <header className={styles.header}>
             <nav>
-                <ul className={header.nav}>
-                    <li><Link to="/" className={header.home}>Vale Games</Link></li>
+                <ul className={styles.nav}>
+                    <li><Link to="/" className={styles.home}>Vale Games</Link></li>
 
-                    <ul className={header.nav}>
+                    <ul className={styles.topRight}>
                         { user ? (
                             <>
                                 <li><Link to="/account">Account</Link></li>

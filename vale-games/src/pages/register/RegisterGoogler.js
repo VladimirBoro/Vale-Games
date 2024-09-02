@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import login from "../login/login.module.css"
 
 const RegisterGoogler = () => {
     const URL = process.env.REACT_APP_SERVER_URL;
@@ -43,26 +44,28 @@ const RegisterGoogler = () => {
     }
 
     return (
-        <div>
-            <h1>Register your Vale Games username!</h1>
-            <section>
-                { usernameError ? (
-                    <p>USERNAME ALREADY IN USE</p>
-                ) : (
-                    <></>
-                )}
-                <form onSubmit={registerUser}>
-                    <label htmlFor="username">Username</label>
-                    <input 
-                        type="text" 
-                        name="username"
-                        value={username}
-                        onInput={handleChange} 
-                        required
-                    />
-                    <button type="submit">Register</button>
-                </form>
-            </section>
+        <div className={login.page}>
+            <div className={login.signIn}>
+                <h1>Register your username!</h1>
+                <div className={login.formContainer}>
+                    { usernameError ? (
+                        <p>USERNAME ALREADY IN USE</p>
+                    ) : (
+                        <></>
+                    )}
+                    <form className={login.form} onSubmit={registerUser}>
+                        <label htmlFor="username">Username</label>
+                        <input 
+                            type="text" 
+                            name="username"
+                            value={username}
+                            onInput={handleChange} 
+                            required
+                        />
+                        <button type="submit">Register</button>
+                    </form>
+                </div>
+            </div>
         </div>
     )
 };

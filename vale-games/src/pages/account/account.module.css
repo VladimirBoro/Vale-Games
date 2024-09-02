@@ -1,0 +1,11 @@
+.page {
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    padding: 0 1em 1em 1em ;
+    background-color: rgb(31, 28, 28);
+    border-radius: 1em;
+    text-align: center;
+}

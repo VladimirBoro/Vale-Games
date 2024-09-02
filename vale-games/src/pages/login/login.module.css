@@ -1,8 +1,19 @@
+.page {
+    display: flex;
+    justify-content: center;
+}
+
 .signIn {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
+    text-align: center;
+    width: 300px;
+    border-radius: 2em;
+    background-color: rgb(31, 28, 28);
+    padding-bottom: 2em;
+    padding-top: 1em;
 }
 
 .formContainer {
@@ -19,7 +30,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* width: 15em; */
 }
 
 .form button {

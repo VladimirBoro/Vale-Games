@@ -39,7 +39,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <main className='layout-container'>
+      <main className="main">
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/game/birdyflap' element={<BirdyFlap />} />

@@ -1,49 +1,64 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import home from "./home.module.css"
-import customAxios from "../../util/customAxios"
+import styles from "./home.module.css";
+import image from "./background.png";
 
 const Home = () => {
     const URL = process.env.REACT_APP_SERVER_URL;
 
-
-    const test = () => {
-        customAxios.get(URL + "/minesweeper/scores",
-            {
-                withCredentials: true
-            }
-        )
-        .then(response => {
-            console.log(response);
-        })
-    };
-
     return (
-        <div>
-            <h1>Welcome to Vale Games!</h1>
-            <ul className={home.gamesDisplay}>
-                <li>    
-                    <Link to="/game/snake">Snake</Link>
+        <div className={styles.page}>
+            <ul className={styles.gamesDisplay}>
+                <li>
+                    <div className={styles.gameSelection}>
+                        <a href="/game/frogger" className={styles.anchor}>
+                            <img src={image} className={styles.homeImage} alt="dope ass pic"/>
+                        </a>
+                        <Link to="/game/snake">Snake</Link>
+                    </div>    
                 </li>    
                 <li>    
-                    <Link to="/game/minesweeper">Minesweeper</Link>
+                    <div className={styles.gameSelection}>
+                        <a href="/game/frogger" className={styles.anchor}>
+                            <img src={image} className={styles.homeImage} alt="dope ass pic"/>
+                        </a>
+                        <Link to="/game/minesweeper">Minesweeper</Link>
+                    </div>
                 </li>    
                 <li>    
-                    <Link to="/game/frogger">Frogger</Link>
+                    <div className={styles.gameSelection}>
+                        <a href="/game/frogger" className={styles.anchor}>
+                            <img src={image} className={styles.homeImage} alt="dope ass pic"/>
+                        </a>
+                        <Link to="/game/frogger">Frogger</Link>
+                    </div>
                 </li>    
                 <li>    
-                    <Link to="/game/cardmatch">Cardmatch</Link>
+                    <div className={styles.gameSelection}>
+                        <a href="/game/frogger" className={styles.anchor}>
+                            <img src={image} className={styles.homeImage} alt="dope ass pic"/>
+                        </a>
+                        <Link to="/game/cardmatch">Cardmatch</Link>
+                    </div>
                 </li>    
                 <li>    
-                    <Link to="/game/birdyflap">Birdy Flap</Link>
+                    <div className={styles.gameSelection}>
+                        <a href="/game/frogger" className={styles.anchor}>
+                            <img src={image} className={styles.homeImage} alt="dope ass pic"/>
+                        </a>
+                        <Link to="/game/birdyflap">Birdy Flap</Link>
+                    </div>
                 </li>    
                 <li>    
-                    <Link to="/game/birdyflap">Birdy Flap</Link>
+                    <div className={styles.gameSelection}>
+                        <a href="/game/frogger" className={styles.anchor}>
+                            <img src={image} className={styles.homeImage} alt="dope ass pic"/>
+                        </a>
+                        <Link to="/game/birdyflap">Birdy Flap</Link>
+                    </div>
                 </li>    
             
             </ul>
-            
-            <button onClick={test}>testing...</button>
         </div>
     )
 };

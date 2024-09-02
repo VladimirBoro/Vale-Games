@@ -92,43 +92,45 @@ const Login = () => {
     }
 
     return (
-        <div className={login.signIn}>
-            <h2>Login</h2>
-            <section>
-                <section className={login.googleButton}>
-                    <GoogleLogin
-                        buttonText="Login with Googler"
-                        onSuccess={handleLoginSuccess}
-                        onError={handleLoginFailure}
-                        cookiePolicy={'single_host_origin'}
-                    />
+        <div className={login.page}>
+            <div className={login.signIn}>
+                <h2>Login</h2>
+                <section>
+                    <section className={login.googleButton}>
+                        <GoogleLogin
+                            buttonText="Login with Googler"
+                            onSuccess={handleLoginSuccess}
+                            onError={handleLoginFailure}
+                            cookiePolicy={'single_host_origin'}
+                        />
+                    </section>
+
+                    <p>------ or -------</p>
+
+                    <section className={login.formContainer}>
+                        {usernameError ? (
+                            <p>USERNAME OR PASSWORD INCORRECT0</p>
+                        ) : (
+                            <></>
+                        )}
+                        <form onSubmit={submitLogin} className={login.form}>
+                            <label htmlFor="username">Username</label>
+                            <input type="text" name="username" ref={usernameRef} required/>
+
+                            <label htmlFor="password">Password</label>
+                            <input type="password" name="password" ref={passwordRef} required/>
+
+                            <button type="submit">Login</button>
+                        </form>
+                    </section>
+
+                    <section className={login.signUp}>
+                        <span>Not a member? </span>
+                        <Link to="/register">Sign Up</Link>
+                    </section>
+
                 </section>
-
-                <p>------ or -------</p>
-
-                <section className={login.formContainer}>
-                    {usernameError ? (
-                        <p>USERNAME OR PASSWORD INCORRECT0</p>
-                    ) : (
-                        <></>
-                    )}
-                    <form onSubmit={submitLogin} className={login.form}>
-                        <label htmlFor="username">Username</label>
-                        <input type="text" name="username" ref={usernameRef} required/>
-
-                        <label htmlFor="password">Password</label>
-                        <input type="password" name="password" ref={passwordRef} required/>
-
-                        <button type="submit">Login</button>
-                    </form>
-                </section>
-
-                <section className={login.signUp}>
-                    <span>Not a member? </span>
-                    <Link to="/register">Sign Up</Link>
-                </section>
-
-            </section>
+            </div>
         </div>
     )
 };

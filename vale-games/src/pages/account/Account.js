@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
 import customAxios from "../../util/customAxios";
+import accountStyle from "./account.module.css";
 
 function Account() {
     const URL = process.env.REACT_APP_SERVER_URL;
@@ -37,20 +38,20 @@ function Account() {
     };
 
     return (
-        <div>
+        <div className={accountStyle.page}>
             {/* user info:
                 username
                 date created */}
-            <section>
+            <div className={accountStyle.form}>
                 <p>Username: {localStorage.getItem("user")}</p>
                 <p>Account created: whenever</p>
                 <button onClick={editProfile}>edit profile</button>
-            </section>
+            </div>
 
             {/* highscores */}
-            <section> 
+            <div> 
                 {/* <Leaderboard data={} printRow={printRow} metric={"Score"}></Leaderboard> */}
-            </section>
+            </div>
         </div>
     );
 }

@@ -1,8 +1,52 @@
+.anchor {
+    background: none;
+    padding: 0;
+    margin: none;
+}
+
+.anchor:hover {
+    background: none;
+}
+
+.anchor:active {
+    box-shadow: none;
+}
+
+.homeImage {
+    width: 250px;
+    height: 200px;
+    margin-bottom: 1em;
+    border-radius: 1em;
+}
+
+.gameSelection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.5em;
+}
+
 .gamesDisplay {
-    columns: 4;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 915px;
 }
 
-.gamesDisplay li {
-    margin: 1em;
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
+@media (min-width: 2000px) {
+    .gamesDisplay {
+        max-width: 1200px;
+    }
+
+    .homeImage {
+        width: 350px;
+        height: 275px;
+    }
+}

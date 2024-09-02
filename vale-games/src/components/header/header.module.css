@@ -1,7 +1,19 @@
 .nav {
     display: flex;
     justify-content: space-between;
-    margin: 1em 1em 0 1em;
+    align-items: center;
+    align-content: center;
+    padding-top: 1em;
+    height:50px;
+}
+
+.header {
+    background-color: rgb(31, 28, 28);
+    padding-bottom: 1em;
+}
+
+.topRight {
+    display: flex;
 }
 
 .nav li {

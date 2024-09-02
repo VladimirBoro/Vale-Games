@@ -5,6 +5,7 @@ import frogSpriteSheet from "./sprites/frog/frog.png";
 import Timer from "../../components/timer/Timer";
 import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from '../../components/leaderboard/Leaderboard';
+import styles from "./styles/styles.module.css";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 
 function Frogger() {
@@ -559,7 +560,8 @@ function Frogger() {
                 <h2>❤️ {lives}</h2>
                 <h2>Score: {score}</h2>
             </div>
-            <canvas ref={canvasRef} style={{width: CANVAS_WIDTH, height: CANVAS_HEIGHT}}/>
+            {/* <canvas ref={canvasRef} style={{width: CANVAS_WIDTH, height: CANVAS_HEIGHT}}/> */}
+            <canvas ref={canvasRef} className={styles.canvas}/>
             <div>
                 <button onClick={handleGridPress} style={{margin:"1em"}}>Testing Grid</button>
                 <button onClick={handleHitboxPress} style={{marginTop:"1em"}}>Hitboxes</button>
