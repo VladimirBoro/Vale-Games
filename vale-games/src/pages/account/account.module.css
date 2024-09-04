@@ -9,3 +9,8 @@
     border-radius: 1em;
     text-align: center;
 }
+
+.profilePic {
+    display: flex;
+    flex-direction: column;
+}

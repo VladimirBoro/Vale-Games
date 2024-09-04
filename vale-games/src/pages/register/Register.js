@@ -12,7 +12,7 @@ const Register = () => {
     const usernameRef = React.useRef();
     const passwordRef = React.useRef();
 
-    function registerUser(event) {
+    const registerUser = (event) => {
         event.preventDefault();
 
         const username = usernameRef.current.value;
@@ -21,7 +21,8 @@ const Register = () => {
         axios.post(URL + REGISTER_PATH,
             {
                 username: username,
-                password: password
+                password: password,
+                type: "valegames"
             },
             {
                 withCredentials: true

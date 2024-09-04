@@ -15,14 +15,6 @@ const Logout = () => {
     const logoutHandler = async (event) => {
         event.preventDefault();
 
-        await axios.get(URL + "/session", { withCredentials: true })
-        .then(response => {
-            console.log("expiry time", response.data);
-        })
-        .catch(error => {
-            console.log(error);
-        })
-
         console.log("wtf");
         
         await axios.post(URL + LOGOUT_EXTENSTION, null, { withCredentials: true })

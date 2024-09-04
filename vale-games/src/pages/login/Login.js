@@ -26,9 +26,10 @@ const Login = () => {
 
         let postResponse; // will contain username on successful response
 
-        await axios.post(URL + GOOGLE_LOGIN_PATH,
+        await axios.post(URL + LOGIN_PATH,
             {
-                credential: credential
+                password: credential,
+                type: "google"
             },
             {
                 withCredentials: true
@@ -70,7 +71,8 @@ const Login = () => {
         await axios.post(URL + LOGIN_PATH, 
             {
                 username: username,
-                password: password
+                password: password,
+                type: "valegames"
             },
             { 
                 withCredentials: true 

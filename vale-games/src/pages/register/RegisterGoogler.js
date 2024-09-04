@@ -7,6 +7,8 @@ import login from "../login/login.module.css"
 const RegisterGoogler = () => {
     const URL = process.env.REACT_APP_SERVER_URL;
     const REG_URL = process.env.REACT_APP_REGISTER_GOOGLE_PATH;
+    const REGISTER_PATH = process.env.REACT_APP_REGISTER_VALEGAMES_PATH;
+
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -19,10 +21,11 @@ const RegisterGoogler = () => {
         event.preventDefault();
         console.log(username, credential);
         
-        axios.post(URL + REG_URL,
+        axios.post(URL + REGISTER_PATH,
             {
-                credential: credential,
-                username: username
+                password: credential,
+                username: username,
+                type: "google"
             },
             {
                 withCredentials: true
