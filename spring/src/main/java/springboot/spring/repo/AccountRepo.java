@@ -8,4 +8,5 @@ import springboot.spring.entities.Account;
 @RepositoryRestResource
 public interface AccountRepo extends JpaRepository<Account, Long> {
     boolean existsByUsername(String username);
+    Account findByUsername(String username);
 }  

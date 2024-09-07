@@ -11,4 +11,5 @@ import springboot.spring.entities.AccountOauth2;
 public interface AccountOauth2Repo extends JpaRepository<AccountOauth2, Long> {
     List<AccountOauth2> findByHashSub(String hashSub);
     boolean existsByUsername(String username);
+    AccountOauth2 findByUsername(String username);
 }  
