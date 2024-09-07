@@ -1,3 +1,20 @@
+.page {
+    display: flex;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    width: 300px;
+    border-radius: 2em;
+    background-color: rgb(31, 28, 28);
+    padding-bottom: 2em;
+    padding-top: 1em;
+}
+
 .noBtn {
     background: none;
     border: none;

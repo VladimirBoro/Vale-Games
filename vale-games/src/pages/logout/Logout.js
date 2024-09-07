@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import logout from "./logout.module.css"
+import styles from "./logout.module.css"
 
 
 const Logout = () => {
@@ -26,21 +26,24 @@ const Logout = () => {
         });
         
         navigate("/");
-        localStorage.removeItem("user");
+        // localStorage.removeItem("user");
+        localStorage.clear();
         window.dispatchEvent(new Event("storage"));
     };
 
     return (
-        <div>
-            <p>
-                Are you sure you want to log out?
-            </p>
-            <form>
-                <button onClick={logoutHandler}>Yes</button>
-                <Link to="/" className={logout.noBtn}>
-                    <button>No</button>
-                </Link>
-            </form>
+        <div className={styles.page}>
+            <div className={styles.form}>
+                <p>
+                    Are you sure you want to log out?
+                </p>
+                <form>
+                    <button onClick={logoutHandler}>Yes</button>
+                    <Link to="/" className={styles.noBtn}>
+                        <button>No</button>
+                    </Link>
+                </form>
+            </div>
         </div>
     )
 };
