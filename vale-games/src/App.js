@@ -14,11 +14,12 @@ import BirdyFlap from "./pages/birdyflap/BirdyFlap";
 import Minesweeper from './pages/minesweeper/Minesweeper';
 import Cardmatch from './pages/cardmatch/Cardmatch';
 import customAxios from './util/customAxios';
+import { fetchProfilePic } from './util/restful';
 import './App.css';
 
 function App() {
   useEffect(() => {
-    document.title = "Vale Games"
+    document.title = "Vale Games";
   }, []);
 
   useEffect(() => {
@@ -31,9 +32,28 @@ function App() {
           console.log(response);
         });        
       }
-    };
+    }
+
+    const fetchProfilePicture = async (currentUser) => {
+      await fetchProfilePic(currentUser);
+      const profilePic = localStorage.getItem("profilePic");  // Wait for the image to be fetched
+      if (profilePic) {
+        console.log("Profile picture fetched!");
+      }
+      else {
+        console.log("Failed to fetch profile picture.");
+      }
+    }
 
     checkSession();
+
+    const currentUser = localStorage.getItem("user");
+    // const profilePic = localStorage.getItem("profilePic");
+    console.log("right b4!!");
+    if (currentUser !== null) {
+      console.log("fetching profile pic!!");
+      fetchProfilePicture(currentUser);
+    }
   }, []);
 
   return (
