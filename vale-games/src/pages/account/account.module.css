@@ -4,6 +4,9 @@
 }
 
 .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 0 1em 1em 1em ;
     background-color: rgb(31, 28, 28);
     border-radius: 1em;
@@ -11,6 +14,16 @@
 }
 
 .profilePic {
-    display: flex;
-    flex-direction: column;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 5em;
+}
+
+.button {
+    margin: 0.5em;
+}
+
+#username {
+    margin-top: 0.5em;
 }
