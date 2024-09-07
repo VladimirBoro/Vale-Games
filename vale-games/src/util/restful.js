@@ -30,3 +30,23 @@ export const sendLeaderboardData = async (path, username, value, metric) => {
 
     return responseMsg;
 }
+
+export const fetchProfilePic = (username) => {
+    customAxios.get("/account/profilePicture", {
+        params: {username: username},
+        responseType: "blob"
+    })
+    .then(response => {
+        const profilePic = new FileReader();
+
+        profilePic.onloadend = () => {
+            const base64profilePic = profilePic.result;
+            localStorage.setItem("profilePic",  base64profilePic);
+            window.dispatchEvent(new Event("storage"));
+
+        }
+        profilePic.readAsDataURL(response.data);
+        // console.log("setting profile pic NOW.", response.data);
+    })
+    .catch(err => console.log("weird!", err));
+}
