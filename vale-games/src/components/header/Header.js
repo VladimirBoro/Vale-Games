@@ -27,7 +27,10 @@ const Header = () => {
                     <ul className={styles.topRight}>
                         { user ? (
                             <>
-                                <li><Link to="/account">Account</Link></li>
+                                {/* <li><Link to="/account">Account</Link></li> */}
+                                <li><Link to="/account" id={styles.profileLink}>
+                                    <img src={localStorage.getItem("profilePic")} className={styles.profilePic}></img>
+                                </Link></li>
                                 <li><Link to="/logout">Logout {user}</Link></li>
                             </>
                         ) : (
