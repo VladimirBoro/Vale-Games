@@ -4,6 +4,8 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import login from "./login.module.css"
+import customAxios from "../../util/customAxios";
+import { fetchProfilePic } from "../../util/restful";
 
 
 const Login = () => {
@@ -43,13 +45,19 @@ const Login = () => {
             console.log("error!!", error);
         })
 
+        console.log("postReponse", postResponse);
+
         if (postResponse === "register") {
             console.log("register time");
             navigate("/registerGoogler", { state: { credential: credential } });
         }
         else {
             localStorage.setItem("user", postResponse);
-            window.dispatchEvent(new Event("storage")); // trigger event
+
+            // get profile pic here!!!
+            // getProfilePicture(postResponse);
+            fetchProfilePic(postResponse);
+
             navigate("/");
             console.log("logged in!");
         }
@@ -68,20 +76,22 @@ const Login = () => {
 
         console.log("logging in!");
 
-        await axios.post(URL + LOGIN_PATH, 
+        await customAxios.post(URL + LOGIN_PATH, 
             {
                 username: username,
                 password: password,
                 type: "valegames"
-            },
-            { 
-                withCredentials: true 
             }
         )
         .then(response => {
             setUsernameError(false);
             localStorage.setItem("user", response.data);
-            window.dispatchEvent(new Event("storage")); // trigger event
+            
+            // get profile pic here!!!
+            // getProfilePicture(response.data);
+            console.log("huh...");
+            // fetchProfilePic(response.data);
+            
             navigate("/");
             console.log(response.data);
         })
@@ -89,8 +99,11 @@ const Login = () => {
             setUsernameError(true);
             console.log(error)
         });
-
-        console.log("logging in!", username, password);
+        
+        if (localStorage.getItem("user") != null) {
+            await fetchProfilePic(localStorage.getItem("user"));
+            console.log("logging in!", username, password);
+        }
     }
 
     return (
