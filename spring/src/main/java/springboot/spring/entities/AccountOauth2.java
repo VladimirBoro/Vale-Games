@@ -18,6 +18,5 @@ public class AccountOauth2 {
 
     @Column(unique = true)
     private String username;
-    
     private String hashSub;
 }

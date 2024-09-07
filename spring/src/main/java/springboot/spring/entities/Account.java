@@ -21,4 +21,8 @@ public class Account {
     
     private String auth_method;
     private String created_at;
+    private boolean pictureCustom;
+    private String profile_pic;
+
+    // PATH TO PROFILE PIC HERE
 }
