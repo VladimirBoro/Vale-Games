@@ -1,6 +1,5 @@
 package springboot.spring.service;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,15 +15,10 @@ public class FileStorageService {
     }
 
     public String updateProfilePicture(String oldPath, String username, MultipartFile file) {
-        Path path = Paths.get(oldPath);
-        try {
-            System.out.println("updating pp " + path + " " + Files.deleteIfExists(path));
-            // Files.deleteIfExists(path);
-            return storeProfilePictureLocally(username, file);
-        }
-        catch (IOException e) {
-            return e.toString();
-        }
+        System.out.println("updating pp " + oldPath);
+        return storeProfilePictureLocally(username, file);
+
+        
     }
 
     public String storeProfilePictureLocally(String username, MultipartFile file) {

@@ -371,8 +371,21 @@ public class AccountService {
 
     private void updateProfilePicture(String username, MultipartFile image) {
         Account account = accountRepo.findByUsername(username);
-        account.setPictureCustom(true);
+
         String oldPath = account.getProfile_pic();
+        if (account.isPictureCustom()) {
+            try {
+                Path path = Paths.get(oldPath);
+                Files.deleteIfExists(path);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            account.setPictureCustom(true);
+        }
+
         account.setProfile_pic(fileStorageService.updateProfilePicture(oldPath, username, image));
         accountRepo.save(account);
     }
