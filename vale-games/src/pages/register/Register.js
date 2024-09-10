@@ -75,9 +75,9 @@ function Register() {
         <div className={login.page}>
             <div className={login.signIn}>
                 <h1>Register</h1>
-                <div className={login.formContainer}>
+                <div className={login.form}>
                     {usernameError ? (
-                        <p>USERNAME IS IN USE ALREADY</p>
+                        <p style={{color: "red"}}>Username already in use</p>
                     ) : (
                         <></>
                     )}

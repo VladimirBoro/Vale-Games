@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import styles from "../login/login.module.css"
+import loginStyle from "../login/login.module.css";
+import styles from "./register.module.css";
 import customAxios from "../../util/customAxios";
 
 const RegisterGoogler = () => {
@@ -60,17 +61,17 @@ const RegisterGoogler = () => {
     }
 
     return (
-        <div className={styles.page}>
-            <div className={styles.signIn}>
+        <div className={loginStyle.page}>
+            <div className={loginStyle.signIn}>
                 <h1>Register your username!</h1>
-                <div className={styles.formContainer}>
+                <div className={loginStyle.form}>
                     { usernameError ? (
-                        <p>USERNAME ALREADY IN USE</p>
+                        <p style={{color: "red"}}>Username already in use</p>
                     ) : (
                         <></>
                     )}
-                    <form className={styles.form} onSubmit={registerUser}>
-                        <label htmlFor="username">Username</label>
+                    <form className={loginStyle.form} onSubmit={registerUser}>
+                        <label htmlFor="username">Username*</label>
                         <input 
                             type="text" 
                             name="username"
@@ -78,9 +79,9 @@ const RegisterGoogler = () => {
                             onInput={handleChange} 
                             required
                         />
-                        <div>
+                        <div className={loginStyle.form}>
                             <p>Profile Picture</p>
-                            <img src={preview} alt="dope profile pic" className={styles.preview}/>
+                            <img src={preview} alt="Profile Picture" className={styles.preview}/>
                             <input type="file" onChange={handleFileChange} accept="image/png, image/jpeg"/>
                         </div>
                         <button type="submit">Register</button>

@@ -26,56 +26,48 @@ const Login = () => {
 
         console.log(credential);
 
-        let postResponse; // will contain username on successful response
+        try {
+            const postResponse = await customAxios.post("/login/valegames",
+                {
+                    password: credential,
+                    type: "google"
+                }
+            );
 
-        await axios.post(URL + LOGIN_PATH,
-            {
-                password: credential,
-                type: "google"
-            },
-            {
-                withCredentials: true
+            console.log("postReponse", postResponse.data, postResponse.status);
+
+            if (postResponse.status === 201) {
+                console.log("register time");
+                navigate("/registerGoogler", { state: { credential: credential } });
             }
-        )
-        .then(res => {
-            postResponse = res.data;
-            console.log("Success in backend.", postResponse);
-        })
-        .catch(error => {
-            console.log("error!!", error);
-        })
+            else {
+                localStorage.setItem("user", postResponse.data);
 
-        console.log("postReponse", postResponse);
-
-        if (postResponse === "register") {
-            console.log("register time");
-            navigate("/registerGoogler", { state: { credential: credential } });
+                await fetchProfilePic(postResponse.data);
+                navigate("/");
+                console.log("logged in!");
+            }
         }
-        else {
-            localStorage.setItem("user", postResponse);
-
-            // get profile pic here!!!
-            // getProfilePicture(postResponse);
-            fetchProfilePic(postResponse);
-
-            navigate("/");
-            console.log("logged in!");
-        }
+        catch (error) {
+            console.log("ERROR",error.response.status)
+        }  
+        
+        
     };
-
+    
     const handleLoginFailure = (error) => {
         console.log("Googler error:", error);
     };
-
+    
     // TEMPORARY MANUAL LOGIN
     const submitLogin = async (event) => {
         event.preventDefault();
-
+        
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
-
+        
         console.log("logging in!");
-
+        
         await customAxios.post(URL + LOGIN_PATH, 
             {
                 username: username,
@@ -86,11 +78,6 @@ const Login = () => {
         .then(response => {
             setUsernameError(false);
             localStorage.setItem("user", response.data);
-            
-            // get profile pic here!!!
-            // getProfilePicture(response.data);
-            console.log("huh...");
-            // fetchProfilePic(response.data);
             
             navigate("/");
             console.log(response.data);
@@ -104,6 +91,7 @@ const Login = () => {
             await fetchProfilePic(localStorage.getItem("user"));
             console.log("logging in!", username, password);
         }
+
     }
 
     return (
@@ -122,9 +110,9 @@ const Login = () => {
 
                     <p>------ or -------</p>
 
-                    <section className={login.formContainer}>
+                    <div className={login.form}>
                         {usernameError ? (
-                            <p>USERNAME OR PASSWORD INCORRECT0</p>
+                            <p style={{color: "red"}}>Incorrect Username or Password</p>
                         ) : (
                             <></>
                         )}
@@ -137,12 +125,12 @@ const Login = () => {
 
                             <button type="submit">Login</button>
                         </form>
-                    </section>
+                    </div>
 
-                    <section className={login.signUp}>
+                    <div className={login.signUp}>
                         <span>Not a member? </span>
                         <Link to="/register">Sign Up</Link>
-                    </section>
+                    </div>
 
                 </section>
             </div>
