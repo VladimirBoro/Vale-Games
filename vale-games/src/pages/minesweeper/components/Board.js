@@ -3,7 +3,7 @@ import CreateBoard from '../utils/CreateBoard';
 import { revealed } from "../utils/Reveal";
 import Cell from './Cell';
 import Timer from "../../../components/timer/Timer"
-import board from './styles/board.module.css';
+import styles from './styles/board.module.css';
 import * as contants from "../utils/contants";
 
 function Board({postTime, gg}) {
@@ -123,8 +123,8 @@ function Board({postTime, gg}) {
     }
     
     return (
-            <div>
-                <section style={{display:'flex', justifyContent:'space-evenly', alignItems:'center', alignContent:'center'}}>
+            <div className={styles.board}>
+                <div className={styles.head}>
                     <h2>🚩 --  {mineCount}</h2>
                     {
                         gameStarted ? (
@@ -133,7 +133,7 @@ function Board({postTime, gg}) {
                             <h2>TIME - {time}</h2>
                         )
                     }
-                </section>
+                </div>
                 {grid.map((singlerow,index1) => {
                     return (
                         <div style={style} key={index1}>
@@ -144,12 +144,12 @@ function Board({postTime, gg}) {
                     )
                 })}
                 {/* <button style={{position:'absolute', top:'50%', bottom:'50%', transform:'translate(-50%, -50%)', width:'50%'}}>Easy</button> */}
-                <section className={board.options}>
+                <div className={styles.options}>
                     <button onClick={() => changeDifficulty(contants.easyGame)} >Easy</button>
                     <button onClick={() => changeDifficulty(contants.mediumGame)} >Medium</button>
                     <button onClick={() => changeDifficulty(contants.hardGame)} >Hard</button>
                     <button onClick={resetGame}>Restart</button>
-                </section>
+                </div>
             </div>
     ) 
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Board from './components/Board';
 import Leaderboard from '../../components/leaderboard/Leaderboard';
 import GameOver from '../../components/gameover/GameOver';
-import game from "../../pages/game/game.module.css"
+import styles from "./minesweeper.module.css";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import { ADD_PATH, LEADERBOARD_PATH } from "./utils/contants.js"
 
@@ -57,7 +57,7 @@ function Minesweeper() {
     }
 
     return (
-        <div className={game.page}>
+        <div className={styles.page}>
             <Board postTime={postTime} gg={gg}/>
             <Leaderboard data={times} printRow={printRow} metric={"Time"}/>
             { gameOver ? (
