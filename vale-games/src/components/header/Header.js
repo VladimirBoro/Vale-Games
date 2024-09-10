@@ -4,10 +4,12 @@ import styles from "./header.module.css"
 
 const Header = () => {
     const [user, setUser] = useState(localStorage.getItem("user"));
+    const [pic, setPic] = useState(localStorage.getItem("profilePic"));
 
     useEffect(() => {
         const handleStorageChange = () => {
             console.log("user change!!!");
+            setPic(localStorage.getItem("profilePic"));
             setUser(localStorage.getItem("user"));
         };
 
@@ -16,7 +18,7 @@ const Header = () => {
         return () => {
             window.removeEventListener("storage", handleStorageChange);
         };
-    });
+    }, []);
 
     return (
         <header className={styles.header}>
@@ -27,7 +29,6 @@ const Header = () => {
                     <ul className={styles.topRight}>
                         { user ? (
                             <>
-                                {/* <li><Link to="/account">Account</Link></li> */}
                                 <li><Link to="/account" id={styles.profileLink}>
                                     <img src={localStorage.getItem("profilePic")} className={styles.profilePic}></img>
                                 </Link></li>

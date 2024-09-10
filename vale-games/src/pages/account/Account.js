@@ -5,7 +5,7 @@ import styles from "./account.module.css";
 import { updateProfile } from "../../util/restful";
 import { useNavigate } from "react-router-dom";
 import { fetchProfilePic } from "../../util/restful";
-// import AccountForm from "./components/AccountForm"
+import  TakenUsername  from "./components/TakenUsername";
 
 function Account() {
     const navigate = useNavigate(); 
@@ -17,9 +17,11 @@ function Account() {
     const [username, setUsername] = useState(localStorage.getItem("user"));
     const [image, setImage] = useState(null);
     const [profilePicPreview, setProfilePicPreview] = useState(null);
+    const [takenUsername, setTakenUsername] = useState(false);
 
     // fetch scores
     useEffect(() => {
+        setTakenUsername(false);
         setProfilePicPreview(localStorage.getItem("profilePic"));
     }, [])
 
@@ -52,9 +54,7 @@ function Account() {
 
         profilePic.onloadend = () => {
             const base64profilePic = profilePic.result;
-            // localStorage.setItem("profilePic",  base64profilePic);
             setProfilePicPreview(base64profilePic);
-            window.dispatchEvent(new Event("storage"));
         }
 
         profilePic.readAsDataURL(e.target.files[0]);
@@ -81,42 +81,31 @@ function Account() {
 
         // update account
         console.log("posting update now!");
-        customAxios.post("/account/update", formData, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        })
-        .then(response => {
-            console.log("we good on update", response);
-            localStorage.setItem("user", username);
-        })
-        .catch(err => {
-            // an error from username already taken should be a thing here
-            console.log("error::", err);
-        });
-        
-        // fetch the pic
-        console.log("fetching after the update");
-        localStorage.removeItem("profilePic");
-        await fetchProfilePic(localStorage.getItem("user"))
-        
-        // localStorage.setItem("profilePic", image);
         try {
-            const profilePic = new FileReader();
-            profilePic.onloadend = () => {
-                const base64profilePic = profilePic.result;
-                localStorage.setItem("profilePic",  base64profilePic);
-                window.dispatchEvent(new Event("storage"));
-    
+            await customAxios.post("/account/update", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+
+            if (username !== "") {
+                localStorage.setItem("user", username);
             }
-            profilePic.readAsDataURL(image);
-            window.dispatchEvent(new Event("storage"));
         }
         catch (err) {
-            console.log(err);
+            console.log("error", err);
+            setTakenUsername(true);
+            return;
         }
         
+        // set the pic
+        console.log("fetching after the update");
+        setImage(profilePicPreview);
+        localStorage.setItem("profilePic", profilePicPreview);
+        
+        window.dispatchEvent(new Event("storage"));
         setEditing(!editing);
+        setTakenUsername(false);
     }
 
     const printRow = (entry) => {
@@ -137,6 +126,7 @@ function Account() {
                     <input type="file" onChange={handleFileChange} accept="image/png, image/jpeg"/>    
                     
                     <div>
+                        <TakenUsername taken={takenUsername}/>
                         <label htmlFor="username">Username:</label>
                         <input  name="username" onChange={handleUsernameChange} defaultValue={localStorage.getItem("user")}  id={styles.username}/>
                         <p>Account created: whenever</p>
