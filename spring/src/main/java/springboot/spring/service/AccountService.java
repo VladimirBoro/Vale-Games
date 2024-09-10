@@ -1,6 +1,5 @@
 package springboot.spring.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -9,6 +8,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -67,8 +67,8 @@ public class AccountService {
     private final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private final HttpTransport transport = new NetHttpTransport();   
 
-    public String login(LoginRequest loginRequest, HttpServletRequest request) {
-        String response = "";
+    public ResponseEntity<?> login(LoginRequest loginRequest, HttpServletRequest request) {
+        ResponseEntity<String> response;
 
         System.out.println("TYPE " + loginRequest.getType());
         if (loginRequest.getType().equals("google")) {
@@ -84,7 +84,7 @@ public class AccountService {
         return response;
     }
 
-    private String valeGamesLogin(LoginRequest loginRequest, HttpServletRequest request) {
+    private ResponseEntity<String> valeGamesLogin(LoginRequest loginRequest, HttpServletRequest request) {
         System.out.println(loginRequest.getUsername() + " " + loginRequest.getPassword());
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
@@ -94,15 +94,15 @@ public class AccountService {
         
         // invalid username or password
         if (user == null || !bcrypt.matches(password, user.getPassword())) {
-            return "Invalid username or password";
+            return ResponseEntity.status(HttpStatus.SC_UNAUTHORIZED).body("Invalid username or password");
         }
 
-        String response = session.startSession(user.getUsername(), request);
+        session.startSession(user.getUsername(), request);
         
-        return response;
+        return ResponseEntity.ok(loginRequest.getUsername());
     }
 
-    private String googleLogin(LoginRequest loginRequest, HttpServletRequest request) {
+    private ResponseEntity<String> googleLogin(LoginRequest loginRequest, HttpServletRequest request) {
         String sub = "";
         try {
             sub = extractSubFromGoog(loginRequest.getPassword());
@@ -112,17 +112,18 @@ public class AccountService {
             e.printStackTrace();
         }
 
-        String responseString = "register";
+        ResponseEntity<String> response = ResponseEntity.status(HttpStatus.SC_CREATED).body("Register");
         List<AccountOauth2> accounts = accountOauth2Repo.findAll();
 
         for (AccountOauth2 account: accounts) {
             if (bcrypt.matches(sub, account.getHashSub())) {
                 //target acquired
-                responseString = session.startSession(account.getUsername(), request);
+                session.startSession(account.getUsername(), request);
+                response = ResponseEntity.ok(account.getUsername());
             }
         }
 
-        return responseString;
+        return response;
     }
 
     private String extractSubFromGoog(String credential) throws GeneralSecurityException, IOException {
@@ -172,8 +173,6 @@ public class AccountService {
     }
     
     public void registerUser(String username, String credential, MultipartFile image, String type) {
-        String response = "";
-        
         // RETURN SOME TYPE OF ERROR RESPONSE (422?)
         if (accountRepo.existsByUsername(username)) {
             System.out.println("user already exists!");
@@ -183,12 +182,12 @@ public class AccountService {
         System.out.println("TYPE " + type);
         if (type.equals("google")) {
             System.out.println("googly");
-            response = googleRegister(username, credential, image);
+            googleRegister(username, credential, image);
         }
         else
         {
             System.out.println("locally");
-            response = valeGamesRegister(username, credential, image);
+            valeGamesRegister(username, credential, image);
         }
 
         String imageLocation = "";
@@ -212,9 +211,7 @@ public class AccountService {
         accountRepo.save(account);
     }
 
-    private String googleRegister(String username, String credential, MultipartFile image) {
-        String response = "registered user";
-
+    private void googleRegister(String username, String credential, MultipartFile image) {
         String sub = "";
         
         System.out.println(username + " " + credential);
@@ -222,26 +219,18 @@ public class AccountService {
             sub = extractSubFromGoog(credential);
             sub = bcrypt.encode(sub);
         } catch (GeneralSecurityException e) {
-            response = e.toString();
             e.printStackTrace();
         } catch (IOException e) {
-            response = e.toString();
             e.printStackTrace();
         }
-
         
         AccountOauth2 accountOauth2 = new AccountOauth2();
         accountOauth2.setUsername(username);
         accountOauth2.setHashSub(sub);
         accountOauth2Repo.save(accountOauth2);
-
-        return response;
     }
 
-    private String valeGamesRegister(String username, String password, MultipartFile image) {
-        String response = "registered user";
-
-
+    private void valeGamesRegister(String username, String password, MultipartFile image) {
         if (image != null) {
             System.out.println("(IMAGE) yo im not null!");
         }
@@ -254,8 +243,6 @@ public class AccountService {
         accountDigest.setUsername(username);
         accountDigest.setPassword(hashedPassword);
         accountDigestRepo.save(accountDigest);
-
-        return response;
     }
 
     public ResponseEntity<Resource> getProfilePicture(String username) {
@@ -311,10 +298,9 @@ public class AccountService {
     }
 
     public String updateUser(String oldUsername, String newUsername, MultipartFile image) {
-        if (!oldUsername.equals(newUsername)) {
+        if (!oldUsername.equals(newUsername) && !newUsername.equals("")) {
             System.out.println("updating username... " + oldUsername + " " + newUsername);
             boolean updatingImage = image == null ? false : true;
-
             updateUsername(oldUsername, newUsername, updatingImage); 
         }
         
@@ -344,7 +330,6 @@ public class AccountService {
         // handle associated data too, so all of the datatables and shiet
         Account account = accountRepo.findByUsername(oldUsername);
         account.setUsername(newUsername);
-        accountRepo.save(account);
         
         if (account.getAuth_method().equals("valegames")) {
             AccountDigest accountDigest = accountDigestRepo.findByUsername(oldUsername);
@@ -360,26 +345,35 @@ public class AccountService {
         scoreService.updateUsername(oldUsername, newUsername);
         
         // update filename here!
-        if (account.isPictureCustom() || updatingImage) {
+        if (account.isPictureCustom() && !updatingImage) {
             // update name
             String currentPicturePath = account.getProfile_pic();
             String imageExtension = currentPicturePath.substring(currentPicturePath.lastIndexOf("."));
             String newName = newUsername + "_profilePic" + imageExtension;
-
+            
             String basePath = currentPicturePath.substring(0, currentPicturePath.lastIndexOf("\\"));
             String newPicturePath = basePath + "\\" + newName;
-
-            File oldPicture = new File(currentPicturePath);
-            File newPicture = new File(newPicturePath);
-            System.out.println(newPicturePath + " " + newPicture);
-            oldPicture.renameTo(newPicture);
+            account.setProfile_pic(newPicturePath);
+            
+            Path path = Paths.get(currentPicturePath);
+            Path newPath = Paths.get(newPicturePath);
+            try {
+                Files.copy(path, newPath);
+                Files.delete(path);
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            accountRepo.save(account);
         }
     }
 
     private void updateProfilePicture(String username, MultipartFile image) {
         Account account = accountRepo.findByUsername(username);
         account.setPictureCustom(true);
-        account.setProfile_pic(fileStorageService.storeProfilePicture(username, image));
+        String oldPath = account.getProfile_pic();
+        account.setProfile_pic(fileStorageService.updateProfilePicture(oldPath, username, image));
         accountRepo.save(account);
     }
 

@@ -15,13 +15,25 @@ public class FileStorageService {
         return storeProfilePictureLocally(username, file);
     }
 
+    public String updateProfilePicture(String oldPath, String username, MultipartFile file) {
+        Path path = Paths.get(oldPath);
+        try {
+            System.out.println("updating pp " + path + " " + Files.deleteIfExists(path));
+            // Files.deleteIfExists(path);
+            return storeProfilePictureLocally(username, file);
+        }
+        catch (IOException e) {
+            return e.toString();
+        }
+    }
+
     public String storeProfilePictureLocally(String username, MultipartFile file) {
         String type = file.getContentType().split("/")[1];
         String filename = username + "_profilePic." + type;
         System.out.println("FILENAME: " + filename + " ");
 
         try {
-            Path uploadDirectory = Paths.get("./spring/src/main/java/springboot/spring/uploads/profile_pictures");
+            Path uploadDirectory = Paths.get("./spring/uploads/profile_pictures");
             Path targetLocation = uploadDirectory.resolve(filename);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             return targetLocation.toString();
