@@ -1,5 +1,5 @@
 import React from "react";
-import "./leaderboard.css"
+import styles from "./leaderboard.module.css"
 
 function Leaderboard({ data, printRow, metric }) {
     let emptyMsg = "";
@@ -8,7 +8,7 @@ function Leaderboard({ data, printRow, metric }) {
     }
 
     return (
-        <div>
+        <div className={styles.tableContainer}>
             <div>
                 <p>{emptyMsg}</p>
                 <table>
