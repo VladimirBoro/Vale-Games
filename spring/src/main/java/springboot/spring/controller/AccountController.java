@@ -53,22 +53,7 @@ public class AccountController {
 
     @PostMapping("/login/valegames")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
-        try {
-            String response = accountService.login(loginRequest, request);
-            System.out.println("login response " + response + " | " + loginRequest.getUsername());
-
-            if (response.equals("register")) {
-                return ResponseEntity.ok(response);
-            }
-            else if (loginRequest.getType().equals("valegames") && !response.equals(loginRequest.getUsername())) {
-                return ResponseEntity.status(HttpStatus.SC_UNPROCESSABLE_ENTITY).body("Invalid username or password");
-            }
-
-            return ResponseEntity.ok(response);
-        }
-        catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.SC_UNPROCESSABLE_ENTITY).body("Invalid username or password");
-        }
+        return accountService.login(loginRequest, request);
     }
 
     @PostMapping("/register/valegames")

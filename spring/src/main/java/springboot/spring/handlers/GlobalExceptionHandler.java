@@ -11,7 +11,7 @@ import springboot.spring.exceptions.UsernameAlreadyExistsException;
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(UsernameAlreadyExistsException.class)
-    public ResponseEntity<String> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException uae) {
-        return new ResponseEntity<>(uae.getMessage(), HttpStatus.CONFLICT);
+    public ResponseEntity<String> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 }
