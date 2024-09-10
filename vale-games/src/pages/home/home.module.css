@@ -17,6 +17,8 @@
     height: 200px;
     margin-bottom: 1em;
     border-radius: 1em;
+    object-fit: cover;
+    border: 2px solid rgb(250, 241, 230);
 }
 
 .gameSelection {
@@ -42,7 +44,7 @@
 
 @media (min-width: 2000px) {
     .gamesDisplay {
-        max-width: 1200px;
+        max-width: 1300px;
     }
 
     .homeImage {
