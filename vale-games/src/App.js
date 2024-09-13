@@ -13,6 +13,7 @@ import Frogger from "./pages/frogger/Frogger";
 import BirdyFlap from "./pages/birdyflap/BirdyFlap";
 import Minesweeper from './pages/minesweeper/Minesweeper';
 import Cardmatch from './pages/cardmatch/Cardmatch';
+import JumpGuy from './pages/jumpguy/JumpGuy';
 import customAxios from './util/customAxios';
 import { fetchProfilePic } from './util/restful';
 import './App.css';
@@ -67,6 +68,7 @@ function App() {
           <Route path='/game/frogger' element={<Frogger />} />
           <Route path='/game/minesweeper' element={<Minesweeper />} />
           <Route path='/game/cardmatch' element={<Cardmatch />} />
+          <Route path='/game/jumpguy' element={<JumpGuy />} />
           <Route path='/login' element={<Login />} />
           <Route path='/account' element={<Account />} />
           <Route path='/logout' element={<Logout />} />

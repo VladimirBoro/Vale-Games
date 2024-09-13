@@ -77,12 +77,10 @@ function BirdyFlap () {
                 mountains.forEach((mountain) => {
                     mountain.scroll();
                     if (mountain.noImgLeft()) {
-                        console.log("adding montana?", mountains.length);
                         mountains.push(new Mountains(mountainsImage));
                     }
                     
                     if (mountain.timeToDestroy()) {
-                        console.log("destroying montana?", mountains.length);
                         mountains.splice(0, 1);
                     }
                 });
