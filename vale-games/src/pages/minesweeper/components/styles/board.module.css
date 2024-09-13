@@ -1,0 +1,16 @@
+.options button {
+    margin: 1em;
+}
+
+.board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.head {
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

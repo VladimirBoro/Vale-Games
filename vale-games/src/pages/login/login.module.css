@@ -1,0 +1,42 @@
+.page {
+    display: flex;
+    justify-content: center;
+}
+
+.signIn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    width: 300px;
+    border-radius: 2em;
+    background-color: rgb(31, 28, 28);
+    padding-bottom: 2em;
+    padding-top: 1em;
+}
+
+.formContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.signUp {
+    margin-top: 2em;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form button {
+    margin-top: 1em;
+}
+
+.googleButton {
+    display: flex;
+    justify-content: center;
+}

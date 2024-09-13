@@ -1,0 +1,21 @@
+.table {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+    justify-content: center;
+    justify-items: center;
+}
+
+.large {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.row {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* align-content: center; */
+}

@@ -1,0 +1,18 @@
+.canvas {
+    width: 770px;
+    height: 715px;
+}
+
+@media (min-width: 1920px) {
+    .canvas {
+        width: 840px;
+        height: 780px;
+    }
+}
+
+@media (min-width: 2250px) {
+    .canvas {
+        width: 910px;
+        height: 845px;
+    }
+}

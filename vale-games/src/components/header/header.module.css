@@ -1,0 +1,50 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    padding-top: 1em;
+    height:50px;
+}
+
+.header {
+    background-color: rgb(31, 28, 28);
+    padding-bottom: 1em;
+}
+
+.topRight {
+    display: flex;
+    align-items: center;
+}
+
+.nav li {
+    margin-right: 0.5em;
+}
+
+.home {
+    background: none;
+    font-size: larger;
+    border: 2px rgb(250, 241, 230) solid;
+
+}
+
+.home:hover {
+    background-color:rgba(240, 248, 255, 0);
+    font-size: 1.3em;
+}
+
+#profileLink {
+    all: unset;
+}
+
+#profileLink:hover {
+    cursor: pointer;
+}
+  
+.profilePic {
+    width: 50px;
+    height: 50px;
+    border-radius: 5em;
+    object-fit: cover;
+}
+  
