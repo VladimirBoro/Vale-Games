@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { CANVAS, DIRECTIONS, GUY, PLATFORM_TYPE, PLATFORM_ROLES } from "./constants";
 import styles from "./styles.module.css";
 import Guy from "./guy";
-import Platform from "./platforms/platform";
-import MovingPlatform from "./platforms/movingPlatform";
 import PlatformFactory from "./platforms/platformFactory";
+import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
+import StartButton from "./components/StartButton";
 
 function JumpGuy() {
     const [gameStarted, setGameStarted] = useState(false);
@@ -50,8 +50,7 @@ function JumpGuy() {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         }
-    }, []);
-
+    }, [gameStarted]);
 
     // GAME LOOP HERE
     useEffect(() => {
@@ -97,9 +96,9 @@ function JumpGuy() {
 
                 // increase difficulty based on current score
                 if (gameScore > nextStage && nextStage != 100000) {
-                    console.log("NEXT LEVEL");
                     nextStage += nextStage;
                     stage.current += 1;
+                    console.log("NEXT LEVEL", stage.current);
                 }
 
                 /*
@@ -133,8 +132,9 @@ function JumpGuy() {
     }, [gameStarted])
 
     const initGame = () => {
+        stage.current = 1;
         platformFactory.current = new PlatformFactory();
-        jumpGuyRef.current = new Guy(GUY.x, GUY.y, GUY.width, GUY.height);
+        jumpGuyRef.current = new Guy(GUY.x, GUY.y, GUY.width, GUY.height, loseGame);
     }
 
     const clearCanvas = (context) => {
@@ -144,8 +144,14 @@ function JumpGuy() {
     }
 
     const startGame = () => {
+        setGameOver(false);
         setScore(0);
         setGameStarted(true);
+    }
+
+    const loseGame = () => {
+        setGameOver(true);
+        setGameStarted(false);
     }
 
     return (
@@ -154,10 +160,16 @@ function JumpGuy() {
             <div >
                 <canvas className={styles.canvas} ref={canvasRef} />
             </div>
-            <div>
-                <button className={styles.button} onClick={startGame}>start</button>
+            <div className={styles.button}>
+                <StartButton gameStarted={gameStarted} startGame={startGame} />
             </div>
             {/* <Leaderboard data={[1,2,3]} printRow={[]} metric={"score"}/> */}
+            { gameOver ? (
+                    <GameOver lost={true} metric="Score" value={score} tryAgain={startGame}/>
+                ) : (
+                    <></>
+                )
+            }
         </div>
     )
 }

@@ -14,7 +14,7 @@ class Guy {
     #falling;
     #currentHeight;
 
-    constructor(x, y, width, height) {
+    constructor(x, y, width, height, loseGame) {
         this.#x = x;
         this.#y = y;
         this.#width = width;
@@ -30,6 +30,8 @@ class Guy {
 
         this.#falling = false;
         this.#currentHeight = 0;
+
+        this.loseGame = loseGame;
     }
     
     set movingRight(isMoving) { 
@@ -91,6 +93,10 @@ class Guy {
                 this.#y += this.#jumpSpeed;
                 this.#falling = true;
             }
+
+            if (this.#y >= CANVAS.height) {
+                this.loseGame();
+            }
         }
 
     }
@@ -115,6 +121,11 @@ class Guy {
     draw (context) {
         context.fillStyle = "yellow";
         context.fillRect(this.#x, this.#y, this.#width, this.#height);
+    }
+
+    reset () {
+        this.#x = GUY.x;
+        this.#y = GUY.y;
     }
 }
 
