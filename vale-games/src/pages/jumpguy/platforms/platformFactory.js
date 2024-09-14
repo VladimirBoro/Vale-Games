@@ -1,17 +1,21 @@
 import Platform from "./platform";
 import MovingPlatform from "./movingPlatform";
-import { PLATFORM_TYPE, PLATFORM_ROLES, CANVAS } from "../constants";
 import BouncyPlatform from "./bouncyPlatform";
+import DestroyPlatform from "./destroyPlatform";
+import FalsePlatform from "./falsePlatform";
+import { PLATFORM_TYPE, PLATFORM_ROLES, CANVAS } from "../constants";
 
 class PlatformFactory {
     #platforms;
     #minSpacing;
     #maxSpacing;
+    #currentId;
 
     constructor() {
         this.#platforms = [];
         this.#maxSpacing = 90;
         this.#minSpacing = 20;
+        this.#currentId = 0;
 
         this.#initFactory();
     }
@@ -33,7 +37,7 @@ class PlatformFactory {
     }
 
     spawnRandomPlatform(lastPlatformHeight) {
-        const randomX = Math.random() * (CANVAS.width - 60);
+        const randomX = 80 + Math.random() * (CANVAS.width - 160);
         const randomY = lastPlatformHeight - this.#nextPlatformDistance();
 
         const roll = this.#roll100();
@@ -57,17 +61,32 @@ class PlatformFactory {
             platform = new MovingPlatform(randomX, randomY);
         }
         else if (platformType === PLATFORM_TYPE.DESTROY) {
-            platform = new Platform(randomX, randomY);
+            platform = new DestroyPlatform(randomX, randomY, this.#currentId++, 
+                (id) => {
+                    this.deleteById(id); 
+                })
         }
         else {
-            platform = new Platform(randomX, randomY);
+            platform = new FalsePlatform(randomX, randomY);
         }
 
         this.#platforms.push(platform);
     }
 
     deletePlatform() {
-        this.#platforms.splice(0,1);
+        console.log(this.#platforms.length);
+        this.#platforms.splice(0, 1);
+    }
+    
+    // only used on destroyable platforms (red ones)
+    deleteById(id) {
+        this.#platforms = this.#platforms.filter((platform) => {
+            if (platform.id !== null && platform.id !== id) {
+                return true;
+            }
+
+            return false;
+        })
     }
 
     drawPlatforms(context) {
