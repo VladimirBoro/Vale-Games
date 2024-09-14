@@ -8,7 +8,7 @@ export const GUY = {
     y: CANVAS.height - (CANVAS.height / 5),
     width: 20,
     height: 20,
-    jumpSpeed: -6.5
+    jumpSpeed: -5.5
 }
 
 export const DIRECTIONS = {
