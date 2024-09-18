@@ -153,9 +153,11 @@ class Guy {
         
         context.shadowColor = "black";
         context.shadowBlur = 10;
-
+        
         // show on refresh
         this.#spriteSheet.onload = () => {
+            context.shadowColor = "black";
+            context.shadowBlur = 10;
             const [x, y, h] = GUY_JUMPING_FRAMES[this.#spriteJumpFrame];
             context.drawImage(this.#spriteSheet, x, y, this.#width, h, this.#x, this.#y, this.#width, this.#height);
         }

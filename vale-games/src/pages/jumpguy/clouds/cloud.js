@@ -25,11 +25,11 @@ class Cloud {
     draw (context) {
         let [x,y,w,h] = CLOUD_FRAMES[this.#cloudType];
         context.save();
-        context.strokeStyle = "black";
         context.shadowColor = "#3f51b5";
         context.shadowBlur = 150;
-        context.lineWidth = 2;
         this.#cloudImage.onload = () => {
+            context.shadowColor = "#3f51b5";
+            context.shadowBlur = 150;
             context.drawImage(this.#cloudImage, x, y, w, h, this.#x, this.#y, w, h);
         }
         context.drawImage(this.#cloudImage, x, y, w, h, this.#x, this.#y, w, h);

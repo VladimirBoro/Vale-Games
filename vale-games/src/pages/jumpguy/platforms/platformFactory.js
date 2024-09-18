@@ -111,6 +111,7 @@ class PlatformFactory {
     }
 
     drawPlatforms(context) {
+        context.shadowBlur = 0;
         this.#platforms.forEach(platform => {
             platform.draw(context);
         })
