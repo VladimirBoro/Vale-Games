@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./home.module.css";
-import image from "./background.png";
 import snakeImage from "./images/snake.png";
 import minesweeperImage from "./images/minesweeper.png";
 import froggerImage from "./images/frogger.png";
 import cardmatchImage from "./images/cardmatch.png";
-import skyImage from "./images/sky.png";
+import birdyFlapImage from "./images/birdyflap.png";
+import jumpGuyImage from "./images/jumpguy.png";
 
 const Home = () => {
     const URL = process.env.REACT_APP_SERVER_URL;
@@ -49,15 +49,15 @@ const Home = () => {
                 <li>    
                     <div className={styles.gameSelection}>
                         <a href="/game/birdyflap" className={styles.anchor}>
-                            <img src={skyImage} className={styles.homeImage} alt="birdyflap game screenshot"/>
+                            <img src={birdyFlapImage} className={styles.homeImage} alt="birdyflap game screenshot"/>
                         </a>
-                        <Link to="/game/birdyflap">Birdy Flap</Link>
+                        <Link to="/game/birdyflap">Batty Flap</Link>
                     </div>
                 </li>    
                 <li>    
                     <div className={styles.gameSelection}>
                         <a href="/game/jumpguy" className={styles.anchor}>
-                            <img src={image} className={styles.homeImage} alt="jump guy game screenshot"/>
+                            <img src={jumpGuyImage} className={styles.homeImage} alt="jump guy game screenshot"/>
                         </a>
                         <Link to="/game/jumpguy">Jump Guy</Link>
                     </div>
