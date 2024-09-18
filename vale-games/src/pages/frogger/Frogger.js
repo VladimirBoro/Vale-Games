@@ -101,6 +101,8 @@ function Frogger() {
         canvas.width = CANVAS_WIDTH;
         canvas.height = CANVAS_HEIGHT;
         let context = canvas.getContext("2d");
+        context.shadowColor = "black";
+        context.shadowBlur = 10;
 
         let animFrame;
         
