@@ -1,0 +1,18 @@
+.summary, .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    text-align: center;
+    background-color:  rgb(31, 28, 28);
+    border-radius: 1em;
+}
+
+.summary h2 {
+    all :none;
+}
+
+.controls {
+    margin: 1em;
+    padding-bottom: 1em;
+}
