@@ -3,43 +3,61 @@ import MovingPlatform from "./movingPlatform";
 import BouncyPlatform from "./bouncyPlatform";
 import DestroyPlatform from "./destroyPlatform";
 import FalsePlatform from "./falsePlatform";
-import { PLATFORM_TYPE, PLATFORM_ROLES, CANVAS } from "../constants";
+import { PLATFORM_TYPE, PLATFORM_ROLES, CANVAS, PLATFORM } from "../constants";
 
 class PlatformFactory {
     #platforms;
     #minSpacing;
     #maxSpacing;
     #currentId;
+    #stage;
 
     constructor() {
         this.#platforms = [];
         this.#maxSpacing = 90;
         this.#minSpacing = 20;
         this.#currentId = 0;
+        this.#stage = 1;
 
         this.#initFactory();
     }
 
     #initFactory() {
-        this.spawnRandomPlatform(CANVAS.height); 
+        this.#platforms.push(this.createRandomPlatform(CANVAS.height)); 
         for (let i = 0; i <= 20; i++) {
-            this.spawnRandomPlatform(this.#platforms[this.#platforms.length - 1].y);
+            this.#platforms.push(this.createRandomPlatform(this.#platforms[this.#platforms.length - 1].y));
         }
-
     }
-
+    
     #roll100() {
         return Math.round(Math.random() * 100); 
     }
-
-    #nextPlatformDistance() {
-        return this.#minSpacing + (Math.random() * this.#maxSpacing);  
+    
+    #nextPlatformDistance(stage) {
+        let multiplier = stage;
+        if (stage > 1) {
+            multiplier = 1 + (stage / 10);
+        }
+        
+        return (this.#minSpacing + (Math.random() * this.#maxSpacing)) * multiplier;  
     }
 
-    spawnRandomPlatform(lastPlatformHeight) {
-        const randomX = 80 + Math.random() * (CANVAS.width - 160);
-        const randomY = lastPlatformHeight - this.#nextPlatformDistance();
+    reset() {
+        this.#platforms = [];
+        this.#currentId = 0;
+        this.#stage = 1;
+        this.#initFactory();
+    }
+    
+    advanceStage() {
+        this.#stage++;
+    }
 
+    createRandomPlatform(lastPlatformHeight) {
+        const randomX = Math.random() * (CANVAS.width - PLATFORM.width);
+        const randomY = lastPlatformHeight - this.#nextPlatformDistance(this.#stage);
+
+        // roll for platform type
         const roll = this.#roll100();
         
         let platformType; 
@@ -54,27 +72,30 @@ class PlatformFactory {
         if (platformType === PLATFORM_TYPE.STATIC) {
             platform = new Platform(randomX, randomY);
         }
+        else if (this.#stage > 1 && platformType === PLATFORM_TYPE.SLIDING) {
+            platform = new MovingPlatform(randomX, randomY, this.#stage);
+        }
         else if (platformType === PLATFORM_TYPE.BOUNCY) {
             platform = new BouncyPlatform(randomX, randomY);
         }
-        else if (platformType === PLATFORM_TYPE.SLIDING) {
-            platform = new MovingPlatform(randomX, randomY);
-        }
-        else if (platformType === PLATFORM_TYPE.DESTROY) {
+        else if (this.#stage > 4 && platformType === PLATFORM_TYPE.DESTROY) {
             platform = new DestroyPlatform(randomX, randomY, this.#currentId++, 
                 (id) => {
                     this.deleteById(id); 
                 })
         }
-        else {
+        else if (this.#stage > 6 && platformType === PLATFORM_TYPE.FALSE) {
             platform = new FalsePlatform(randomX, randomY);
         }
+        else {
+            // reroll it 
+            return this.createRandomPlatform(lastPlatformHeight, this.#stage);
+        }
 
-        this.#platforms.push(platform);
+        return platform;
     }
 
     deletePlatform() {
-        console.log(this.#platforms.length);
         this.#platforms.splice(0, 1);
     }
     
@@ -102,10 +123,9 @@ class PlatformFactory {
 
         const lastPlatform = this.#platforms[this.#platforms.length - 1];
         if (lastPlatform.y > 0) {
-            this.spawnRandomPlatform(lastPlatform.y);
+            this.#platforms.push(this.createRandomPlatform(lastPlatform.y, this.#stage));
         }
     }
-
 }
 
 export default PlatformFactory;

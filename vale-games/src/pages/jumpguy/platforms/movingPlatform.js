@@ -2,21 +2,23 @@ import Platform from "./platform";
 import { CANVAS } from "../constants";
 
 class MovingPlatform extends Platform {
-    constructor(x, y, slideSpeed = 1) {
+    constructor(x, y, stage, slideSpeed = 1) {
         super(x, y,);
         this._slideSpeed = slideSpeed;
         this._direction = 1;
+        this.stage = stage;
     }
 
     update (speed, guyRef, deletePlatform) {
         super.update(speed, guyRef, deletePlatform);
 
-        if ((this._x <= 20) || (this._x >= CANVAS.width - this._width - 20)) {
+        if ((this._x <= 0) || (this._x >= CANVAS.width - this._width)) {
             this._direction *= -1;
         }
 
         // console.log(this._slideSpeed);
-        this._x += this._slideSpeed * this._direction;
+        let multiplier = 1 + (this.stage / 10);
+        this._x += this._slideSpeed * this._direction * multiplier;
     }
 
     draw (context) {

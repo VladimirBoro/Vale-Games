@@ -1,8 +1,8 @@
 import React from "react";
 
-function StartButton({gameStarted, startGame}) {
+function StartButton({hideButton, startGame}) {
     return (
-        <div style={{ visibility: gameStarted ? "hidden" : "visible" }}>
+        <div style={{ visibility: (hideButton) ? "hidden" : "visible" }}>
             <button onClick={startGame}>Start</button>
         </div>
     );

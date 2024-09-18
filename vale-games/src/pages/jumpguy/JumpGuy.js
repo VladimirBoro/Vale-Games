@@ -5,17 +5,21 @@ import Guy from "./guy";
 import PlatformFactory from "./platforms/platformFactory";
 import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
+import HowTo from "../../components/howTo/HowTo";
 import StartButton from "./components/StartButton";
+import CloudFactory from "./clouds/cloudFactory";
 
 function JumpGuy() {
     const [gameStarted, setGameStarted] = useState(false);
     const [gameOver, setGameOver] = useState(false);
+    const [hideStartButton, setHideStartButton] = useState(false);
     const [score, setScore] = useState(0);
     
     const canvasRef = useRef(null);
     const jumpGuyRef = useRef(null);
     const stage = useRef(1);
     const platformFactory = useRef();
+    const cloudFactory = useRef();
     
     // init game and set up controls
     useEffect(() => {
@@ -50,7 +54,7 @@ function JumpGuy() {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         }
-    }, [gameStarted]);
+    }, []);
 
     // GAME LOOP HERE
     useEffect(() => {
@@ -63,12 +67,14 @@ function JumpGuy() {
         const jumpGuy = jumpGuyRef.current;
 
         clearCanvas(context);
-        jumpGuy.draw(context);
+        cloudFactory.current.drawClouds(context);
         platformFactory.current.drawPlatforms(context);
+        jumpGuy.draw(context);
+        console.log("right after init drawing");
 
         let animationId;
         let gameScore = 0;
-        let nextStage = 100;
+        let nextStage = 2500;
          
         // START THE GAME LOOP HERE
         if (gameStarted) {
@@ -95,10 +101,10 @@ function JumpGuy() {
                 }
 
                 // increase difficulty based on current score
-                if (gameScore > nextStage && nextStage != 100000) {
-                    nextStage += nextStage;
-                    stage.current += 1;
-                    console.log("NEXT LEVEL", stage.current);
+                if (gameScore > nextStage && nextStage < 25000) {
+                    nextStage += 2500;
+                    platformFactory.current.advanceStage();
+                    console.log("NEXT LEVEL", stage.current, nextStage);
                 }
 
                 /*
@@ -113,9 +119,11 @@ function JumpGuy() {
                 }
 
                 // update platforms
-                platformFactory.current.updatePlatforms(speed, jumpGuy);
+                platformFactory.current.updatePlatforms(speed, jumpGuy, stage.current);
+                cloudFactory.current.updateClouds(speed, jumpGuy);
     
                 // draw everything
+                cloudFactory.current.drawClouds(context);
                 platformFactory.current.drawPlatforms(context);
                 jumpGuy.draw(context);
     
@@ -128,30 +136,58 @@ function JumpGuy() {
                 cancelAnimationFrame(animationId);
             }
         }
+    }, [gameStarted, gameOver])
 
-    }, [gameStarted])
-
-    const initGame = () => {
+    const initGame = async () => {
         stage.current = 1;
-        platformFactory.current = new PlatformFactory();
+        cloudFactory.current =  new CloudFactory();
+        platformFactory.current =  new PlatformFactory();
         jumpGuyRef.current = new Guy(GUY.x, GUY.y, GUY.width, GUY.height, loseGame);
+
     }
 
     const clearCanvas = (context) => {
         context.clearRect(0, 0, CANVAS.width, CANVAS.height);
-        context.fillStyle = "black";
+        context.fillStyle = "#3f51b5";
         context.fillRect(0, 0, CANVAS.width, CANVAS.height);
     }
 
-    const startGame = () => {
+    const resetGame = () => {
+        cloudFactory.current.reset();
+        platformFactory.current.reset();
+        jumpGuyRef.current.reset();
         setGameOver(false);
+        setHideStartButton(false);
         setScore(0);
+
+    }
+
+    const startGame = () => {
+        setScore(0);
+        setHideStartButton(true);
         setGameStarted(true);
     }
 
     const loseGame = () => {
+        stage.current = 1;
         setGameOver(true);
         setGameStarted(false);
+    }
+
+    const toggleHitbox = () => {
+        jumpGuyRef.current.showHitbox = !jumpGuyRef.current.showHitbox;
+    }
+
+    const summary = () => {
+        return "Welcome to Jump Guy! The objective in this game is to get as high as possible"
+        + " without falling below the screen.\n As you climb higher the difficulty will increase, with new"
+        + " platform types appearing and the distance between them increasing. \n"
+    }
+
+    const controls = () => {
+        return ["Left Arrow / Right Arrow OR A / D => Move Left and Move Right",
+                "Going off the side of the screen brings you to the opposite side"
+        ]
     }
 
     return (
@@ -161,11 +197,13 @@ function JumpGuy() {
                 <canvas className={styles.canvas} ref={canvasRef} />
             </div>
             <div className={styles.button}>
-                <StartButton gameStarted={gameStarted} startGame={startGame} />
+                <StartButton hideButton={hideStartButton} startGame={startGame} />
+                <button onClick={toggleHitbox}>Show Hitbox</button>
             </div>
+            <HowTo summary={summary()} controls={controls()}/>
             {/* <Leaderboard data={[1,2,3]} printRow={[]} metric={"score"}/> */}
             { gameOver ? (
-                    <GameOver lost={true} metric="Score" value={score} tryAgain={startGame}/>
+                    <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (
                     <></>
                 )

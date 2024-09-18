@@ -12,3 +12,17 @@
 .canvas {
     margin: 1em;
 }
+
+@media (min-width: 1500px) {
+    .canvas {
+        width: 700px;
+        height: 933px;
+    }
+}
+
+@media (min-width: 2000px) {
+    .canvas {
+        width: 800px;
+        height: 1066px;
+    }
+}

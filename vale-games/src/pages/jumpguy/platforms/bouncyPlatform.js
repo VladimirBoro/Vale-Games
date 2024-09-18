@@ -5,7 +5,7 @@ class BouncyPlatform extends Platform {
     #y;
     #bounceMultiplier;
 
-    constructor(x, y, bounceMultiplier = 1.66) {
+    constructor(x, y, bounceMultiplier = 1.86) {
         super(x, y);
         this.#bounceMultiplier = bounceMultiplier;
     }

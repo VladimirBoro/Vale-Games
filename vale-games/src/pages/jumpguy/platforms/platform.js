@@ -41,6 +41,7 @@ class Platform {
     draw (context) {
         context.fillStyle = "white";
         context.fillRect(this._x, this._y, this._width, this._height);
+        context.strokeRect(this._x, this._y, this._width, this._height);
     }
 }
 
