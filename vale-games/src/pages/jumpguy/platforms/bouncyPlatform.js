@@ -29,6 +29,7 @@ class BouncyPlatform extends Platform {
     draw (context) {
         context.fillStyle = "green";
         context.fillRect(this._x, this._y, this._width, this._height);
+        context.strokeRect(this._x, this._y, this._width, this._height);
     }
 }
 

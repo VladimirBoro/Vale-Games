@@ -53,9 +53,9 @@ export const PLATFORM_TYPE = {
     FALSE: 4
 }
 
-export const PLATFORM_ROLES = [ {type: PLATFORM_TYPE.STATIC, roll: 80},
-                                {type: PLATFORM_TYPE.SLIDING, roll: 90},
+export const PLATFORM_ROLES = [ {type: PLATFORM_TYPE.STATIC, roll: 75},
+                                {type: PLATFORM_TYPE.SLIDING, roll: 88},
                                 {type: PLATFORM_TYPE.BOUNCY, roll: 94},
-                                {type: PLATFORM_TYPE.DESTROY, roll: 99},
-                                {type: PLATFORM_TYPE.FALSE, roll: 101}
+                                {type: PLATFORM_TYPE.DESTROY, roll: 100}
+                                // {type: PLATFORM_TYPE.FALSE, roll: 101}
                             ]

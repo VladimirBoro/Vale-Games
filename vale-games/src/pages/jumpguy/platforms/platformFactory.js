@@ -78,14 +78,11 @@ class PlatformFactory {
         else if (platformType === PLATFORM_TYPE.BOUNCY) {
             platform = new BouncyPlatform(randomX, randomY);
         }
-        else if (this.#stage > 4 && platformType === PLATFORM_TYPE.DESTROY) {
+        else if (this.#stage > 3 && platformType === PLATFORM_TYPE.DESTROY) {
             platform = new DestroyPlatform(randomX, randomY, this.#currentId++, 
                 (id) => {
                     this.deleteById(id); 
                 })
-        }
-        else if (this.#stage > 6 && platformType === PLATFORM_TYPE.FALSE) {
-            platform = new FalsePlatform(randomX, randomY);
         }
         else {
             // reroll it 
@@ -111,7 +108,9 @@ class PlatformFactory {
     }
 
     drawPlatforms(context) {
-        context.shadowBlur = 0;
+        context.shadowBlur = 10;
+        context.shadowColor = "black";
+        context.strokeStyle = "black";
         this.#platforms.forEach(platform => {
             platform.draw(context);
         })
