@@ -27,6 +27,8 @@ function Frogger() {
     const hopDistanceY = Math.floor(CANVAS_HEIGHT / numRows);
     const initFrogX = (CANVAS_WIDTH / 2) - (hopDistanceX - 8);
     const initFrogY = CANVAS_HEIGHT - (hopDistanceY - 5);
+    const fps = 60;
+    const fpsInterval = 1000 / fps;
 
     const canvasRef = useRef(); // canvas dom reference
 
@@ -58,27 +60,27 @@ function Frogger() {
 
     const isHit = useRef(false);
 
-    // UGLY HARDCODED STUFF ALERT!!
+    const lastFroggerTime = useRef(Date.now());
+
     const froggerPosition = useRef({
         x: initFrogX, 
         y: initFrogY
     });
     
-    // UGLY HARDCODED STUFF ALERT!!
     const uncenteredY = CANVAS_HEIGHT - hopDistanceY;
     const lanes = [
         { laneNumber: 1, laneYPosition: uncenteredY - (hopDistanceY * 1) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 2, laneYPosition: uncenteredY - (hopDistanceY * 2) + 12, showHitboxes, isLevelScaled: true},
-        { laneNumber: 3, laneYPosition: uncenteredY - (hopDistanceY * 3) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 4, laneYPosition: uncenteredY - (hopDistanceY * 4) + 12, showHitboxes, isLevelScaled: true},
-        { laneNumber: 5, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 6, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 7, laneYPosition: uncenteredY - (hopDistanceY * 7) + 15, showHitboxes, isLevelScaled: true},
-        { laneNumber: 8, laneYPosition: uncenteredY - (hopDistanceY * 8) + 25, showHitboxes, isLevelScaled: false},
-        { laneNumber: 9, laneYPosition: uncenteredY - (hopDistanceY * 9) + 25, showHitboxes, isLevelScaled: true},
-        { laneNumber: 10, laneYPosition: uncenteredY - (hopDistanceY * 10) + 25, showHitboxes, isLevelScaled: true},
-        { laneNumber: 11, laneYPosition: uncenteredY - (hopDistanceY * 11) + 25, showHitboxes, isLevelScaled: false},
-        { laneNumber: 12, laneYPosition: uncenteredY - (hopDistanceY * 12) + 25, showHitboxes, isLevelScaled: false}
+        // { laneNumber: 2, laneYPosition: uncenteredY - (hopDistanceY * 2) + 12, showHitboxes, isLevelScaled: true},
+        // { laneNumber: 3, laneYPosition: uncenteredY - (hopDistanceY * 3) + 12, showHitboxes, isLevelScaled: false},
+        // { laneNumber: 4, laneYPosition: uncenteredY - (hopDistanceY * 4) + 12, showHitboxes, isLevelScaled: true},
+        // { laneNumber: 5, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
+        // { laneNumber: 6, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
+        // { laneNumber: 7, laneYPosition: uncenteredY - (hopDistanceY * 7) + 15, showHitboxes, isLevelScaled: true},
+        // { laneNumber: 8, laneYPosition: uncenteredY - (hopDistanceY * 8) + 25, showHitboxes, isLevelScaled: false},
+        // { laneNumber: 9, laneYPosition: uncenteredY - (hopDistanceY * 9) + 25, showHitboxes, isLevelScaled: true},
+        // { laneNumber: 10, laneYPosition: uncenteredY - (hopDistanceY * 10) + 25, showHitboxes, isLevelScaled: true},
+        // { laneNumber: 11, laneYPosition: uncenteredY - (hopDistanceY * 11) + 25, showHitboxes, isLevelScaled: false},
+        // { laneNumber: 12, laneYPosition: uncenteredY - (hopDistanceY * 12) + 25, showHitboxes, isLevelScaled: false}
     ]
     .map(({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }) => new Lane({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }));
 
@@ -105,6 +107,8 @@ function Frogger() {
         context.shadowColor = "black";
         context.shadowBlur = 10;
 
+        let lastLaneTime = Date.now();
+
         let animFrame;
         
         fetchLeaderboard();
@@ -118,8 +122,15 @@ function Frogger() {
                 loseGame();
             }
 
-            // LOGIC (move all objects)
-            lanes.forEach(lane => lane.updateLaneObjects(levelMultiplier.current));
+            let deltaLaneTime = Date.now() - lastLaneTime;
+
+            if (deltaLaneTime > fpsInterval) {
+                lastLaneTime = Date.now() - (deltaLaneTime % fpsInterval);
+                // LOGIC (move all objects)
+                lanes.forEach(lane => lane.updateLaneObjects(levelMultiplier.current));
+            }
+            // lanes.forEach(lane => lane.updateLaneObjects(levelMultiplier.current));
+
 
             // check current lane for collisions with frog
             if ((froggerLane.current !== -1 && froggerLane.current !== 5 && froggerLane.current !== 11) && !isHit.current) {
@@ -134,7 +145,8 @@ function Frogger() {
             clearScreen(context);
             lanes.forEach(lane => lane.drawLaneObjects(context));
             
-            drawFrogger(context);
+            let deltaFroggerTime = Date.now() - lastFroggerTime.current;
+            drawFrogger(context, deltaFroggerTime);
             
             animFrame = requestAnimationFrame(gameLoop);
         }
@@ -321,10 +333,11 @@ function Frogger() {
         }
     }
 
-    const hopAnimation = (context) => {
+    const hopAnimation = (context, deltaTime) => {
         hopFrameCount.current++;
 
-        if (hopFrameCount.current % framesPerJump === 0) {
+        if (deltaTime > fpsInterval) {
+            lastFroggerTime.current = Date.now() - (deltaTime % fpsInterval);
             moveFrogger();
             hopFrameIndex.current++;
         }
@@ -342,11 +355,15 @@ function Frogger() {
         }
     }
 
-    const idleAnimation = (context) => {
+    const idleAnimation = (context, deltaTime) => {
         const postion = froggerPosition.current;
-        idleFrameCount.current++;
-
-        if (idleFrameCount.current % 35 === 0) {
+            
+        if (deltaTime > fpsInterval) {
+            idleFrameCount.current++;
+        }
+    
+        if (idleFrameCount.current % 15 === 0) {
+            lastFroggerTime.current = Date.now() - (deltaTime % fpsInterval);
             idleFrameIndex.current++;
         }
 
@@ -378,13 +395,13 @@ function Frogger() {
         }
     }
 
-    const drawFrogger = (context) => {
+    const drawFrogger = (context, deltaTime) => {
         context.save();
         context.scale(froggerDirection.current, 1);
         
         if (isHit.current && !isHopping.current) {
             // RIP...
-            deathAnimation(context);
+            deathAnimation(context, deltaTime);
         }
 
         // TODO: move to move function
@@ -400,11 +417,11 @@ function Frogger() {
         if (isHopping.current) {
             idleFrameIndex.current = 0;
             // playAnimation(ANIMATIONS.HOP);
-            hopAnimation(context);
+            hopAnimation(context, deltaTime);
         }
         else if (!isHit.current) {
             // idle...
-            idleAnimation(context);
+            idleAnimation(context, deltaTime);
         }
         
         context.restore();

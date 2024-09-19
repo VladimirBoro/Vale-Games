@@ -61,7 +61,7 @@ export const frogRadius = 14;
 
 export const LANES = {
     1: {
-        speed: 0.6,
+        speed: 1.44,
         width: 72,
         height: 27,
         batchSize: 3,
