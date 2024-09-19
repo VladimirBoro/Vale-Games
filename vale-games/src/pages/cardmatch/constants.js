@@ -1,18 +1,18 @@
 export const EASY = {
     pairs: 6,
-    lives: 5,
+    lives: 10,
     string: "Easy"
 };
 
 export const MEDIUM = {
     pairs: 8,
-    lives: 5,
+    lives: 10,
     string: "Medium"
 };
 
 export const HARD = {
     pairs: 10,
-    lives: 5,
+    lives: 10,
     string: "Hard"
 };
 
