@@ -10,6 +10,7 @@ function Leaderboard({ data, printRow, metric }) {
     return (
         <div className={styles.tableContainer}>
             <div>
+                <h2 style={{textAlign: "center"}}>Leaderboard:</h2>
                 <p>{emptyMsg}</p>
                 <table>
                     <thead>
