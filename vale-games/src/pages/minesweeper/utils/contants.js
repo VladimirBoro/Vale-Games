@@ -1,16 +1,16 @@
 export const easyGame = {
-    size: 8,
-    minesAmount: 1
+    size: 9,
+    minesAmount: 10
 };
 
 export const mediumGame = {
-    size: 12,
-    minesAmount: 16
+    size: 16,
+    minesAmount: 40
 };
 
 export const hardGame = {
-    size: 16,
-    minesAmount: 35
+    size: 22,
+    minesAmount: 99
 };
 
 export const URL = process.env.REACT_APP_SERVER_URL;
