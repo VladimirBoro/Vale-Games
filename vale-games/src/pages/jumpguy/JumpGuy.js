@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { CANVAS, DIRECTIONS, GUY, PLATFORM_TYPE, PLATFORM_ROLES } from "./constants";
+import { CANVAS, DIRECTIONS, GUY } from "./constants";
+import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import styles from "./styles.module.css";
 import Guy from "./guy";
 import PlatformFactory from "./platforms/platformFactory";
@@ -14,6 +15,7 @@ function JumpGuy() {
     const [gameOver, setGameOver] = useState(false);
     const [hideStartButton, setHideStartButton] = useState(false);
     const [score, setScore] = useState(0);
+    const [leaderboard, setLeaderboard] = useState([]);
     
     const canvasRef = useRef(null);
     const jumpGuyRef = useRef(null);
@@ -56,6 +58,13 @@ function JumpGuy() {
         }
     }, []);
 
+    useEffect(() => {
+        const username = localStorage.getItem("user");
+        if (username !== null && score !== 0) {
+            submitScore(username);
+        }
+    }, [gameOver])
+
     // GAME LOOP HERE
     useEffect(() => {
         // set some stuff up before starting the game loop
@@ -65,6 +74,8 @@ function JumpGuy() {
         const context = canvas.getContext("2d");
         
         const jumpGuy = jumpGuyRef.current;
+
+        fetchLeaderboard();
 
         clearCanvas(context);
         cloudFactory.current.drawClouds(context);
@@ -101,7 +112,7 @@ function JumpGuy() {
                 }
 
                 // increase difficulty based on current score
-                if (gameScore > nextStage && nextStage < 25000) {
+                if (gameScore > nextStage && nextStage < 27500) {
                     nextStage += 2500;
                     platformFactory.current.advanceStage();
                     console.log("NEXT LEVEL", stage.current, nextStage);
@@ -163,9 +174,16 @@ function JumpGuy() {
     }
 
     const startGame = () => {
-        setScore(0);
         setHideStartButton(true);
         setGameStarted(true);
+    }
+
+    const fetchLeaderboard = async () => {
+        setLeaderboard(await getLeaderboard("/jumpguy/leaderboard-top10"));
+    }
+
+    const submitScore = (username) => {
+        sendLeaderboardData("/jumpguy/add", username, score, "score");
     }
 
     const loseGame = () => {
@@ -176,6 +194,16 @@ function JumpGuy() {
 
     const toggleHitbox = () => {
         jumpGuyRef.current.showHitbox = !jumpGuyRef.current.showHitbox;
+    }
+
+    const printRow = (entry) => {
+        return (
+            <>
+                <th scope="row">{entry.username}</th>
+                <td>{entry.date}</td>
+                <td>{entry.score}</td>
+            </>
+        )
     }
 
     const summary = () => {
@@ -201,7 +229,7 @@ function JumpGuy() {
                 <button onClick={toggleHitbox}>Show Hitbox</button>
             </div>
             <HowTo summary={summary()} controls={controls()}/>
-            {/* <Leaderboard data={[1,2,3]} printRow={[]} metric={"score"}/> */}
+            <Leaderboard data={leaderboard} printRow={printRow} metric={"score"}/>
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (

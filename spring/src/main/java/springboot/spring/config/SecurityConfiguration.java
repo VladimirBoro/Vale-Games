@@ -20,23 +20,16 @@ public class SecurityConfiguration {
                 authorizeRequests
                 .requestMatchers("/login/**", "/register/**", "/logout/**", "/frogger/leaderboard**", 
                     "/snake/leaderboard/**", "/minesweeper/leaderboard", "/cardmatch/leaderboard-top10", 
-                    "/birdyflap/leaderboard-top10")
+                    "/birdyflap/leaderboard-top10", "/jumpguy/leaderboard**")
                     .permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(formLogin -> 
                 formLogin
                 .disable()
-                // .loginPage("/login")
-                // .permitAll()
             )
-            // .logout(logout ->
-            //     logout
-            //     .permitAll()
-            // )   
             .sessionManagement(session -> session
                 .maximumSessions(1)
-                // .maxSessionsPreventsLogin(true)
             )
             .csrf(AbstractHttpConfigurer::disable);
 
