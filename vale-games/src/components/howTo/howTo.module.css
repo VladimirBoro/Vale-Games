@@ -9,7 +9,11 @@
 }
 
 .summary h2 {
-    all :none;
+    margin-bottom: 0;
+}
+
+.summary p {
+    padding: 0 1em 0 1em;
 }
 
 .controls {
