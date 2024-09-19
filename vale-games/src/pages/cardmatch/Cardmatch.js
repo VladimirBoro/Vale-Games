@@ -6,6 +6,7 @@ import GameOver from "../../components/gameover/GameOver"
 import Leaderboard from "../../components/leaderboard/Leaderboard"
 import { EASY, MEDIUM, HARD } from "./constants";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import HowTo from "../../components/howTo/HowTo";
 
 
 function CardMatch() {
@@ -109,6 +110,17 @@ function CardMatch() {
         )
     }
 
+    const summary = () => {
+        return "Welcome to Cardmatch! The objective in this game is to match all the pairs of cards."
+        + " Flip over a card and then different card to see if they match, if they do keep going, and if"
+        + " not, try to keep note of what type the two cards you just flipped over were."
+    }
+
+    const controls = () => {
+        return ["Left Click a card => Reveal the other side"
+        ]
+    }
+
     return (
         <div className={style.table_container}>
             <h1 className={style.h1}>Card Match</h1>
@@ -134,6 +146,7 @@ function CardMatch() {
                 <button onClick={() => handleDifficultyButton(HARD)}> Hard </button>
             </div>
 
+            <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={leaderboard} printRow={printRow} metric="Time"/>
         </div>
     );

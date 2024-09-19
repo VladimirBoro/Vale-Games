@@ -4,6 +4,7 @@ import game from "../../pages/game/game.module.css"
 import Timer from "../../components/timer/Timer";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
 import GameOver from "../../components/gameover/GameOver";
+import HowTo from "../../components/howTo/HowTo";
 
 function Snake() {
     const ADD_SCORE_PATH = process.env.REACT_APP_SNAKE_ADD_PATH;
@@ -309,6 +310,16 @@ function Snake() {
         )
     }
 
+    const summary = () => {
+        return "Welcome to Snake! Grow as long as possible by consuming hearts, but be sure to not"
+        + " run into yourself or the walls! Then it is game over."
+    }
+
+    const controls = () => {
+        return ["WASD or Arrow Keys => Up, Right, Down, Left"
+        ]
+    }
+
     return (
         <div className={game.page}>
             <h1>Snake</h1>
@@ -334,7 +345,7 @@ function Snake() {
                 )
             }
             <button onClick={startGame} className={game.startButton}>start game</button>
-            <h2>Leaderboard</h2>
+            <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={scores} printRow={printLeaderboardRow} metric={"Score"}/>
         </div>
     );

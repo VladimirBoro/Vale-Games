@@ -7,6 +7,7 @@ import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from '../../components/leaderboard/Leaderboard';
 import styles from "./styles/styles.module.css";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import HowTo from "../../components/howTo/HowTo";
 
 function Frogger() {
     const [gameStarted, setGameStarted] = useState(false);
@@ -555,6 +556,17 @@ function Frogger() {
         )
     }
 
+    const summary = () => {
+        return "Welcome to Frogger! Try your best to reach one of the square lilypads on the other"
+        + " side of the road and river. Reaching every platform will restart the process except"
+        + " the speed of some of the lanes increase, so don't get too comfortable!"
+    }
+
+    const controls = () => {
+        return ["WASD or Arrow Keys => Hop left, right, up, or down"
+        ]
+    }
+
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center" }}>
             <div style={{display: "flex", justifyContent: "space-around", width: "500px"}}>
@@ -569,6 +581,7 @@ function Frogger() {
                 <button onClick={handleHitboxPress} style={{marginTop:"1em"}}>Hitboxes</button>
                 <button onClick={startGame} style={{marginTop:"1em"}}>Start</button>
             </div>
+            <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={leaderboard} printRow={printRow} metric={"Score"}/>
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>

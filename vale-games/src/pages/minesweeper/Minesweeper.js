@@ -5,6 +5,7 @@ import GameOver from '../../components/gameover/GameOver';
 import styles from "./minesweeper.module.css";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import { ADD_PATH, LEADERBOARD_PATH } from "./utils/contants.js"
+import HowTo from '../../components/howTo/HowTo.js';
 
 
 function Minesweeper() {
@@ -56,9 +57,23 @@ function Minesweeper() {
         restart.current(); // reset board
     }
 
+    const summary = () => {
+        return "Open squares with the left mouse button and put flags on mines with the right mouse button."
+        + " When you open a square that does not touch any mines, it will be empty and the adjacent"
+        + " squares will automatically open in all directions until reaching squares that contain numbers."
+        + " A common strategy for starting games is to randomly click until you get a big opening with lots of numbers."
+    }
+
+    const controls = () => {
+        return ["Left Click Cell => Open it up",
+                "Right Click Cell => Place Flag/Remove Flag"
+        ]
+    }
+
     return (
         <div className={styles.page}>
             <Board postTime={postTime} gg={gg}/>
+            <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={times} printRow={printRow} metric={"Time"}/>
             { gameOver ? (
                     <GameOver lost={gameLost.current} metric="Time" value={time.current} tryAgain={hideGameOver}/>

@@ -8,6 +8,7 @@ import sky from "./images/sky.png";
 import mountainRange from "./images/mountains.png"
 import Leaderboard from "../../components/leaderboard/Leaderboard";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import HowTo from "../../components/howTo/HowTo";
 
 function BirdyFlap () {
     const [gameStarted, setGameStarted] = useState(false);
@@ -239,13 +240,24 @@ function BirdyFlap () {
         )
     }
 
+    const summary = () => {
+        return "Welcome to Batty Flap! The objective in this game is to make it through the pillars."
+        + " Make any contact with the pillars and you lose!"
+    }
+
+    const controls = () => {
+        return ["Left Click => Flap upwards"
+        ]
+    }
+
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center" }}>
             <h1>Birdy Flap</h1>
             <div>
                 <h2>Score: {score}</h2>
             </div>
-            <canvas ref={canvasRef} />
+            <canvas style={{marginBottom: "1em"}} ref={canvasRef} />
+            <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={leaderboard} printRow={printRow} metric={"Score"}/>
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
