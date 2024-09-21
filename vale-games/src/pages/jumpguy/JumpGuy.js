@@ -23,6 +23,13 @@ function JumpGuy() {
     const platformFactory = useRef();
     const cloudFactory = useRef();
     
+    const gameScoreRef = useRef(0);
+    const nextStageRef = useRef(2500);
+
+    const fps = useRef(60);
+    const fpsIntervalRef = useRef(1000/ fps.current);
+    const lastFrameTimeRef = useRef(Date.now());
+
     // init game and set up controls
     useEffect(() => {
         initGame();
@@ -84,8 +91,6 @@ function JumpGuy() {
         console.log("right after init drawing");
 
         let animationId;
-        let gameScore = 0;
-        let nextStage = 2500;
          
         // START THE GAME LOOP HERE
         if (gameStarted) {
@@ -93,46 +98,14 @@ function JumpGuy() {
 
             const gameLoop = () => {
                 clearCanvas(context);
-    
-                if (jumpGuy.movingRight) {
-                    jumpGuy.move(DIRECTIONS.right);
-                }
-                if (jumpGuy.movingLeft) {
-                    jumpGuy.move(DIRECTIONS.left);
-                }
+                
+                const deltaTime = Date.now() - lastFrameTimeRef.current;
 
-                // apply jumping/falling to our guy
-                jumpGuy.update(); 
-
-                // track jumpguy's current height and use max value as our score
-                const currentHeight = Math.abs(Math.round(jumpGuy.currentHeight));
-                if (currentHeight > gameScore) {
-                    gameScore = currentHeight;
-                    setScore(currentHeight);
+                if (deltaTime - fpsIntervalRef.current) {
+                    lastFrameTimeRef.current = Date.now() - (deltaTime & fpsIntervalRef.current);
+                    updateGame();
                 }
 
-                // increase difficulty based on current score
-                if (gameScore > nextStage && nextStage < 27500) {
-                    nextStage += 2500;
-                    platformFactory.current.advanceStage();
-                    console.log("NEXT LEVEL", stage.current, nextStage);
-                }
-
-                /*
-                    when jump guy reaches 2/3 up the canvas, apply his current speed
-                    in the opposite direction to the platforms. During this time
-                    jump guy will be glued to the 2/3 position for the effect of
-                    shifting our camera upwards. 
-                */
-                let speed = 0;
-                if (jumpGuy.y < CANVAS.height - (2 * CANVAS.height / 3)) {
-                    speed = jumpGuy.jumpSpeed;
-                }
-
-                // update platforms
-                platformFactory.current.updatePlatforms(speed, jumpGuy, stage.current);
-                cloudFactory.current.updateClouds(speed, jumpGuy);
-    
                 // draw everything
                 cloudFactory.current.drawClouds(context);
                 platformFactory.current.drawPlatforms(context);
@@ -148,6 +121,60 @@ function JumpGuy() {
             }
         }
     }, [gameStarted, gameOver])
+
+    const updateJumpGuy = () => {
+        if (jumpGuyRef.current.movingRight) {
+            jumpGuyRef.current.move(DIRECTIONS.right);
+        }
+        if (jumpGuyRef.current.movingLeft) {
+            jumpGuyRef.current.move(DIRECTIONS.left);
+        }
+
+        // apply jumping/falling to our guy
+        jumpGuyRef.current.update(); 
+
+        /*
+        when jump guy reaches 2/3 up the canvas, apply his current speed
+        in the opposite direction to the platforms. During this time
+        jump guy will be glued to the 2/3 position for the effect of
+        shifting our camera upwards. 
+        */
+       let speed = 0;
+       if (jumpGuyRef.current.y < CANVAS.height - (2 * CANVAS.height / 3)) {
+           speed = jumpGuyRef.current.jumpSpeed;
+        }
+
+        return speed;
+    }
+
+    const updatePlatforms = (speed) => {
+        platformFactory.current.updatePlatforms(speed, jumpGuyRef.current, stage.current);
+    }
+    
+    const updateClouds = (speed) => {
+        cloudFactory.current.updateClouds(speed, jumpGuyRef.current);
+    }
+
+    const updateGame = () => {
+       const speed = updateJumpGuy();
+        
+       updateClouds(speed);
+       updatePlatforms(speed);
+
+        // track jumpguy's current height and use max value as our score
+        const currentHeight = Math.abs(Math.round(jumpGuyRef.current.currentHeight));
+        if (currentHeight > gameScoreRef.current) {
+            gameScoreRef.current = currentHeight;
+            setScore(currentHeight);
+        }
+
+        // increase difficulty based on current score
+        if (gameScoreRef.current > nextStageRef.current && nextStageRef.current < 27500) {
+            nextStageRef.current += 2500;
+            platformFactory.current.advanceStage();
+            console.log("NEXT LEVEL", stage.current, nextStageRef.current);
+        }
+    }
 
     const initGame = async () => {
         stage.current = 1;
@@ -169,8 +196,8 @@ function JumpGuy() {
         jumpGuyRef.current.reset();
         setGameOver(false);
         setHideStartButton(false);
+        gameScoreRef.current = 0;
         setScore(0);
-
     }
 
     const startGame = () => {

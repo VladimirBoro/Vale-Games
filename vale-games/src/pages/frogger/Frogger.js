@@ -70,17 +70,17 @@ function Frogger() {
     const uncenteredY = CANVAS_HEIGHT - hopDistanceY;
     const lanes = [
         { laneNumber: 1, laneYPosition: uncenteredY - (hopDistanceY * 1) + 12, showHitboxes, isLevelScaled: false},
-        // { laneNumber: 2, laneYPosition: uncenteredY - (hopDistanceY * 2) + 12, showHitboxes, isLevelScaled: true},
-        // { laneNumber: 3, laneYPosition: uncenteredY - (hopDistanceY * 3) + 12, showHitboxes, isLevelScaled: false},
-        // { laneNumber: 4, laneYPosition: uncenteredY - (hopDistanceY * 4) + 12, showHitboxes, isLevelScaled: true},
-        // { laneNumber: 5, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
-        // { laneNumber: 6, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
-        // { laneNumber: 7, laneYPosition: uncenteredY - (hopDistanceY * 7) + 15, showHitboxes, isLevelScaled: true},
-        // { laneNumber: 8, laneYPosition: uncenteredY - (hopDistanceY * 8) + 25, showHitboxes, isLevelScaled: false},
-        // { laneNumber: 9, laneYPosition: uncenteredY - (hopDistanceY * 9) + 25, showHitboxes, isLevelScaled: true},
-        // { laneNumber: 10, laneYPosition: uncenteredY - (hopDistanceY * 10) + 25, showHitboxes, isLevelScaled: true},
-        // { laneNumber: 11, laneYPosition: uncenteredY - (hopDistanceY * 11) + 25, showHitboxes, isLevelScaled: false},
-        // { laneNumber: 12, laneYPosition: uncenteredY - (hopDistanceY * 12) + 25, showHitboxes, isLevelScaled: false}
+        { laneNumber: 2, laneYPosition: uncenteredY - (hopDistanceY * 2) + 12, showHitboxes, isLevelScaled: true},
+        { laneNumber: 3, laneYPosition: uncenteredY - (hopDistanceY * 3) + 12, showHitboxes, isLevelScaled: false},
+        { laneNumber: 4, laneYPosition: uncenteredY - (hopDistanceY * 4) + 12, showHitboxes, isLevelScaled: true},
+        { laneNumber: 5, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
+        { laneNumber: 6, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
+        { laneNumber: 7, laneYPosition: uncenteredY - (hopDistanceY * 7) + 15, showHitboxes, isLevelScaled: true},
+        { laneNumber: 8, laneYPosition: uncenteredY - (hopDistanceY * 8) + 25, showHitboxes, isLevelScaled: false},
+        { laneNumber: 9, laneYPosition: uncenteredY - (hopDistanceY * 9) + 25, showHitboxes, isLevelScaled: true},
+        { laneNumber: 10, laneYPosition: uncenteredY - (hopDistanceY * 10) + 25, showHitboxes, isLevelScaled: true},
+        { laneNumber: 11, laneYPosition: uncenteredY - (hopDistanceY * 11) + 25, showHitboxes, isLevelScaled: false},
+        { laneNumber: 12, laneYPosition: uncenteredY - (hopDistanceY * 12) + 25, showHitboxes, isLevelScaled: false}
     ]
     .map(({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }) => new Lane({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }));
 
@@ -129,8 +129,6 @@ function Frogger() {
                 // LOGIC (move all objects)
                 lanes.forEach(lane => lane.updateLaneObjects(levelMultiplier.current));
             }
-            // lanes.forEach(lane => lane.updateLaneObjects(levelMultiplier.current));
-
 
             // check current lane for collisions with frog
             if ((froggerLane.current !== -1 && froggerLane.current !== 5 && froggerLane.current !== 11) && !isHit.current) {

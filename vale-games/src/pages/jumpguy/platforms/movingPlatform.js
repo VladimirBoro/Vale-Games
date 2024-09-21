@@ -2,7 +2,7 @@ import Platform from "./platform";
 import { CANVAS } from "../constants";
 
 class MovingPlatform extends Platform {
-    constructor(x, y, stage, slideSpeed = 1) {
+    constructor(x, y, stage, slideSpeed = 2.4) {
         super(x, y,);
         this._slideSpeed = slideSpeed;
         this._direction = 1;

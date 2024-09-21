@@ -3,7 +3,7 @@ import batSpriteSheet from "./images/bat.png";
 
 export class Birdy {
     constructor() {
-        this.dropRate = 0.055;
+        this.dropRate = 0.2;
         this.size = {width: 40, height: 40};
         this.position = {x: CANVAS.width / 5, y: CANVAS.height / 2};
 
@@ -14,7 +14,7 @@ export class Birdy {
         this.batSprites = new Image();
         this.batSprites.src = batSpriteSheet;
 
-        this.frameCount = 18;
+        this.frameCount = 6;
         this.spriteIndex = 0;
         this.isFlapping = false;
         this.idle = true;
@@ -43,7 +43,7 @@ export class Birdy {
     
     flap() {
         if (!this.hit) {
-            this.currentSpeed = -2.75;
+            this.currentSpeed = -5.5;
             this.spriteIndex = 0;
             this.frameCount = 19;
             this.isFlapping = true;
@@ -61,7 +61,7 @@ export class Birdy {
     
     update() {
         this.frameCount++;
-        if (this.isFlapping && this.frameCount % 20 === 0) {
+        if (this.isFlapping && this.frameCount % 8 === 0) {
             this.frameCount = 0;
             this.spriteIndex++;
             
@@ -71,7 +71,6 @@ export class Birdy {
                 this.isFlapping = false;
             }
         }
-
 
         if (this.position.y > CANVAS.height - this.size.height) {
             this.die();
