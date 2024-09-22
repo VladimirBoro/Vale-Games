@@ -27,9 +27,7 @@ function Frogger() {
     const hopDistanceY = Math.floor(CANVAS_HEIGHT / numRows);
     const initFrogX = (CANVAS_WIDTH / 2) - (hopDistanceX - 8);
     const initFrogY = CANVAS_HEIGHT - (hopDistanceY - 5);
-    const fps = 60;
-    const fpsInterval = 1000 / fps;
-
+    
     const canvasRef = useRef(); // canvas dom reference
 
     // FROG SPRITE SHEET
@@ -60,6 +58,8 @@ function Frogger() {
 
     const isHit = useRef(false);
 
+    const fpsRef = useRef(60);
+    const fpsIntervalRef = useRef(1000 / fpsRef.current);
     const lastFroggerTime = useRef(Date.now());
 
     const froggerPosition = useRef({
@@ -124,26 +124,27 @@ function Frogger() {
 
             let deltaLaneTime = Date.now() - lastLaneTime;
 
-            if (deltaLaneTime > fpsInterval) {
-                lastLaneTime = Date.now() - (deltaLaneTime % fpsInterval);
+            if (deltaLaneTime > fpsIntervalRef.current) {
+                lastLaneTime = Date.now() - (deltaLaneTime % fpsIntervalRef.current);
                 // LOGIC (move all objects)
                 lanes.forEach(lane => lane.updateLaneObjects(levelMultiplier.current));
-            }
 
-            // check current lane for collisions with frog
-            if ((froggerLane.current !== -1 && froggerLane.current !== 5 && froggerLane.current !== 11) && !isHit.current) {
-                isHit.current = lanes[froggerLane.current].collideWithFrog(froggerPosition.current);
-            }
+                // check current lane for collisions with frog
+                if ((froggerLane.current !== -1 && froggerLane.current !== 5 && froggerLane.current !== 11) && !isHit.current) {
+                    isHit.current = lanes[froggerLane.current].collideWithFrog(froggerPosition.current);
+                }
 
-            if (!isHit.current && froggerLane.current > 5 && froggerLane.current != 11) {
-                driftFrogger();
+                if (!isHit.current && froggerLane.current > 5 && froggerLane.current != 11) {
+                    driftFrogger();
+                }
             }
             
             // DRAW
             clearScreen(context);
-            lanes.forEach(lane => lane.drawLaneObjects(context));
             
             let deltaFroggerTime = Date.now() - lastFroggerTime.current;
+
+            lanes.forEach(lane => lane.drawLaneObjects(context));
             drawFrogger(context, deltaFroggerTime);
             
             animFrame = requestAnimationFrame(gameLoop);
@@ -332,12 +333,15 @@ function Frogger() {
     }
 
     const hopAnimation = (context, deltaTime) => {
-        hopFrameCount.current++;
+        
+        if (deltaTime > fpsIntervalRef.current) {
+            hopFrameCount.current++;
 
-        if (deltaTime > fpsInterval) {
-            lastFroggerTime.current = Date.now() - (deltaTime % fpsInterval);
-            moveFrogger();
-            hopFrameIndex.current++;
+            if (hopFrameCount.current % 5 == 0) {
+                lastFroggerTime.current = Date.now() - (deltaTime % fpsIntervalRef.current);
+                moveFrogger();
+                hopFrameIndex.current++;
+            }
         }
         
         const spriteSheet = ANIMATIONS.HOP;
@@ -354,17 +358,18 @@ function Frogger() {
     }
 
     const idleAnimation = (context, deltaTime) => {
-        const postion = froggerPosition.current;
-            
-        if (deltaTime > fpsInterval) {
+          
+        // update sprite frame index
+        if (deltaTime > fpsIntervalRef.current) {
             idleFrameCount.current++;
-        }
-    
-        if (idleFrameCount.current % 15 === 0) {
-            lastFroggerTime.current = Date.now() - (deltaTime % fpsInterval);
-            idleFrameIndex.current++;
+
+            if (idleFrameCount.current % 20 === 0) {
+                lastFroggerTime.current = Date.now() - (deltaTime % fpsIntervalRef.current);
+                idleFrameIndex.current++;
+            }
         }
 
+        // reset sprite frame index
         if (idleFrameIndex.current > 2) {
             idleFrameIndex.current = 0;
         }
@@ -373,11 +378,15 @@ function Frogger() {
         drawCurrentFrogSprite(context, currentFrame);
     }
 
-    const deathAnimation = (context) => {
-        dieFrameCount.current++;
+    const deathAnimation = (context, deltaTime) => {
+ 
+        // update sprite frame index
+        if (deltaTime > fpsIntervalRef.current) {
+            dieFrameCount.current++;
 
-        if (dieFrameCount.current % 15 === 0) {
-            dieSpriteIndex.current++;
+            if (dieFrameCount.current % 25 === 0) {
+                dieSpriteIndex.current++;
+            }
         }
         
         const spriteSheet = ANIMATIONS.DIE;
@@ -414,7 +423,6 @@ function Frogger() {
         
         if (isHopping.current) {
             idleFrameIndex.current = 0;
-            // playAnimation(ANIMATIONS.HOP);
             hopAnimation(context, deltaTime);
         }
         else if (!isHit.current) {

@@ -101,8 +101,9 @@ function JumpGuy() {
                 
                 const deltaTime = Date.now() - lastFrameTimeRef.current;
 
-                if (deltaTime - fpsIntervalRef.current) {
-                    lastFrameTimeRef.current = Date.now() - (deltaTime & fpsIntervalRef.current);
+                // update game at 60fps
+                if (deltaTime > fpsIntervalRef.current) {
+                    lastFrameTimeRef.current = Date.now() - (deltaTime % fpsIntervalRef.current);
                     updateGame();
                 }
 
