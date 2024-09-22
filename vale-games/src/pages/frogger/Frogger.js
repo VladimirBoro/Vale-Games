@@ -56,26 +56,30 @@ function Frogger() {
 
     // INPUT HANDLER
     useEffect(() => {
-        // if (gameStarted) {
-        //     document.body.addEventListener("keydown", frogRef.current.hop);
-        // }
-        // else {
-        //     document.body.removeEventListener("keydown", frogRef.current.hop);
-        // }
+        const frogSpriteSheetImg = new Image();
+        frogSpriteSheetImg.src = frogSpriteSheet;
+        frogRef.current = new Frog(GRID_DIMENSIONS.rowCount, GRID_DIMENSIONS.columnCount, frogSpriteSheetImg);
+
+        const handleKeyDown = (event) => {
+            const keyPress = event.keyCode;
+            frogRef.current.hop(keyPress);
+        }
+
+        if (gameStarted) {
+            document.body.addEventListener("keydown", handleKeyDown);
+        }
+        else {
+            document.body.removeEventListener("keydown", handleKeyDown);
+        }
         
-        // return () => {
-        //     document.body.removeEventListener("keydown", frogRef.current.hop);
-        // };
+        return () => {
+            document.body.removeEventListener("keydown", handleKeyDown);
+        };
     });
 
     // GAME LOOP HOOK
     useEffect(() => {
         const initGame = () => {
-            // FROG SPRITE SHEET
-            const frogSpriteSheetImg = new Image();
-            frogSpriteSheetImg.src = frogSpriteSheet;
-            frogRef.current = new Frog(GRID_DIMENSIONS.rowCount, GRID_DIMENSIONS.columnCount, frogSpriteSheetImg);
-
             const canvas = canvasRef.current;
             canvas.width = CANVAS_SIZE.width;
             canvas.height = CANVAS_SIZE.height;
@@ -90,7 +94,7 @@ function Frogger() {
         const context = initGame();
         let animFrame;
         
-        fetchLeaderboard();
+        // fetchLeaderboard();
         drawGrid();
         updateGoals();
 
@@ -104,6 +108,7 @@ function Frogger() {
             const deltaTime = Date.now() - lastFrameTime.current;
             if (deltaTime > fpsIntervalRef.current) {
                 // update all objects in world(frogger, and lanes (river factories objects, road factories objects))
+                lastFrameTime.current = Date.now() - (deltaTime % fpsIntervalRef.current);
                 frogRef.current.update();
             }
             
