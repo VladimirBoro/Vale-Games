@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HOP_DIRECTIONS, IDLE_ANIMATION, LANES, ANIMATIONS, CANVAS_WIDTH, CANVAS_HEIGHT } from "./contants/constants";
+import { HOP_DIRECTIONS, IDLE_ANIMATION, LANES, ANIMATIONS, GRID_DIMENSIONS, HOP_DISTANCE, CANVAS_SIZE } from "./contants/constants";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import Lane from "./Lane";
 import frogSpriteSheet from "./sprites/frog/frog.png";
@@ -8,6 +8,7 @@ import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from '../../components/leaderboard/Leaderboard';
 import styles from "./styles/styles.module.css";
 import HowTo from "../../components/howTo/HowTo";
+import Frog from "./frog";
 
 function Frogger() {
     const [gameStarted, setGameStarted] = useState(false);
@@ -19,33 +20,10 @@ function Frogger() {
     const [lives, setLives] = useState(3);
     const [leaderboard, setLeaderboard] = useState([]);
 
-    // LOCAL CONSTANTS
-    const numRows = 13;
-    const numCols = 14;
-    // const hopDistanceX = Math.floor(CANVAS_WIDTH / numCols);
-    // const hopDistanceY = Math.floor(CANVAS_HEIGHT / numRows);
-    // const initFrogX = (CANVAS_WIDTH / 2) - (hopDistanceX - 8);
-    // const initFrogY = CANVAS_HEIGHT - (hopDistanceY - 5);
-    
     const canvasRef = useRef(); // canvas dom reference
-
-    // FROG SPRITE SHEET
-    const frogSpriteSheetImg = new Image();
-    frogSpriteSheetImg.src = frogSpriteSheet;
-    // // FROG FACING DIRECTION AND LANE POSITION
-    // const froggerDirection = useRef(1);
-    // const froggerLane = useRef(-1);
-    // // IDLE FRAMES
-    // const idleFrameIndex = useRef(0);
-    // const idleFrameCount = useRef(0);
-    // // HOPPING FRAMES
-    // const isHopping = useRef(false);
-    // const hopDirection = useRef(null);
-    // const hopFrameCount = useRef(0);
-    // const hopFrameIndex = useRef(0);
-    // // DYING FRAMES
-    // const dieFrameCount = useRef(0);
-    // const dieSpriteIndex = useRef(0);
+    const frogRef = useRef();
+    const roadRef = useRef();
+    const riverRef = useRef();
 
     // SCORE DATA
     const touchedLanes = useRef([]);
@@ -55,59 +33,61 @@ function Frogger() {
     // STATIC BACKGROUND
     const testGrid = useRef(null);
 
-    const isHit = useRef(false);
-
     const fpsRef = useRef(60);
     const fpsIntervalRef = useRef(1000 / fpsRef.current);
-    const lastFroggerTime = useRef(Date.now());
-
-    const froggerPosition = useRef({
-        x: initFrogX, 
-        y: initFrogY
-    });
+    const lastFrameTime = useRef(Date.now());
     
-    const uncenteredY = CANVAS_HEIGHT - hopDistanceY;
-    const lanes = [
-        { laneNumber: 1, laneYPosition: uncenteredY - (hopDistanceY * 1) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 2, laneYPosition: uncenteredY - (hopDistanceY * 2) + 12, showHitboxes, isLevelScaled: true},
-        { laneNumber: 3, laneYPosition: uncenteredY - (hopDistanceY * 3) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 4, laneYPosition: uncenteredY - (hopDistanceY * 4) + 12, showHitboxes, isLevelScaled: true},
-        { laneNumber: 5, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 6, laneYPosition: uncenteredY - (hopDistanceY * 5) + 12, showHitboxes, isLevelScaled: false},
-        { laneNumber: 7, laneYPosition: uncenteredY - (hopDistanceY * 7) + 15, showHitboxes, isLevelScaled: true},
-        { laneNumber: 8, laneYPosition: uncenteredY - (hopDistanceY * 8) + 25, showHitboxes, isLevelScaled: false},
-        { laneNumber: 9, laneYPosition: uncenteredY - (hopDistanceY * 9) + 25, showHitboxes, isLevelScaled: true},
-        { laneNumber: 10, laneYPosition: uncenteredY - (hopDistanceY * 10) + 25, showHitboxes, isLevelScaled: true},
-        { laneNumber: 11, laneYPosition: uncenteredY - (hopDistanceY * 11) + 25, showHitboxes, isLevelScaled: false},
-        { laneNumber: 12, laneYPosition: uncenteredY - (hopDistanceY * 12) + 25, showHitboxes, isLevelScaled: false}
-    ]
-    .map(({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }) => new Lane({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }));
+    // const uncenteredY = GRID_DIMENSIONS.columnCount - HOP_DISTANCE.y;
+    // const lanes = [
+    //     { laneNumber: 1, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 1) + 12, showHitboxes, isLevelScaled: false},
+    //     { laneNumber: 2, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 2) + 12, showHitboxes, isLevelScaled: true},
+    //     { laneNumber: 3, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 3) + 12, showHitboxes, isLevelScaled: false},
+    //     { laneNumber: 4, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 4) + 12, showHitboxes, isLevelScaled: true},
+    //     { laneNumber: 5, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 5) + 12, showHitboxes, isLevelScaled: false},
+    //     { laneNumber: 6, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 5) + 12, showHitboxes, isLevelScaled: false},
+    //     { laneNumber: 7, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 7) + 15, showHitboxes, isLevelScaled: true},
+    //     { laneNumber: 8, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 8) + 25, showHitboxes, isLevelScaled: false},
+    //     { laneNumber: 9, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 9) + 25, showHitboxes, isLevelScaled: true},
+    //     { laneNumber: 10, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 10) + 25, showHitboxes, isLevelScaled: true},
+    //     { laneNumber: 11, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 11) + 25, showHitboxes, isLevelScaled: false},
+    //     { laneNumber: 12, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 12) + 25, showHitboxes, isLevelScaled: false}
+    // ]
+    // .map(({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }) => new Lane({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }));
 
     // INPUT HANDLER
     useEffect(() => {
-        if (gameStarted) {
-            document.body.addEventListener("keydown", hop);
-        }
-        else {
-            document.body.removeEventListener("keydown", hop);
-        }
+        // if (gameStarted) {
+        //     document.body.addEventListener("keydown", frogRef.current.hop);
+        // }
+        // else {
+        //     document.body.removeEventListener("keydown", frogRef.current.hop);
+        // }
         
-        return () => {
-            document.body.removeEventListener("keydown", hop);
-        };
+        // return () => {
+        //     document.body.removeEventListener("keydown", frogRef.current.hop);
+        // };
     });
 
     // GAME LOOP HOOK
     useEffect(() => {
-        let canvas = canvasRef.current;
-        canvas.width = CANVAS_WIDTH;
-        canvas.height = CANVAS_HEIGHT;
-        let context = canvas.getContext("2d");
-        context.shadowColor = "black";
-        context.shadowBlur = 10;
+        const initGame = () => {
+            // FROG SPRITE SHEET
+            const frogSpriteSheetImg = new Image();
+            frogSpriteSheetImg.src = frogSpriteSheet;
+            frogRef.current = new Frog(GRID_DIMENSIONS.rowCount, GRID_DIMENSIONS.columnCount, frogSpriteSheetImg);
 
-        let lastLaneTime = Date.now();
+            const canvas = canvasRef.current;
+            canvas.width = CANVAS_SIZE.width;
+            canvas.height = CANVAS_SIZE.height;
+            const context = canvas.getContext("2d");
+            context.shadowColor = "black";
+            context.shadowBlur = 10;
 
+            return context;
+        }
+
+        // initGame and get context;
+        const context = initGame();
         let animFrame;
         
         fetchLeaderboard();
@@ -115,36 +95,22 @@ function Frogger() {
         updateGoals();
 
         const gameLoop = () => {
-            if (lives === 0 && gameStarted && !gameOver) {
-                //ggs
-                console.log("stop!");
-                loseGame();
-            }
+            // if (lives === 0 && gameStarted && !gameOver) {
+            //     //ggs
+            //     console.log("stop!");
+            //     loseGame();
+            // }
 
-            let deltaLaneTime = Date.now() - lastLaneTime;
-
-            if (deltaLaneTime > fpsIntervalRef.current) {
-                lastLaneTime = Date.now() - (deltaLaneTime % fpsIntervalRef.current);
-                // LOGIC (move all objects)
-                lanes.forEach(lane => lane.updateLaneObjects(levelMultiplier.current));
-
-                // check current lane for collisions with frog
-                if ((froggerLane.current !== -1 && froggerLane.current !== 5 && froggerLane.current !== 11) && !isHit.current) {
-                    isHit.current = lanes[froggerLane.current].collideWithFrog(froggerPosition.current);
-                }
-
-                if (!isHit.current && froggerLane.current > 5 && froggerLane.current != 11) {
-                    driftFrogger();
-                }
+            const deltaTime = Date.now() - lastFrameTime.current;
+            if (deltaTime > fpsIntervalRef.current) {
+                // update all objects in world(frogger, and lanes (river factories objects, road factories objects))
+                frogRef.current.update();
             }
             
             // DRAW
             clearScreen(context);
-            
-            let deltaFroggerTime = Date.now() - lastFroggerTime.current;
-
-            lanes.forEach(lane => lane.drawLaneObjects(context));
-            drawFrogger(context, deltaFroggerTime);
+            frogRef.current.draw(context);
+            // drawFrogger(context, deltaFroggerTime);
             
             animFrame = requestAnimationFrame(gameLoop);
         }
@@ -156,28 +122,6 @@ function Frogger() {
         };
     }, [showGrid, showHitboxes, goals, lives, gameOver]);
 
-    // const missGoal = () => {
-    //     let topLeftOfFrog = {x: froggerPosition.current.x, y: froggerPosition.current.y};
-    //     let bottomRightOfFrog = {x: topLeftOfFrog.x + 38, y: topLeftOfFrog.y + 32};
-
-    //     for (let i = 0; i < goals.length; i++) {
-    //         const goalTopLeft = goals[i].area.topLeft;
-    //         const goalBottomRight = goals[i].area.bottomRight;
-
-    //         if (!((topLeftOfFrog.x >= goalBottomRight.x || goalTopLeft.x >= bottomRightOfFrog.x) || 
-    //         (topLeftOfFrog.y >= goalBottomRight.y || goalTopLeft.y >= bottomRightOfFrog.y)) && !goals[i].occupied) {
-    //             console.log("we made it!", topLeftOfFrog, bottomRightOfFrog, goalTopLeft, goalBottomRight);
-    //             const updatedGoals = goals.map((goal, index) => 
-    //                 index === i ? { ...goal, occupied: true } : goal
-    //             );
-    //             setGoals(updatedGoals);
-    //             return false;
-    //         }
-    //     }
-
-    //     return true;
-    // }
-
     const updateGoals = () => {
         const initGoals = () => {
             let goalOffset = 1;
@@ -185,10 +129,10 @@ function Frogger() {
             const initGoals = [];
 
             for (let i = 0; i < 5; i++) {
-                let topLeftX = goalOffset * CANVAS_WIDTH / 20 + (CANVAS_WIDTH / 30)
-                let topLeftY = hopDistanceY / 5 * 2;
+                let topLeftX = goalOffset * CANVAS_SIZE.width / 20 + (CANVAS_SIZE.width / 30)
+                let topLeftY = HOP_DISTANCE.y / 5 * 2;
                 let topL = {x: topLeftX , y: topLeftY};
-                let bottomR = {x: topL.x + (1/3) * (CANVAS_WIDTH / 10), y: topL.y +  hopDistanceY};
+                let bottomR = {x: topL.x + (1/3) * (CANVAS_SIZE.width / 10), y: topL.y +  HOP_DISTANCE.y};
                 currentGoal = {area: {topLeft: topL, bottomRight: bottomR}, occupied: false};
                 initGoals.push(currentGoal);
                 goalOffset += 4;
@@ -205,29 +149,29 @@ function Frogger() {
     
     const drawGrid = () => {
         const grid = document.createElement("canvas");
-        grid.width = CANVAS_WIDTH;
-        grid.height = CANVAS_HEIGHT;
+        grid.width = CANVAS_SIZE.width;
+        grid.height = CANVAS_SIZE.height;
         const gridContext = grid.getContext("2d");
 
         gridContext.fillStyle = "#161518"; // black road
-        gridContext.fillRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
+        gridContext.fillRect(0,0,CANVAS_SIZE.width,CANVAS_SIZE.height);
 
         gridContext.fillStyle = "grey";
-        gridContext.fillRect(0, CANVAS_HEIGHT - hopDistanceY, CANVAS_WIDTH, hopDistanceY);
-        gridContext.fillRect(0, CANVAS_HEIGHT - hopDistanceY * 7, CANVAS_WIDTH, hopDistanceY);
+        gridContext.fillRect(0, CANVAS_SIZE.height - HOP_DISTANCE.y, CANVAS_SIZE.width, HOP_DISTANCE.y);
+        gridContext.fillRect(0, CANVAS_SIZE.height - HOP_DISTANCE.y * 7, CANVAS_SIZE.width, HOP_DISTANCE.y);
         
         gridContext.fillStyle = "#1a237e"; // water
-        gridContext.fillRect(0, 0, CANVAS_WIDTH, hopDistanceY * 6);
+        gridContext.fillRect(0, 0, CANVAS_SIZE.width, HOP_DISTANCE.y * 6);
         
         gridContext.fillStyle = "green";
-        gridContext.fillRect(0, 0, CANVAS_WIDTH, hopDistanceY);
+        gridContext.fillRect(0, 0, CANVAS_SIZE.width, HOP_DISTANCE.y);
         
         gridContext.fillStyle = "#1a237e"; // water
         
         // SET AND DRAW GOALS
         let goalOffset = 1;
         for (let i = 0; i < 5; i++) {
-            gridContext.fillRect(goalOffset * CANVAS_WIDTH / 20, hopDistanceY / 5, CANVAS_WIDTH / 10, hopDistanceY - (hopDistanceY / 5));
+            gridContext.fillRect(goalOffset * CANVAS_SIZE.width / 20, HOP_DISTANCE.y / 5, CANVAS_SIZE.width / 10, HOP_DISTANCE.y - (HOP_DISTANCE.y / 5));
             goalOffset += 4;
         }
         
@@ -247,21 +191,21 @@ function Frogger() {
             gridContext.beginPath();
     
             // grid column lines
-            for (let i = 0; i < numCols; i++) {
-                gridContext.moveTo(hopDistanceX * i, hopDistanceY);
-                gridContext.lineTo(hopDistanceX * i, CANVAS_HEIGHT);
+            for (let i = 0; i < GRID_DIMENSIONS.columnCount; i++) {
+                gridContext.moveTo(HOP_DISTANCE.x * i, HOP_DISTANCE.y);
+                gridContext.lineTo(HOP_DISTANCE.x * i, CANVAS_SIZE.height);
             }
             
             // grid row lines
-            for (let i = 0; i < numRows; i++) {
-                gridContext.moveTo(0, hopDistanceY * i);
-                gridContext.lineTo(CANVAS_WIDTH, hopDistanceY * i);
+            for (let i = 0; i < GRID_DIMENSIONS.rowCount; i++) {
+                gridContext.moveTo(0, HOP_DISTANCE.y * i);
+                gridContext.lineTo(CANVAS_SIZE.width, HOP_DISTANCE.y * i);
             }
             
             // GOAL SEGMENTS
             for (let i = 0; i < 5; i++) {
-                gridContext.moveTo(CANVAS_WIDTH / 5 * i, 0);
-                gridContext.lineTo(CANVAS_WIDTH / 5 * i, hopDistanceY);
+                gridContext.moveTo(CANVAS_SIZE.width / 5 * i, 0);
+                gridContext.lineTo(CANVAS_SIZE.width / 5 * i, HOP_DISTANCE.y);
             }
     
             gridContext.strokeStyle = "white";
@@ -271,208 +215,8 @@ function Frogger() {
         testGrid.current = grid;
     }
 
-    // const driftFrogger = () => {
-    //     const currentLane = froggerLane.current + 1; 
-    //     const laneSettings = LANES[currentLane];
-    //     // drifting...
-    //     let driftMultiplier = 1;
-        
-    //     if (currentLane === 2 || currentLane === 4 || currentLane === 7 || 
-    //             currentLane === 10 || currentLane === 9) {
-    //         driftMultiplier = levelMultiplier.current;
-    //     }
-
-    //     froggerPosition.current.x += laneSettings.speed * laneSettings.direction * driftMultiplier;
-    // }
-
-    // const moveFrogger = () => {
-    //     let hopSegment;
-    //     const position = froggerPosition.current;
-    //     const jumpFrames = 3;
-
-    //     if (hopDirection.current === HOP_DIRECTIONS.UP) {
-    //         hopSegment = hopDistanceY / jumpFrames;
-    //         position.y -= hopSegment;
-    //     }
-    //     else if(hopDirection.current === HOP_DIRECTIONS.DOWN) {
-    //         hopSegment = hopDistanceY / jumpFrames;
-    //         position.y += hopSegment;
-            
-    //     }
-    //     else if(hopDirection.current === HOP_DIRECTIONS.RIGHT) {
-    //         hopSegment = hopDistanceX / jumpFrames;
-    //         position.x += hopSegment;
-            
-    //     }
-    //     else {
-    //         hopSegment = hopDistanceX / jumpFrames;
-    //         position.x -= hopSegment;
-    //     }
-    // }
-
-    // const drawCurrentFrogSprite = (context, currentFrame) => {
-    //     const postion = froggerPosition.current;
-        
-    //     const drawWidth = currentFrame[2] - 10;
-    //     const drawHeight = currentFrame[3] ;
-    //     const hopHeight = isHopping.current ? 10 : 0; 
-    //     const flipCorrectionShift = froggerDirection.current < 0 ? drawWidth : 0;
-    //     const deathCorrectionShift = isHit.current ? 30 : 0;
-
-    //     context.drawImage(
-    //         frogSpriteSheetImg, currentFrame[0], currentFrame[1], currentFrame[2], currentFrame[3], 
-    //         postion.x * froggerDirection.current - flipCorrectionShift - deathCorrectionShift * froggerDirection.current, postion.y - hopHeight, drawWidth, drawHeight 
-    //     );
-
-    //     if (showHitboxes) {
-    //         context.strokeStyle = "white";
-    //         context.lineWidth = 2;
-    //         context.strokeRect(postion.x * froggerDirection.current - flipCorrectionShift - deathCorrectionShift * froggerDirection.current, postion.y - hopHeight, drawWidth, drawHeight);
-    //     }
-    // }
-
-    // const hopAnimation = (context) => {
-    //     hopFrameCount.current++;
-
-    //     if (hopFrameCount.current % 5 == 0) {
-    //         moveFrogger();
-    //         hopFrameIndex.current++;
-    //     }
-        
-    //     const spriteSheet = ANIMATIONS.HOP;
-    //     let currentFrame = spriteSheet[hopFrameIndex.current];
-        
-    //     drawCurrentFrogSprite(context, currentFrame);
-        
-    //     if (hopFrameIndex.current > 2) {
-    //         isHopping.current = false;
-    //         hopFrameCount.current = 0;
-    //         hopFrameIndex.current = 0;
-    //         return;
-    //     }
-    // }
-
-    // const idleAnimation = (context) => {
-          
-    //     // update sprite frame index
-    //     idleFrameCount.current++;
-
-    //     if (idleFrameCount.current % 20 === 0) {
-    //         idleFrameIndex.current++;
-    //     }
-
-    //     // reset sprite frame index
-    //     if (idleFrameIndex.current > 2) {
-    //         idleFrameIndex.current = 0;
-    //     }
-
-    //     let currentFrame = IDLE_ANIMATION[idleFrameIndex.current];
-    //     drawCurrentFrogSprite(context, currentFrame);
-    // }
-
-    // const deathAnimation = (context) => {
-    //     // update sprite frame index
-    //     dieFrameCount.current++;
-
-    //     if (dieFrameCount.current % 25 === 0) {
-    //         dieSpriteIndex.current++;
-    //     }
-        
-    //     const spriteSheet = ANIMATIONS.DIE;
-    //     let currentFrame = spriteSheet[dieSpriteIndex.current];
-        
-    //     drawCurrentFrogSprite(context, currentFrame);
-        
-    //     // death animation done but game still going
-    //     if (dieSpriteIndex.current > 2) {
-    //         resetFrogger();
-    //         loseHeart();
-    //         return;
-    //     }
-    // }
-
-    // const drawFrogger = (context, deltaTime) => {
-    //     // TODO: move to move function
-    //     if (!isHopping.current && froggerLane.current == 11) {
-    //         if (!missGoal()) {
-    //             scoreGoal();
-    //         }
-    //         else {
-    //             isHit.current = true;
-    //         }            
-    //     }
-
-    //     context.save();
-    //     context.scale(froggerDirection.current, 1);
-
-    //     if (deltaTime > fpsIntervalRef.current) {
-    //         lastFroggerTime.current = Date.now() - (deltaTime % fpsIntervalRef.current);
-    //         if (isHit.current && !isHopping.current) {
-    //             deathAnimation(context, deltaTime);
-    //         }
-            
-    //         if (isHopping.current) {
-    //             idleFrameIndex.current = 0;
-    //             hopAnimation(context, deltaTime);
-    //         }
-    //         else if (!isHit.current) {
-    //             idleAnimation(context, deltaTime);
-    //         }
-    //     }
-        
-    //     context.restore();
-    // }
-
-    // const hop = (event) => {
-    //     const keyPressed = event.keyCode;
-    //     const position = froggerPosition.current;
-        
-    //     if (HOP_DIRECTIONS.LEFT.includes(keyPressed) && !isHopping.current && !isHit.current) {
-    //         if (position.x - hopDistanceX < 0) {
-    //             return;
-    //         }
-    //         isHopping.current = true;
-    //         hopDirection.current = HOP_DIRECTIONS.LEFT;
-    //         froggerDirection.current *= froggerDirection.current < 0 ? 1 : -1;
-    //     }
-    //     else if (HOP_DIRECTIONS.RIGHT.includes(keyPressed) && !isHopping.current && !isHit.current) {
-    //         if (position.x + hopDistanceX > CANVAS_WIDTH) {
-    //             return;
-    //         }
-    //         isHopping.current = true;
-    //         hopDirection.current = HOP_DIRECTIONS.RIGHT;
-    //         froggerDirection.current *= froggerDirection.current;
-    //     }
-    //     else if (HOP_DIRECTIONS.UP.includes(keyPressed) && !isHopping.current && !isHit.current) {
-    //         if (position.y - hopDistanceY < 0) {
-    //             return;
-    //         }
-    //         isHopping.current = true;
-    //         hopDirection.current = HOP_DIRECTIONS.UP;
-    //         froggerLane.current += 1;
-            
-    //         // score up 10 on new lanes
-    //         if (touchedLanes.current.length == 0) {
-    //             touchedLanes.current.push(froggerLane.current);
-    //             scoreUp(10 * levelMultiplier.current);
-    //         }
-    //         else if (!touchedLanes.current.includes(froggerLane.current)) {
-    //             touchedLanes.current.push(froggerLane.current);
-    //             scoreUp(10 * levelMultiplier.current);
-    //         }
-    //     }
-    //     else if (HOP_DIRECTIONS.DOWN.includes(keyPressed) && !isHopping.current && !isHit.current) {
-    //         if (position.y + hopDistanceY > CANVAS_HEIGHT) {
-    //             return;
-    //         }
-    //         isHopping.current = true;
-    //         hopDirection.current = HOP_DIRECTIONS.DOWN;
-    //         froggerLane.current -= 1;
-    //     }
-    // }
-
     const clearScreen = (context) => {
-        context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        context.clearRect(0, 0, GRID_DIMENSIONS.columnCount, GRID_DIMENSIONS.columnCount);
         context.drawImage(testGrid.current, 0, 0);
     }
 
@@ -537,13 +281,13 @@ function Frogger() {
     }
 
     const resetFrogger = () => {
-        isHit.current = false;
-        isHopping.current = false;
-        hopFrameIndex.current = 0;
-        dieFrameCount.current = 0;
-        dieSpriteIndex.current = 0;
-        froggerPosition.current = {x: initFrogX, y: initFrogY};
-        froggerLane.current = -1;
+        // isHit.current = false;
+        // isHopping.current = false;
+        // hopFrameIndex.current = 0;
+        // dieFrameCount.current = 0;
+        // dieSpriteIndex.current = 0;
+        // froggerPosition.current = {x: initFrogX, y: initFrogY};
+        // froggerLane.current = -1;
     }
 
     const handleGridPress = () => {
@@ -587,7 +331,7 @@ function Frogger() {
                 <h2>❤️ {lives}</h2>
                 <h2>Score: {score}</h2>
             </div>
-            {/* <canvas ref={canvasRef} style={{width: CANVAS_WIDTH, height: CANVAS_HEIGHT}}/> */}
+            {/* <canvas ref={canvasRef} style={{width: GRID_DIMENSIONS.columnCount, height: GRID_DIMENSIONS.columnCount}}/> */}
             <canvas ref={canvasRef} className={styles.canvas}/>
             <div>
                 <button onClick={handleGridPress} style={{margin:"1em"}}>Testing Grid</button>
