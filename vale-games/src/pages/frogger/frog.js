@@ -5,6 +5,7 @@ class Frog {
     #currentLane = 0;
     #dying = false;
     #hopping = false;
+    #floating = false;
     #width = CANVAS_SIZE.width / GRID_DIMENSIONS.columnCount;
     #height = CANVAS_SIZE.height / GRID_DIMENSIONS.rowCount;
     #frameIndices = {
@@ -44,62 +45,73 @@ class Frog {
         }
         else if (HOP_DIRECTIONS.UP.includes(direction)) {
             this.#position.y -= (HOP_DISTANCE.y / divisions);
-            this.#currentLane++;
         }
         else {
             this.#position.y += (HOP_DISTANCE.y / divisions);
-            this.#currentLane--;
         }
+
 
         this.#frameIndices.hopping++;
     }
 
     #resetPosition() {
+        this.#currentLane = 0;
+        this.#floating = false;
         this.#position = {
             x: CANVAS_SIZE.width / 2, 
             y: CANVAS_SIZE.height - (CANVAS_SIZE.height / GRID_DIMENSIONS.rowCount)
         }
     }
 
+    setFloating() {
+        this.#floating = true;
+    }
+
     update() {
         // update froggers placement and frameIndex
         // collision happens on object's end
-
-        if (this.#hopping) {
-            this.#frameCounts.hopping++;
-            if (this.#frameCounts.hopping % 2 != 0) {
-                return;
-            }
-            
-            this.#move(this.#hopDirection);
-
-            if (this.#frameIndices.hopping >= Object.keys(ANIMATIONS.HOP).length) {
-                // stop and reset
-                this.#frameIndices.hopping = 0;
-                this.#hopping = false;
-            }
-        }
-        else if (this.#dying) {
+        
+        if (this.#dying) {
             this.#frameCounts.dying++;
-
+            
             if (this.#frameCounts.dying % 15 == 0) {
                 this.#frameIndices.dying++;
             }
-
+            
             if (this.#frameIndices.dying >= Object.keys(ANIMATIONS.DIE).length) {
                 this.#frameIndices.dying = 0;
                 this.#dying = false;
                 this.#resetPosition();
             }
         }
+        else if (this.#hopping) {
+            this.#frameCounts.hopping++;
+            if (this.#frameCounts.hopping % 2 != 0) {
+                return;
+            }
+            
+            this.#move(this.#hopDirection);
+            
+            if (this.#frameIndices.hopping >= Object.keys(ANIMATIONS.HOP).length) {
+                // stop and reset
+                this.#frameIndices.hopping = 0;
+                this.#hopping = false;
+            }
+
+            return;
+        }
         else {
             // idle frames
             this.#frameCounts.idle++;
-
+            
             if (this.#frameCounts.idle % 15 == 0) {
                 this.#frameIndices.idle++;
                 this.#frameIndices.idle %= 3;
             }
+        }
+
+        if (this.#currentLane > 6 && !this.#floating) {
+            this.die();
         }
     } 
     
@@ -108,23 +120,29 @@ class Frog {
         if (this.#hopping) {
             return;
         }
-        // prohibit hopping for improper input values
-        if ( !(HOP_DIRECTIONS.LEFT.includes(direction) || HOP_DIRECTIONS.RIGHT.includes(direction) || 
-            HOP_DIRECTIONS.UP.includes(direction) || HOP_DIRECTIONS.DOWN.includes(direction))) {
-            console.log("non valid direction!");
-            return;
-        }
+
+        const hoppingLeft = HOP_DIRECTIONS.LEFT.includes(direction);
+        const hoppingRight = HOP_DIRECTIONS.RIGHT.includes(direction);
+        const hoppingUp = HOP_DIRECTIONS.UP.includes(direction);
+        const hoppingDown = HOP_DIRECTIONS.DOWN.includes(direction);
+
         // prohibit hopping if it would send us O.O.B
-        const jumpingTooFarLeft =   this.#position.x - HOP_DISTANCE.x < 0 && HOP_DIRECTIONS.LEFT.includes(direction); 
-        const jumpingTooFarRight =  this.#position.x + HOP_DISTANCE.x > CANVAS_SIZE.width - this.#width && HOP_DIRECTIONS.RIGHT.includes(direction); 
-        const jumpingTooFarUp =     this.#position.y - HOP_DISTANCE.y < 0 && HOP_DIRECTIONS.UP.includes(direction); 
-        const jumpingTooFarDown =   this.#position.y + HOP_DISTANCE.y > CANVAS_SIZE.height - this.#height && HOP_DIRECTIONS.DOWN.includes(direction); 
+        const jumpingTooFarLeft =   this.#position.x - HOP_DISTANCE.x < 0 && hoppingLeft; 
+        const jumpingTooFarRight =  this.#position.x + HOP_DISTANCE.x > CANVAS_SIZE.width - this.#width && hoppingRight; 
+        const jumpingTooFarUp =     this.#position.y - HOP_DISTANCE.y < 0 && hoppingUp; 
+        const jumpingTooFarDown =   this.#position.y + HOP_DISTANCE.y > CANVAS_SIZE.height - this.#height && hoppingDown; 
         if (jumpingTooFarLeft || jumpingTooFarRight || jumpingTooFarUp || jumpingTooFarDown) {
-            this.die();
             return;
         }
 
-        console.log(direction);
+        if (hoppingDown) {
+            this.#currentLane--;
+        }
+        else if (hoppingUp) {
+            this.#currentLane++;
+        }
+
+        console.log(this.#currentLane);
         this.#frameIndices.hopping = 0;
         this.#frameCounts.hopping = 0;
         this.#hopDirection = direction;
