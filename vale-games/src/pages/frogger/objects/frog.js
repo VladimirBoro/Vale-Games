@@ -1,4 +1,4 @@
-import { CANVAS_SIZE, HOP_DIRECTIONS, HOP_DISTANCE, ANIMATIONS, GRID_DIMENSIONS } from "./contants/constants";
+import { CANVAS_SIZE, HOP_DIRECTIONS, HOP_DISTANCE, ANIMATIONS, GRID_DIMENSIONS } from "../contants/constants";
 
 class Frog {
     #headDirection = 1;
@@ -22,13 +22,15 @@ class Frog {
     #hopDirection;
     #position;
     #spriteSheet;
+    #loseLife;
 
-    constructor (numRows, numCols, spriteSheet) {
+    constructor (spriteSheet, loseLife) {
         this.#position = {
             x: CANVAS_SIZE.width / 2, 
             y: CANVAS_SIZE.height - this.#height
         }
 
+        this.#loseLife = loseLife;
         this.#spriteSheet = spriteSheet;
     }
 
@@ -54,23 +56,33 @@ class Frog {
         this.#frameIndices.hopping++;
     }
 
-    #resetPosition() {
+    resetPosition() {
         this.#currentLane = 0;
+        this.#hopping = false; // stop hopping to return to proper position
         this.#floating = false;
         this.#position = {
             x: CANVAS_SIZE.width / 2, 
             y: CANVAS_SIZE.height - (CANVAS_SIZE.height / GRID_DIMENSIONS.rowCount)
         }
+
+        if (this.#dying) {
+            this.#loseLife();
+        }  
     }
 
-    setFloating() {
-        this.#floating = true;
+    getPosition() {
+        return this.#position;
+    }
+
+    getSize() {
+        return {width: this.#width, height: this.#height};
+    }
+
+    getLane() {
+        return this.#currentLane;
     }
 
     update() {
-        // update froggers placement and frameIndex
-        // collision happens on object's end
-        
         if (this.#dying) {
             this.#frameCounts.dying++;
             
@@ -79,9 +91,9 @@ class Frog {
             }
             
             if (this.#frameIndices.dying >= Object.keys(ANIMATIONS.DIE).length) {
+                this.resetPosition();
                 this.#frameIndices.dying = 0;
                 this.#dying = false;
-                this.#resetPosition();
             }
         }
         else if (this.#hopping) {
@@ -96,6 +108,7 @@ class Frog {
                 // stop and reset
                 this.#frameIndices.hopping = 0;
                 this.#hopping = false;
+                this.#floating = false;
             }
 
             return;
@@ -110,14 +123,18 @@ class Frog {
             }
         }
 
-        if (this.#currentLane > 6 && !this.#floating) {
+        if ((this.#currentLane > 6 
+            && !this.#floating)
+            || this.#position.x > CANVAS_SIZE.width - (this.#width/2)
+            || this.#position.x < (-this.#width/2)
+        ) {
             this.die();
         }
     } 
     
     hop(direction) {
         // prohibit hopping while hoppig
-        if (this.#hopping) {
+        if (this.#hopping || this.#dying) {
             return;
         }
 
@@ -134,22 +151,22 @@ class Frog {
         if (jumpingTooFarLeft || jumpingTooFarRight || jumpingTooFarUp || jumpingTooFarDown) {
             return;
         }
-
+        
         if (hoppingDown) {
             this.#currentLane--;
         }
         else if (hoppingUp) {
             this.#currentLane++;
         }
-
-        console.log(this.#currentLane);
+        
         this.#frameIndices.hopping = 0;
         this.#frameCounts.hopping = 0;
         this.#hopDirection = direction;
+        // this.#floating = false;
         this.#hopping = true;
     }
 
-    draw(context) {
+    draw(context, showHitbox) {
         context.save();
 
         if (this.#headDirection < 0) {
@@ -160,10 +177,10 @@ class Frog {
             context.translate(this.#position.x, this.#position.y);
         }
         
-        let x = 5;
-        let y = 5;
-        let stretchWidth = -10;
-        let stretchHeight = -10;
+        let x = 7;
+        let y = 7;
+        let stretchWidth = -15;
+        let stretchHeight = -15;
         let spriteFrame;
         if (this.#hopping) {
             const currentFrameIndex = this.#frameIndices.hopping;
@@ -187,17 +204,30 @@ class Frog {
         context.drawImage(this.#spriteSheet, spriteFrame[0], spriteFrame[1], spriteFrame[2], spriteFrame[3],
             x, y, this.#width + stretchWidth, this.#height + stretchHeight);
 
-        context.strokeStyle = "white";
-        context.strokeRect(x, y, this.#width + stretchWidth, this.#height + stretchHeight);
+        // context.strokeStyle = "white";
+        
+        if (showHitbox) {
+            context.strokeRect(x, y, this.#width + stretchWidth, this.#height + stretchHeight);
+        }
 
         context.restore();
+    }
+
+    stopDrifting() {
+        this.#floating = false;
+    }
+
+    drift(speed) {
+        if (!this.#dying) {
+            this.#floating = true;
+            this.#position.x += speed;
+        }
     }
 
     die() {
         this.#dying = true;
         this.#hopping = false;
     }
-
 }
 
 export default Frog;

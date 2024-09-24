@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { HOP_DIRECTIONS, IDLE_ANIMATION, LANES, ANIMATIONS, GRID_DIMENSIONS, HOP_DISTANCE, CANVAS_SIZE } from "./contants/constants";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
-import Lane from "./Lane";
 import frogSpriteSheet from "./sprites/frog/frog.png";
 import Timer from "../../components/timer/Timer";
 import GameOver from "../../components/gameover/GameOver";
 import Leaderboard from '../../components/leaderboard/Leaderboard';
 import styles from "./styles/styles.module.css";
 import HowTo from "../../components/howTo/HowTo";
-import Frog from "./frog";
+import Frog from "./objects/frog";
+import Road from "./road";
+import River from "./river";
 
 function Frogger() {
     const [gameStarted, setGameStarted] = useState(false);
@@ -21,9 +22,10 @@ function Frogger() {
     const [leaderboard, setLeaderboard] = useState([]);
 
     const canvasRef = useRef(); // canvas dom reference
-    const frogRef = useRef();
-    const roadRef = useRef();
-    const riverRef = useRef();
+    const contextRef = useRef();
+    const frogRef = useRef(null);
+    const roadRef = useRef(null);
+    const riverRef = useRef(null);
 
     // SCORE DATA
     const touchedLanes = useRef([]);
@@ -31,41 +33,81 @@ function Frogger() {
     const goalsReached = useRef(0);
 
     // STATIC BACKGROUND
-    const testGrid = useRef(null);
+    const background = useRef(null);
 
+    const screenInFocus = useRef(true);
     const fpsRef = useRef(60);
     const fpsIntervalRef = useRef(1000 / fpsRef.current);
     const lastFrameTime = useRef(Date.now());
-    
-    // const uncenteredY = GRID_DIMENSIONS.columnCount - HOP_DISTANCE.y;
-    // const lanes = [
-    //     { laneNumber: 1, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 1) + 12, showHitboxes, isLevelScaled: false},
-    //     { laneNumber: 2, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 2) + 12, showHitboxes, isLevelScaled: true},
-    //     { laneNumber: 3, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 3) + 12, showHitboxes, isLevelScaled: false},
-    //     { laneNumber: 4, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 4) + 12, showHitboxes, isLevelScaled: true},
-    //     { laneNumber: 5, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 5) + 12, showHitboxes, isLevelScaled: false},
-    //     { laneNumber: 6, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 5) + 12, showHitboxes, isLevelScaled: false},
-    //     { laneNumber: 7, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 7) + 15, showHitboxes, isLevelScaled: true},
-    //     { laneNumber: 8, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 8) + 25, showHitboxes, isLevelScaled: false},
-    //     { laneNumber: 9, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 9) + 25, showHitboxes, isLevelScaled: true},
-    //     { laneNumber: 10, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 10) + 25, showHitboxes, isLevelScaled: true},
-    //     { laneNumber: 11, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 11) + 25, showHitboxes, isLevelScaled: false},
-    //     { laneNumber: 12, laneYPosition: uncenteredY - (HOP_DISTANCE.y * 12) + 25, showHitboxes, isLevelScaled: false}
-    // ]
-    // .map(({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }) => new Lane({ laneNumber, laneYPosition, showHitboxes, isLevelScaled }));
+
+    const shouldDisplayLevelCleared = useRef(false);
+    const levelCleared = useRef(false);
+
+    // FLASHING TEXT FRAME TRACKERS
+    const startGameFrameCount = useRef(0);
+    const levelClearFrameCount = useRef(1);
+
+
+    // DOCUMENT VISIBILITY HANDLER
+    // init game on entry
+    useEffect(() => {
+        const initGame = () => {
+            // canvas set up
+            const canvas = canvasRef.current;
+            canvas.width = CANVAS_SIZE.width;
+            canvas.height = CANVAS_SIZE.height;
+            contextRef.current = canvas.getContext("2d");
+            // draw everything with shadowblur, it looks nice
+            contextRef.current.strokeStyle = "white";
+            contextRef.current.shadowColor = "black";
+            contextRef.current.shadowBlur = 15;
+            
+            fetchLeaderboard();
+
+            // create frog
+            const frogSpriteSheetImg = new Image();
+            frogSpriteSheetImg.src = frogSpriteSheet;
+            frogRef.current = new Frog(frogSpriteSheetImg, loseHeart);
+            // create road
+            roadRef.current = new Road();
+            // create river
+            riverRef.current = new River();
+        }
+
+        // initGame
+        initGame();
+
+        // tab out event listener
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "hidden") {
+                console.log("u cant see me!")
+                screenInFocus.current = false;
+            }
+            else {
+                console.log("document is here!");
+                screenInFocus.current = true;
+            }
+        }
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return (document.removeEventListener("visibilitychange", handleVisibilityChange));
+    }, [])
 
     // INPUT HANDLER
     useEffect(() => {
-        const frogSpriteSheetImg = new Image();
-        frogSpriteSheetImg.src = frogSpriteSheet;
-        frogRef.current = new Frog(GRID_DIMENSIONS.rowCount, GRID_DIMENSIONS.columnCount, frogSpriteSheetImg);
-
         const handleKeyDown = (event) => {
             const keyPress = event.keyCode;
             frogRef.current.hop(keyPress);
+
+            const lane = frogRef.current.getLane();
+            if (lane > 0 && !touchedLanes.current.includes(lane)) {
+                touchedLanes.current.push(frogRef.current.getLane());
+                setScore(prev => prev += 10 * (levelMultiplier.current));
+            }
         }
 
-        if (gameStarted) {
+        if (gameStarted && !gameOver) {
             document.body.addEventListener("keydown", handleKeyDown);
         }
         else {
@@ -75,47 +117,48 @@ function Frogger() {
         return () => {
             document.body.removeEventListener("keydown", handleKeyDown);
         };
-    });
+    }, [gameStarted, gameOver]);
 
     // GAME LOOP HOOK
     useEffect(() => {
-        const initGame = () => {
-            const canvas = canvasRef.current;
-            canvas.width = CANVAS_SIZE.width;
-            canvas.height = CANVAS_SIZE.height;
-            const context = canvas.getContext("2d");
-            context.shadowColor = "black";
-            context.shadowBlur = 10;
-
-            return context;
-        }
-
-        // initGame and get context;
-        const context = initGame();
         let animFrame;
-        
-        // fetchLeaderboard();
-        drawGrid();
+
+        fetchLeaderboard();
         updateGoals();
-
+        drawBackground();
+        
         const gameLoop = () => {
-            // if (lives === 0 && gameStarted && !gameOver) {
-            //     //ggs
-            //     console.log("stop!");
-            //     loseGame();
-            // }
+            // trigger lose game under these conditions!
+            if (lives === 0 && gameStarted && !gameOver) {
+                loseGame();
+            }
 
+            // UPDATES
             const deltaTime = Date.now() - lastFrameTime.current;
             if (deltaTime > fpsIntervalRef.current) {
-                // update all objects in world(frogger, and lanes (river factories objects, road factories objects))
                 lastFrameTime.current = Date.now() - (deltaTime % fpsIntervalRef.current);
+                
+                // update all objects in world(frogger, and lanes (river factories objects, road factories objects))
                 frogRef.current.update();
+                roadRef.current.update(frogRef.current);
+                riverRef.current.update(frogRef.current);
+                scoreGoalHandler();
+                updateTextFrames();
             }
             
             // DRAW
-            clearScreen(context);
-            frogRef.current.draw(context);
-            // drawFrogger(context, deltaFroggerTime);
+            clearScreen(contextRef.current);
+            riverRef.current.draw(contextRef.current, showHitboxes);
+            frogRef.current.draw(contextRef.current, showHitboxes);
+            roadRef.current.draw(contextRef.current, showHitboxes);
+            
+            if ( ! gameStarted) {
+                gameStartOverlay();
+            }
+
+            if (shouldDisplayLevelCleared.current) {
+                levelClearMessage();
+            }
             
             animFrame = requestAnimationFrame(gameLoop);
         }
@@ -125,7 +168,26 @@ function Frogger() {
         return () => {
             cancelAnimationFrame(animFrame);
         };
-    }, [showGrid, showHitboxes, goals, lives, gameOver]);
+    }, [showGrid, showHitboxes, goals, gameOver, lives, gameStarted]);
+
+    const updateTextFrames = () => {
+        if ( ! gameStarted) {
+            startGameFrameCount.current++;
+        }
+       
+        if (levelCleared.current) {
+            levelClearFrameCount.current++;
+        }
+
+        if (levelClearFrameCount.current % 15 == 0) {
+            shouldDisplayLevelCleared.current = !shouldDisplayLevelCleared.current;
+        }
+        else if (levelClearFrameCount.current >= 75) {
+            levelClearFrameCount.current = 1
+            levelCleared.current = false;
+            shouldDisplayLevelCleared.current = false;
+        }
+    }
 
     const updateGoals = () => {
         const initGoals = () => {
@@ -137,7 +199,8 @@ function Frogger() {
                 let topLeftX = goalOffset * CANVAS_SIZE.width / 20 + (CANVAS_SIZE.width / 30)
                 let topLeftY = HOP_DISTANCE.y / 5 * 2;
                 let topL = {x: topLeftX , y: topLeftY};
-                let bottomR = {x: topL.x + (1/3) * (CANVAS_SIZE.width / 10), y: topL.y +  HOP_DISTANCE.y};
+                let bottomR = {x: topL.x + (1/3) * (CANVAS_SIZE.width / 10), y: (topL.y +  HOP_DISTANCE.y) / 4};
+
                 currentGoal = {area: {topLeft: topL, bottomRight: bottomR}, occupied: false};
                 initGoals.push(currentGoal);
                 goalOffset += 4;
@@ -147,12 +210,68 @@ function Frogger() {
         }
 
         if (goals.length === 0) {
-            console.log("initializing goals");
             initGoals();
         }
     }
+
+    const scoreGoalHandler = () => {
+        const froggerSize = frogRef.current.getSize();
+        const froggerTopLeftHitbox = frogRef.current.getPosition();
+        const froggerBottomRightHitbox = { x: froggerTopLeftHitbox.x + froggerSize.width,
+            y: froggerTopLeftHitbox.y + froggerSize.height };
+
+        for (let i = 0; i < goals.length; i++) {
+            const goalTopLeft = goals[i].area.topLeft;
+            const goalBottomRight = goals[i].area.bottomRight;
+
+            // see if ith goal is colliding with frogger
+            if ( ! ((froggerTopLeftHitbox.x >= goalBottomRight.x || goalTopLeft.x >= froggerBottomRightHitbox.x) 
+                || (froggerTopLeftHitbox.y >= goalBottomRight.y / 2 || goalTopLeft.y >= froggerBottomRightHitbox.y)) 
+                && !goals[i].occupied) {
+                const updatedGoals = goals.map((goal, index) => 
+                    index === i ? { ...goal, occupied: true } : goal
+                );
+
+                setGoals(updatedGoals);
+                scoreGoal();
+            }
+        }
+    }
+
+    const levelClearMessage = () => {
+        displayMessage("LEVEL CLEARED", "serif", "red");
+    } 
+
+    const displayMessage = (message, font, color) => {
+        const context = contextRef.current;
+        context.save();
+
+        const x = (CANVAS_SIZE.width / 2) - ((1/7) * CANVAS_SIZE.width);
+        const y = (CANVAS_SIZE.height / 2) + ((1/52) * CANVAS_SIZE.height);
+        context.translate(x, y);
     
-    const drawGrid = () => {
+        const fontSize = Math.floor(CANVAS_SIZE.width / 22);
+        context.font = `${fontSize}px ${font}`;
+        context.fillStyle = color;
+        context.fillText(message, 0, 0);
+        
+        context.restore();
+    }
+
+    const gameStartOverlay = () => {
+
+        contextRef.current.fillStyle = "#00000052"
+        contextRef.current.fillRect(0,0,CANVAS_SIZE.width,CANVAS_SIZE.height);
+
+        if (startGameFrameCount.current < 75) {
+            displayMessage("PRESS START", "serif", "red");
+        }
+        else if (startGameFrameCount.current > 125) {
+            startGameFrameCount.current = 0;
+        }
+    }
+    
+    const drawBackground = () => {
         const grid = document.createElement("canvas");
         grid.width = CANVAS_SIZE.width;
         grid.height = CANVAS_SIZE.height;
@@ -184,115 +303,102 @@ function Frogger() {
         gridContext.fillStyle = "limegreen";
         for (let i = 0; i < goals.length; i++) {
             if (!goals[i].occupied) {
-                let goalX = goals[i].area.topLeft.x;
-                let goalY = goals[i].area.topLeft.y;
-                let goalWidth = goals[i].area.bottomRight.x - goalX;
-                let goalHeight = goals[i].area.bottomRight.y / 4;
+                const goalX = goals[i].area.topLeft.x;
+                const goalY = goals[i].area.topLeft.y;
+                const goalWidth = goals[i].area.bottomRight.x - goalX;
+                const goalHeight = goals[i].area.bottomRight.y;
                 gridContext.fillRect(goalX, goalY, goalWidth, goalHeight);
             }
         }
         
+        // TESTING GRID
         if (showGrid) {
             gridContext.beginPath();
-    
             // grid column lines
             for (let i = 0; i < GRID_DIMENSIONS.columnCount; i++) {
                 gridContext.moveTo(HOP_DISTANCE.x * i, HOP_DISTANCE.y);
                 gridContext.lineTo(HOP_DISTANCE.x * i, CANVAS_SIZE.height);
             }
-            
             // grid row lines
             for (let i = 0; i < GRID_DIMENSIONS.rowCount; i++) {
                 gridContext.moveTo(0, HOP_DISTANCE.y * i);
                 gridContext.lineTo(CANVAS_SIZE.width, HOP_DISTANCE.y * i);
             }
-            
             // GOAL SEGMENTS
             for (let i = 0; i < 5; i++) {
                 gridContext.moveTo(CANVAS_SIZE.width / 5 * i, 0);
                 gridContext.lineTo(CANVAS_SIZE.width / 5 * i, HOP_DISTANCE.y);
             }
-    
             gridContext.strokeStyle = "white";
             gridContext.stroke();
         }
 
-        testGrid.current = grid;
+        // set background
+        background.current = grid;
     }
 
     const clearScreen = (context) => {
         context.clearRect(0, 0, GRID_DIMENSIONS.columnCount, GRID_DIMENSIONS.columnCount);
-        context.drawImage(testGrid.current, 0, 0);
+        context.drawImage(background.current, 0, 0);
     }
-
-    const loseHeart = () => {
-        setLives(prev => prev -= 1);
+    
+    const levelClear = () => {
+        setGoals([]);
+        goalsReached.current = 0;
+        levelMultiplier.current += 1;
+        roadRef.current.increaseDifficulty();
+        riverRef.current.increaseDifficulty();
+        levelCleared.current = true;
+    }
+    
+    const scoreGoal = () => {
+        scoreUp(100 * levelMultiplier.current);
+        touchedLanes.current = [];
+        frogRef.current.resetPosition();
+        
+        if (++goalsReached.current === 5) {
+            levelClear();
+        }
     }
 
     const scoreUp = (upAmount) => {
         setScore(prev => Math.floor(prev += upAmount));
     }
-
-    const scoreGoal = () => {
-        scoreUp(200 * levelMultiplier.current);
-        touchedLanes.current = [];
-        
-        console.log("golasos", goalsReached.current);
-        if (++goalsReached.current === 5) {
-            levelClear();
-        }
-
-        resetFrogger();
-    }
     
-    const levelClear = () => {
-        console.log("cleared!");
-        setGoals([]);
-        goalsReached.current = 0;
-        levelMultiplier.current += 0.25;
+    const sendScore = async () => {
+        let username = localStorage.getItem("user");
+        console.log(username);
+        
+        if (username !== null) {
+            sendLeaderboardData("frogger/add", username, score, "score");
+        }
     }
 
     const fetchLeaderboard = async () => {
         setLeaderboard(await getLeaderboard("/frogger/leaderboard-top10"));
     }
 
-    const sendScore = async () => {
-        let username = localStorage.getItem("user");
-        console.log(username);
-
-        if (username !== null) {
-            sendLeaderboardData("frogger/add", username, score, "score");
-        }
+    const loseHeart = () => {
+        console.log("-1 life");
+        setLives(prev => prev -= 1);
     }
 
-    const loseGame =  () => {
+    const loseGame =  async () => {
         setGameOver(true);
-        setGameStarted(false);
-
-        // send score to server here
         sendScore();
     }
 
     const resetGame = () => {
-        setGameStarted(true);
+        setGameStarted(false);
         setGameOver(false);
         setScore(0);
         setLives(3);
         setGoals([]);
-        resetFrogger();
+        roadRef.current.resetDifficulty();
+        riverRef.current.resetDifficulty();
         touchedLanes.current = [];
         goalsReached.current = 0;
         levelMultiplier.current = 1;
-    }
-
-    const resetFrogger = () => {
-        // isHit.current = false;
-        // isHopping.current = false;
-        // hopFrameIndex.current = 0;
-        // dieFrameCount.current = 0;
-        // dieSpriteIndex.current = 0;
-        // froggerPosition.current = {x: initFrogX, y: initFrogY};
-        // froggerLane.current = -1;
     }
 
     const handleGridPress = () => {
@@ -304,7 +410,7 @@ function Frogger() {
     }
 
     const startGame = () => {
-        resetGame();
+        setGameStarted(true);
     }
 
     // print row function to be passed into Leaderboard
@@ -341,7 +447,11 @@ function Frogger() {
             <div>
                 <button onClick={handleGridPress} style={{margin:"1em"}}>Testing Grid</button>
                 <button onClick={handleHitboxPress} style={{marginTop:"1em"}}>Hitboxes</button>
-                <button onClick={startGame} style={{marginTop:"1em"}}>Start</button>
+                {gameStarted ? (
+                    <></>
+                ) : (
+                    <button onClick={startGame} style={{marginTop:"1em"}}>Start</button>
+                )}
             </div>
             <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={leaderboard} printRow={printRow} metric={"Score"}/>

@@ -73,119 +73,115 @@ export const LOG_COORDS = {
 
 export const frogRadius = 14;
 
-// export const LANES = {
-//     1: {
-//         speed: 1.44,
-//         width: 72,
-//         height: 27,
-//         batchSize: 3,
-//         batchInterval: 7000, 
-//         spawnInterval: 1800,
-//         direction: -1,
-//         type: "oldBlueLeft",
-//         initX: CANVAS_WIDTH
-//     },
-//     2: {
-//         speed: 2.11,
-//         width: 72,
-//         height: 27,
-//         batchSize: 3,
-//         batchInterval: 9000,
-//         spawnInterval: 3000,
-//         direction: 1,
-//         type: "denimBlue",
-//         initX: -70
-//     },
-//     3: {
-//         speed: 3,
-//         width: 72,
-//         height: 27,
-//         batchSize: 3,
-//         batchInterval: 3500,
-//         spawnInterval: 1000,
-//         direction: -1,
-//         type: "oldBlueLeft",
-//         initX: CANVAS_WIDTH + 100
-//     },
-//     4: {
-//         speed: 4.8,
-//         width: 72,
-//         height: 27,
-//         batchSize: 2,
-//         batchInterval: 7500,
-//         spawnInterval: 5500,
-//         direction: 1,
-//         type: "pinkRight",
-//         initX: -70
-//     },
-//     5: {
-//         speed: 2.16,
-//         width: 72,
-//         height: 27,
-//         batchSize: 3,
-//         batchInterval: 5000,
-//         spawnInterval: 1750,
-//         direction: -1,
-//         type: "truck",
-//         initX: CANVAS_WIDTH
-//     },
-//     //  SIDEWALK
-//     6: {},
-//     7: { // TURTLE DOUBLE
-//         speed: 2.4,
-//         width: 110,
-//         height: 40,
-//         batchSize: 2,
-//         batchInterval: 5000,
-//         spawnInterval: 550,
-//         direction: -1,
-//         type: "turtle",
-//         initX: CANVAS_WIDTH
-//     },
-//     8: { // small log
-//         speed: 1.92,
-//         width: 80,
-//         height: 32,
-//         batchSize: 3,
-//         batchInterval: 5000,
-//         spawnInterval: 2000,
-//         direction: 1,
-//         type: "smallLog",
-//         initX: -70
-//     },
-//     9: { // big log
-//         speed: 2.4,
-//         width: 150,
-//         height: 32,
-//         batchSize: 3,
-//         batchInterval: 5000,
-//         spawnInterval: 1750,
-//         direction: 1,
-//         type: "largeLog",
-//         initX: -150
-//     },
-//     10: { // TURTLE SINGLE
-//         speed: 1.44,
-//         width: 110,
-//         height: 40,
-//         batchSize: 1,
-//         batchInterval: 7500,
-//         spawnInterval: 2750,
-//         direction: -1,
-//         type: "turtle",
-//         initX: CANVAS_WIDTH
-//     },
-//     11: { // med log
-//         speed: 1.92,
-//         width: 100,
-//         height: 32,
-//         batchSize: 3,
-//         batchInterval: 5250,
-//         spawnInterval: 1650,
-//         direction: 1,
-//         type: "medLog",
-//         initX: -100
-//     },
-//     // GOAL
-//     12: {}
-// }
+export const LANES = {
+    1: {
+        speed: 1.44,
+        width: 72,
+        height: 27,
+        batchSize: 3,
+        batchInterval: 7000, 
+        spawnInterval: 1800,
+        direction: -1,
+        type: "oldBlueLeft",
+        initX: CANVAS_SIZE.width
+    },
+    2: {
+        speed: 2.11,
+        width: 72,
+        height: 27,
+        batchSize: 3,
+        batchInterval: 9000,
+        spawnInterval: 3000,
+        direction: 1,
+        type: "denimBlue",
+        initX: -70
+    },
+    3: {
+        speed: 3,
+        width: 72,
+        height: 27,
+        batchSize: 3,
+        batchInterval: 3500,
+        spawnInterval: 1000,
+        direction: -1,
+        type: "oldBlueLeft",
+        initX: CANVAS_SIZE.width + 100
+    },
+    4: {
+        speed: 4.8,
+        width: 72,
+        height: 27,
+        batchSize: 2,
+        batchInterval: 7500,
+        spawnInterval: 5500,
+        direction: 1,
+        type: "pinkRight",
+        initX: -70
+    },
+    5: {
+        speed: 2.16,
+        width: 72,
+        height: 27,
+        batchSize: 3,
+        batchInterval: 5000,
+        spawnInterval: 1750,
+        direction: -1,
+        type: "truck",
+        initX: CANVAS_SIZE.width
+    },
+    7: { // TURTLE DOUBLE
+        speed: 2.4,
+        width: 110,
+        height: 40,
+        batchSize: 2,
+        batchInterval: 5000,
+        spawnInterval: 550,
+        direction: -1,
+        type: "turtle",
+        initX: CANVAS_SIZE.width
+    },
+    8: { // small log
+        speed: 1.92,
+        width: 80,
+        height: 32,
+        batchSize: 3,
+        batchInterval: 5000,
+        spawnInterval: 2000,
+        direction: 1,
+        type: "smallLog",
+        initX: -70
+    },
+    9: { // big log
+        speed: 2.4,
+        width: 150,
+        height: 32,
+        batchSize: 3,
+        batchInterval: 5000,
+        spawnInterval: 1750,
+        direction: 1,
+        type: "largeLog",
+        initX: -150
+    },
+    10: { // TURTLE SINGLE
+        speed: 1.44,
+        width: 110,
+        height: 40,
+        batchSize: 1,
+        batchInterval: 7500,
+        spawnInterval: 2750,
+        direction: -1,
+        type: "turtle",
+        initX: CANVAS_SIZE.width
+    },
+    11: { // med log
+        speed: 1.92,
+        width: 100,
+        height: 32,
+        batchSize: 3,
+        batchInterval: 5250,
+        spawnInterval: 1650,
+        direction: 1,
+        type: "medLog",
+        initX: -100
+    },
+}
