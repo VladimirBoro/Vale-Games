@@ -1,6 +1,17 @@
-export const CANVAS_SIZE = 770;
-export const CANVAS_WIDTH = 770;
-export const CANVAS_HEIGHT = 715;
+export const GRID_DIMENSIONS = {
+    rowCount: 13,
+    columnCount: 14
+}
+
+export const CANVAS_SIZE = {
+    width: 770,
+    height: 715
+}
+
+export const HOP_DISTANCE = {
+    x: CANVAS_SIZE.width / GRID_DIMENSIONS.columnCount,
+    y: CANVAS_SIZE.height / GRID_DIMENSIONS.rowCount
+}
 
 export const HOP_DIRECTIONS = {
     LEFT: [65, 37], 
@@ -28,10 +39,13 @@ export const ANIMATIONS = {
         3: [51, 181, 50, 42]
     },
     DIE: {
-        0: [258, 0, 128, 32],
-        1: [258, 0, 128, 32],
-        2: [129, 33, 128, 32],
-        3: [258, 66, 128, 32],
+        0: [258, 15, 128, 20],
+        1: [129, 48, 128, 20],
+        2: [258, 81, 128, 20],
+        3: [258, 81, 128, 20],
+        4: [258, 81, 128, 20],
+        5: [258, 81, 128, 20],
+        6: [258, 81, 128, 20],
     }
 }
 
@@ -61,7 +75,7 @@ export const frogRadius = 14;
 
 export const LANES = {
     1: {
-        speed: 0.6,
+        speed: 1.44,
         width: 72,
         height: 27,
         batchSize: 3,
@@ -69,10 +83,10 @@ export const LANES = {
         spawnInterval: 1800,
         direction: -1,
         type: "oldBlueLeft",
-        initX: CANVAS_WIDTH
+        initX: CANVAS_SIZE.width
     },
     2: {
-        speed: 0.88,
+        speed: 2.11,
         width: 72,
         height: 27,
         batchSize: 3,
@@ -83,7 +97,7 @@ export const LANES = {
         initX: -70
     },
     3: {
-        speed: 1.25,
+        speed: 3,
         width: 72,
         height: 27,
         batchSize: 3,
@@ -91,10 +105,10 @@ export const LANES = {
         spawnInterval: 1000,
         direction: -1,
         type: "oldBlueLeft",
-        initX: CANVAS_WIDTH + 100
+        initX: CANVAS_SIZE.width + 100
     },
     4: {
-        speed: 2,
+        speed: 4.8,
         width: 72,
         height: 27,
         batchSize: 2,
@@ -105,7 +119,7 @@ export const LANES = {
         initX: -70
     },
     5: {
-        speed: 0.9,
+        speed: 2.16,
         width: 72,
         height: 27,
         batchSize: 3,
@@ -113,12 +127,10 @@ export const LANES = {
         spawnInterval: 1750,
         direction: -1,
         type: "truck",
-        initX: CANVAS_WIDTH
+        initX: CANVAS_SIZE.width
     },
-    //  SIDEWALK
-    6: {},
     7: { // TURTLE DOUBLE
-        speed: 1,
+        speed: 2.4,
         width: 110,
         height: 40,
         batchSize: 2,
@@ -126,10 +138,10 @@ export const LANES = {
         spawnInterval: 550,
         direction: -1,
         type: "turtle",
-        initX: CANVAS_WIDTH
+        initX: CANVAS_SIZE.width
     },
     8: { // small log
-        speed: 0.8,
+        speed: 1.92,
         width: 80,
         height: 32,
         batchSize: 3,
@@ -140,7 +152,7 @@ export const LANES = {
         initX: -70
     },
     9: { // big log
-        speed: 1,
+        speed: 2.4,
         width: 150,
         height: 32,
         batchSize: 3,
@@ -151,7 +163,7 @@ export const LANES = {
         initX: -150
     },
     10: { // TURTLE SINGLE
-        speed: 0.6,
+        speed: 1.44,
         width: 110,
         height: 40,
         batchSize: 1,
@@ -159,10 +171,10 @@ export const LANES = {
         spawnInterval: 2750,
         direction: -1,
         type: "turtle",
-        initX: CANVAS_WIDTH
+        initX: CANVAS_SIZE.width
     },
     11: { // med log
-        speed: 0.8,
+        speed: 1.92,
         width: 100,
         height: 32,
         batchSize: 3,
@@ -172,6 +184,4 @@ export const LANES = {
         type: "medLog",
         initX: -100
     },
-    // GOAL
-    12: {}
 }

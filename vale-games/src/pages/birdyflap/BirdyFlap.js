@@ -32,6 +32,9 @@ function BirdyFlap () {
     const birdyRef = useRef();
     const pipesRef = useRef([]);
     const mountainsRef = useRef([]);
+    const fpsRef = useRef(60);
+    const fpsIntervalRef = useRef(1000 / fpsRef.current);
+    const lastFrameTimeRef = useRef(Date.now());
     
     // initGame
     useEffect(() => {
@@ -53,10 +56,6 @@ function BirdyFlap () {
 
     // MAIN LOOP
     useEffect(() => {
-        let birdy = birdyRef.current;
-        let pipes = pipesRef.current;
-        let mountains = mountainsRef.current;
-        
         let canvas = canvasRef.current;
         canvas.width = CANVAS.width; 
         canvas.height = CANVAS.height;
@@ -68,37 +67,12 @@ function BirdyFlap () {
 
         let animationFrame;
         const gameLoop = () => {
+            const deltaTime = Date.now() - lastFrameTimeRef.current;
+
             // UPDATES
-            if (!gameOver) {
-                pipes.forEach((pipe) => {
-                    pipe.update(birdy) // pass in birdy to check for collisions
-                    if (pipe.score(birdy)) {
-                        setScore(prev => prev += 1);
-                    }
-                });
-
-                mountains.forEach((mountain) => {
-                    mountain.scroll();
-                    if (mountain.noImgLeft()) {
-                        mountains.push(new Mountains(mountainsImage));
-                    }
-                    
-                    if (mountain.timeToDestroy()) {
-                        mountains.splice(0, 1);
-                    }
-                });
-            }
-
-            birdy.update();
-            
-            if (birdy.isHit() && !gameOver) {
-                console.log("im hit!");
-                
-                setGameOver(true);
-            }
-            
-            if (birdy.isDead()) {
-                pauseGame();
+            if (deltaTime > fpsIntervalRef.current) {
+                lastFrameTimeRef.current = Date.now() - (deltaTime % fpsIntervalRef.current);
+                updateGame();
             }
 
             // DRAW
@@ -150,7 +124,7 @@ function BirdyFlap () {
         const width = 50;
         const gap = CANVAS.height / 6;
         let position = randomPipeSpawn();
-        const speed = 1;
+        const speed = 2.4;
 
         let pipe = new Pipe(width, gap, position, speed, destroyPipe);
 
@@ -175,7 +149,52 @@ function BirdyFlap () {
         setGamePaused(!gamePaused);
         setGameStarted(!gameStarted);
     }
+
+    const updateGame = () => {
+        if (!gameOver) {
+            updatePipes();
+            updateBackground();
+        }
+
+        updateBirdy();
+    }
+
+    const updatePipes = () => {
+        pipesRef.current.forEach((pipe) => {
+            pipe.update(birdyRef.current) // pass in birdy to check for collisions
+            if (pipe.score(birdyRef.current)) {
+                setScore(prev => prev += 1);
+            }
+        });
+    }
     
+    const updateBackground = () => {
+        mountainsRef.current.forEach((mountain) => {
+            mountain.scroll();
+            if (mountain.noImgLeft()) {
+                mountainsRef.current.push(new Mountains(mountainsImage));
+            }
+            
+            if (mountain.timeToDestroy()) {
+                mountainsRef.current.splice(0, 1);
+            }
+        });
+    }
+    
+    const updateBirdy = () => {
+        birdyRef.current.update();
+
+        if (birdyRef.current.isHit() && !gameOver) {
+            console.log("im hit!");
+            
+            setGameOver(true);
+        }
+        
+        if (birdyRef.current.isDead()) {
+            pauseGame();
+        }
+    }
+
     const clearCanvas = (context) => {
         context.clearRect(0, 0, CANVAS.width, CANVAS.height);
         context.drawImage(skyImage, 0, 0, CANVAS.width, CANVAS.height);

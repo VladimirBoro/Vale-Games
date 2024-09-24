@@ -8,7 +8,7 @@ export const GUY = {
     y: CANVAS.height - (CANVAS.height / 5),
     width: CANVAS.width / 15,
     height: CANVAS.height / 15,
-    jumpSpeed: -5.5
+    jumpSpeed: -9.75
 }
 
 // x,y,height (no width it's custom)

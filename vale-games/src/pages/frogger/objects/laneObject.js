@@ -1,9 +1,9 @@
-
 export class LaneObject {
-    constructor(speed, position, size) {
-        this.speed = speed;
+    constructor(speed, direction, position, size, destroy) {
+        this.speed = speed * direction;
         this.position = position;
         this.size = size;
+        this.destroy = destroy;
     }
 
     getPosition() {
@@ -21,6 +21,10 @@ export class LaneObject {
 
     setPosition(position) {
         this.position = position;
+    }
+
+    update() {
+        this.position.x += this.speed;
     }
 
     drawHitbox(context, position, size) {

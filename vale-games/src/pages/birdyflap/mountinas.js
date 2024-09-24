@@ -6,7 +6,7 @@ export class Mountains {
         this.position = position;
 
         this.width = 1500;
-        this.scrollSpeed = 0.15;
+        this.scrollSpeed = 0.36;
         this.spawnedNextSet = false;
     }
 

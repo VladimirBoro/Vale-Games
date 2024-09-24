@@ -27,13 +27,13 @@ class Guy {
         this.#height = height;
         this.#direction = 1;
 
-        this.#sideSpeed = 2;
+        this.#sideSpeed = 4.2;
         this.#movingLeft = false;
         this.#movingRight = false;
 
         this.#isJumping = false;
         this.#jumpSpeed = GUY.jumpSpeed;
-        this.#gravity = 0.06; 
+        this.#gravity = 0.25; 
 
         this.#falling = false;
         this.#currentHeight = 0;
@@ -85,6 +85,17 @@ class Guy {
     }
 
     update () {
+        // update the sprite frame 
+        this.#currentFrameCount++;
+        
+        if (this.#falling && this.#currentFrameCount % 15 == 0) {
+            this.#spriteFallFrame++;
+            this.#spriteFallFrame %= 2;
+        }
+        else if (this.#currentFrameCount % 7 == 0) {
+            this.#spriteJumpFrame++;
+        }
+
         // teleport guy to the right siode
         if (this.#x < -this.#width) {
             this.#x = CANVAS.width - 1;
@@ -173,18 +184,7 @@ class Guy {
 
         context.restore();
 
-        this.#currentFrameCount++;
-        
-        if (this.#falling && this.#currentFrameCount % 20 == 0) {
-            this.#spriteFallFrame++;
-            this.#spriteFallFrame %= 2;
-        }
-        else if (this.#currentFrameCount % 15 == 0) {
-            this.#spriteJumpFrame++;
-        }
-
         if (this.showHitbox) {
-            // context.strokeStyle = "limegreen";
             context.strokeRect(this.#x, this.#y, this.#width, this.#height);
         }
     }
