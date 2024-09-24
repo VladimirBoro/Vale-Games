@@ -21,15 +21,9 @@ public class FroggerScoreController {
 
     @GetMapping("/leaderboard-top10")
     public Iterable<FroggerScore> getLeaderBoardTop10() {
-        System.out.println("yo");
         return froggerRepo.findTop10ByOrderByScoreDesc();
     }
 
-    // @GetMapping("/leaderboard")
-    // public Iterable<FroggerScore> getLeaderBoard() {
-    //     return froggerRepo.findAllByScoreDesc();
-    // }
-    
     @PostMapping("/add")
     public String postAdd(@RequestParam String username, @RequestParam int score) {
        String response = "not signed in";
