@@ -21,7 +21,11 @@ function Minesweeper() {
         setTimes(await getLeaderboard(LEADERBOARD_PATH));
     }
 
-    // GET top ten leaderboard
+    useEffect(() => {
+        localStorage.setItem("currentGame", "Minesweeper");
+        window.dispatchEvent(new Event("game"));
+    }, [])
+
     useEffect(() => {
         fetchLeaderboard();
     }, [gameOver]);
@@ -62,6 +66,7 @@ function Minesweeper() {
         + " When you open a square that does not touch any mines, it will be empty and the adjacent"
         + " squares will automatically open in all directions until reaching squares that contain numbers."
         + " A common strategy for starting games is to randomly click until you get a big opening with lots of numbers."
+        + " Clear the field without left-clicking any mines to win!"
     }
 
     const controls = () => {
@@ -72,8 +77,11 @@ function Minesweeper() {
 
     return (
         <div className={styles.page}>
-            <Board postTime={postTime} gg={gg}/>
-            <HowTo summary={summary()} controls={controls()}/>
+            <div className={styles.contents}>
+                <Board postTime={postTime} gg={gg}/>
+                <HowTo summary={summary()} controls={controls()}/>
+            </div>
+
             <Leaderboard data={times} printRow={printRow} metric={"Time"}/>
             { gameOver ? (
                     <GameOver lost={gameLost.current} metric="Time" value={time.current} tryAgain={hideGameOver}/>

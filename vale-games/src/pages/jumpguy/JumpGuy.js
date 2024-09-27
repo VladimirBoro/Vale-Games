@@ -32,6 +32,9 @@ function JumpGuy() {
 
     // init game and set up controls
     useEffect(() => {
+        localStorage.setItem("currentGame", "Jump Guy");
+        window.dispatchEvent(new Event("game"));
+
         initGame();
         const jumpGuy = jumpGuyRef.current;
 
@@ -248,8 +251,10 @@ function JumpGuy() {
 
     return (
         <div className={styles.page}>
-            <h2>Score: {score}</h2>
-            <div >
+            <div className={styles.head}>
+                <h2>Score: {score}</h2>
+            </div>
+            <div>
                 <canvas className={styles.canvas} ref={canvasRef} />
             </div>
             <div className={styles.button}>

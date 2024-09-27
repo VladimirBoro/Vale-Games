@@ -17,7 +17,7 @@ export default function Cell( {details, updateFlag, revealcell} ) {
   const style = {
       backgroundColor: details.revealed && details.value !== 0 ? details.value === 'X' ? 'red' : ' #00226d' : details.revealed && details.value===0 ? '#00226f' : '#000',
       opacity:'0.8',
-      border:'3px solid white',
+      border:'2px solid white',
       display:'flex',
       justifyContent:'center',
       alignItems:'center',

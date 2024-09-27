@@ -3,12 +3,13 @@ import { CANVAS } from "./constants";
 import { Pipe } from "./pipe";
 import { Birdy } from "./birdy";
 import { Mountains } from "./mountinas";
+import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import GameOver from "../../components/gameover/GameOver";
 import sky from "./images/sky.png";
 import mountainRange from "./images/mountains.png"
 import Leaderboard from "../../components/leaderboard/Leaderboard";
-import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import HowTo from "../../components/howTo/HowTo";
+import styles from "./styles.module.css";
 
 function BirdyFlap () {
     const [gameStarted, setGameStarted] = useState(false);
@@ -38,9 +39,11 @@ function BirdyFlap () {
     
     // initGame
     useEffect(() => {
+        localStorage.setItem("currentGame", "Flappy Bat");
+        window.dispatchEvent(new Event("game"));
+
         initGame();
 
-        console.log("listening..." , birdyRef.current);
         canvasRef.current.addEventListener("mousedown", onClick);
 
         return () => {
@@ -270,12 +273,11 @@ function BirdyFlap () {
     }
 
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <h1>Birdy Flap</h1>
-            <div>
+        <div className={styles.page}>
+            <div className={styles.head}>
                 <h2>Score: {score}</h2>
             </div>
-            <canvas style={{marginBottom: "1em"}} ref={canvasRef} />
+            <canvas style={{marginBottom: "3em"}} ref={canvasRef} />
             <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={leaderboard} printRow={printRow} metric={"Score"}/>
             { gameOver ? (

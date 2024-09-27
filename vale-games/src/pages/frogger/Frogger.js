@@ -74,6 +74,9 @@ function Frogger() {
             riverRef.current = new River();
         }
 
+        localStorage.setItem("currentGame", "Frogger");
+        window.dispatchEvent(new Event("game"));
+
         // initGame
         initGame();
 
@@ -436,21 +439,20 @@ function Frogger() {
     }
 
     return (
-        <div style={{display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{display: "flex", justifyContent: "space-around", width: "500px"}}>
+        <div className={styles.page}>
+            <div className={styles.head}>
                 <h2><Timer initTime={0} startTimer={gameStarted}/></h2>
                 <h2>❤️ {lives}</h2>
                 <h2>Score: {score}</h2>
             </div>
-            {/* <canvas ref={canvasRef} style={{width: GRID_DIMENSIONS.columnCount, height: GRID_DIMENSIONS.columnCount}}/> */}
             <canvas ref={canvasRef} className={styles.canvas}/>
-            <div>
-                <button onClick={handleGridPress} style={{margin:"1em"}}>Testing Grid</button>
-                <button onClick={handleHitboxPress} style={{marginTop:"1em"}}>Hitboxes</button>
+            <div className={styles.buttons}>
+                <button onClick={handleGridPress}> Testing Grid </button>
+                <button onClick={handleHitboxPress}> Hitboxes </button>
                 {gameStarted ? (
                     <></>
                 ) : (
-                    <button onClick={startGame} style={{marginTop:"1em"}}>Start</button>
+                    <button onClick={startGame}> Start </button>
                 )}
             </div>
             <HowTo summary={summary()} controls={controls()}/>

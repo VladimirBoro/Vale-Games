@@ -21,6 +21,7 @@ import './App.css';
 function App() {
   useEffect(() => {
     document.title = "Vale Games";
+    localStorage.setItem("currentGame", "");
   }, []);
 
   useEffect(() => {

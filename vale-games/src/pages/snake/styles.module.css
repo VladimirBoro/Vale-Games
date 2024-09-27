@@ -4,29 +4,21 @@
     align-items: center;
 }
 
-.head {
-    width: fit-content;
-    text-align: center;
-    padding: 0 1em;
+.info {
+    display: flex;
     margin: 1em 0;
+    justify-content: space-evenly;
     background-color: var(--window-background-color);
     border-radius: 1em;
+    align-items: center;
+    width: 500px;
 }
 
-.head h2 {
+.info h2 {
     margin: 0;
 }
 
-.button {
-    display: flex;
+.startButton {
     margin-top: 1em;
     margin-bottom: 3em;
-}
-
-
-@media (min-width: 2250px) {
-    .canvas {
-        width: 700px;
-        height: 933px;
-    }
 }

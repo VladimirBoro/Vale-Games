@@ -22,5 +22,12 @@ tbody tr:nth-child(even) {
 }
 
 .tableContainer {
-    margin: 1em;
+    width: 500px;
+    background-color: var(--window-background-color);
+    border-radius: 1em;
+    margin: 2em;
+    margin-bottom: 5em;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1em;
 }

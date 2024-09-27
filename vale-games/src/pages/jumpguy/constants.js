@@ -1,6 +1,6 @@
 export const CANVAS = {
-    width: 600,
-    height: 800
+    width: 500,
+    height: 666
 }
 
 export const GUY = {
@@ -13,7 +13,7 @@ export const GUY = {
 
 // x,y,height (no width it's custom)
 export const GUY_JUMPING_FRAMES = [
-    [138, 320, 64],
+    [138, 321, 64],
     [202, 320, 64],
     [267, 320, 64],
     [331, 320, 64],

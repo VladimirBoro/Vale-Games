@@ -1,15 +1,19 @@
-.summary, .controls {
+.component {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 2em;
+}
+
+.summary, .controls {
     width: 500px;
     text-align: center;
-    background-color:  rgb(31, 28, 28);
+    background-color: var(--window-background-color);
     border-radius: 1em;
 }
 
-.summary h2 {
-    margin-bottom: 0;
+.summary li {
+    padding-bottom: 1em;
 }
 
 .summary p {

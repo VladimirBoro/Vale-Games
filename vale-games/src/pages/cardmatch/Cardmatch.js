@@ -21,7 +21,11 @@ function CardMatch() {
     const disabled = useRef(false);
     const time = useRef("");
 
-    // OPEN PAGE
+    useEffect(() => {
+        localStorage.setItem("currentGame", "Card Match");
+        window.dispatchEvent(new Event("game"));
+    }, [])
+
     useEffect(() => {
         const fetchLeaderboard = async () => {
             setLeaderboard(await getLeaderboard("/cardmatch/leaderboard-top10"));
@@ -123,10 +127,10 @@ function CardMatch() {
 
     return (
         <div className={style.table_container}>
-            <h1 className={style.h1}>Card Match</h1>
             <div className={style.gameStats}>
-                <h2><Timer initTime={0} startTimer={gameStarted} updateTime={getTime}/></h2>
-                <h2>Lives: {lives}</h2>
+                <h2>🕒: <Timer initTime={0} startTimer={gameStarted} updateTime={getTime}/></h2>
+                <h2>Difficulty: {difficulty.string}</h2>
+                <h2>❤️: {lives}</h2>
             </div>
 
             <Table difficulty={difficulty} gameEnded={gameOver} disable={disabled.current} loseLife={loseLife} startGame={startGame} matchFound={matchFound}/>
@@ -139,7 +143,6 @@ function CardMatch() {
                 )
             }
 
-            <h2>Difficulty: {difficulty.string}</h2>
             <div className={style.button_container}>
                 <button onClick={() => handleDifficultyButton(EASY)}> Easy </button>
                 <button onClick={() => handleDifficultyButton(MEDIUM)}> Medium </button>

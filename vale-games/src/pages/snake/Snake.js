@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
-import game from "../../pages/game/game.module.css"
+import styles from "./styles.module.css"
 import Timer from "../../components/timer/Timer";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
 import GameOver from "../../components/gameover/GameOver";
@@ -45,6 +45,9 @@ function Snake() {
 
     // fetch scores and show canvas when page opens
     useEffect(() => {
+        localStorage.setItem("currentGame", "Snake");
+        window.dispatchEvent(new Event("game"));
+
         let canvas = ref.current;
         canvas.width = CANVAS_SIZE;
         canvas.height = CANVAS_SIZE; 
@@ -68,7 +71,7 @@ function Snake() {
     }); 
     
     
-    // GAME LOOP
+    // styles LOOP
     useEffect(() => {
         // Set up canvas element
         if (gameStarted) {
@@ -321,17 +324,17 @@ function Snake() {
     }
 
     return (
-        <div className={game.page}>
-            <h1>Snake</h1>
-            <section className={game.info}>
+        <div className={styles.page}>
+            <div className={styles.info}>
                 { gameStarted ? (
-                    <h3><Timer initTime={0} startTimer={gameStarted}/></h3>
+                    <h2><Timer initTime={0} startTimer={gameStarted}/></h2>
                     ) : (
-                        <h3>00:00</h3>
+                        <h2>00:00</h2>
                     )
                 }
-                <h3>Score: {currentScore}</h3>
-            </section>
+                <h2>Score: {currentScore}</h2>
+            </div>
+            
             <canvas 
                 ref={ref}
                 style={{width: '740px', height: '740px'}}
@@ -344,7 +347,7 @@ function Snake() {
                     <></>
                 )
             }
-            <button onClick={startGame} className={game.startButton}>start game</button>
+            <button onClick={startGame} className={styles.startButton}>start</button>
             <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={scores} printRow={printLeaderboardRow} metric={"Score"}/>
         </div>

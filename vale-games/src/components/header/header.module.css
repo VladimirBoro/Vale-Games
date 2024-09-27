@@ -2,30 +2,38 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    align-content: center;
-    padding-top: 1em;
     height:50px;
+    margin: 0;
+    padding: 0;
 }
 
 .header {
-    background-color: rgb(31, 28, 28);
-    padding-bottom: 1em;
+    background-color: var(--window-background-color);
+    padding: 1em 2em 1em 2em;
+}
+
+.gameTitle {
+    flex: 2;
+    margin: 0;
+    text-align: center;
 }
 
 .topRight {
+    flex: 1;
     display: flex;
+    gap: 0.5em;
     align-items: center;
-}
-
-.nav li {
-    margin-right: 0.5em;
+    justify-content: end;
 }
 
 .home {
+    flex: 1;
     background: none;
     font-size: larger;
-    border: 2px rgb(250, 241, 230) solid;
+}
 
+.home a {
+    border: 2px var(--white-font-color) solid;
 }
 
 .home:hover {
