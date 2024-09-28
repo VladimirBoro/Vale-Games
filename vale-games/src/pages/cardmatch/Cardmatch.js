@@ -103,17 +103,6 @@ function CardMatch() {
         time.current = currentTime;
     }
 
-    // print row function to be passed into Leaderboard
-    const printRow = (entry) => {
-        return (
-            <>
-                <th scope="row">{entry.username}</th>
-                <td>{entry.date}</td>
-                <td>{entry.time}</td>
-            </>
-        )
-    }
-
     const summary = () => {
         return "Welcome to Cardmatch! The objective in this game is to match all the pairs of cards."
         + " Flip over a card and then different card to see if they match, if they do keep going, and if"
@@ -150,7 +139,7 @@ function CardMatch() {
             </div>
 
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} printRow={printRow} metric="Time"/>
+            <Leaderboard data={leaderboard} metric="Time"/>
         </div>
     );
 }

@@ -227,16 +227,6 @@ function JumpGuy() {
         jumpGuyRef.current.showHitbox = !jumpGuyRef.current.showHitbox;
     }
 
-    const printRow = (entry) => {
-        return (
-            <>
-                <th scope="row">{entry.username}</th>
-                <td>{entry.date}</td>
-                <td>{entry.score}</td>
-            </>
-        )
-    }
-
     const summary = () => {
         return "Welcome to Jump Guy! The objective in this game is to get as high as possible"
         + " without falling below the screen.\n As you climb higher the difficulty will increase, with new"
@@ -262,7 +252,7 @@ function JumpGuy() {
                 <button onClick={toggleHitbox}>Show Hitbox</button>
             </div>
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} printRow={printRow} metric={"score"}/>
+            <Leaderboard data={leaderboard} metric={"score"}/>
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (

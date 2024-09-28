@@ -416,17 +416,6 @@ function Frogger() {
         setGameStarted(true);
     }
 
-    // print row function to be passed into Leaderboard
-    const printRow = (entry) => {
-        return (
-            <>
-                <th scope="row">{entry.username}</th>
-                <td>{entry.date}</td>
-                <td>{entry.score}</td>
-            </>
-        )
-    }
-
     const summary = () => {
         return "Welcome to Frogger! Try your best to reach one of the square lilypads on the other"
         + " side of the road and river. Reaching every platform will restart the process except"
@@ -456,7 +445,7 @@ function Frogger() {
                 )}
             </div>
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} printRow={printRow} metric={"Score"}/>
+            <Leaderboard data={leaderboard} metric={"Score"}/>
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (

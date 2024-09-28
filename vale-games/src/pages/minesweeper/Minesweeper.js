@@ -36,17 +36,6 @@ function Minesweeper() {
         await sendLeaderboardData(ADD_PATH, username, time, "time");
     }
 
-    // print row function to be passed into Leaderboard
-    const printRow = (entry) => {
-        return (
-            <>
-                <th scope="row">{entry.username}</th>
-                <td>{entry.date}</td>
-                <td>{entry.time}</td>
-            </>
-        )
-    }
-
     // params: bool, string, function
     const gg = (gameL, timed, resetGame) => {
         console.log("ggs...", gameLost);
@@ -82,7 +71,7 @@ function Minesweeper() {
                 <HowTo summary={summary()} controls={controls()}/>
             </div>
 
-            <Leaderboard data={times} printRow={printRow} metric={"Time"}/>
+            <Leaderboard data={times} metric={"Time"}/>
             { gameOver ? (
                     <GameOver lost={gameLost.current} metric="Time" value={time.current} tryAgain={hideGameOver}/>
                 ) : (

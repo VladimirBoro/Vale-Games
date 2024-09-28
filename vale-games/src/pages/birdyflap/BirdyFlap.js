@@ -252,16 +252,6 @@ function BirdyFlap () {
         }
     }
 
-    const printRow = (entry) => {
-        return (
-            <>
-                <th scope="row">{entry.username}</th>
-                <td>{entry.date}</td>
-                <td>{entry.score}</td>
-            </>
-        )
-    }
-
     const summary = () => {
         return "Welcome to Batty Flap! The objective in this game is to make it through the pillars."
         + " Make any contact with the pillars and you lose!"
@@ -279,7 +269,7 @@ function BirdyFlap () {
             </div>
             <canvas style={{marginBottom: "3em"}} ref={canvasRef} />
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} printRow={printRow} metric={"Score"}/>
+            <Leaderboard data={leaderboard} metric={"Score"}/>
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (

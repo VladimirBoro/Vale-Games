@@ -303,16 +303,6 @@ function Snake() {
         }
     }
 
-    function printLeaderboardRow(entry) {
-        return (
-            <>
-                <th scope="row">{entry.username}</th>
-                <td>{entry.date}</td>
-                <td>{entry.score}</td>
-            </>
-        )
-    }
-
     const summary = () => {
         return "Welcome to Snake! Grow as long as possible by consuming hearts, but be sure to not"
         + " run into yourself or the walls! Then it is game over."
@@ -349,7 +339,7 @@ function Snake() {
             }
             <button onClick={startGame} className={styles.startButton}>start</button>
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={scores} printRow={printLeaderboardRow} metric={"Score"}/>
+            <Leaderboard data={scores} metric={"Score"}/>
         </div>
     );
 };
