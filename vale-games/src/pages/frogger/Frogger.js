@@ -280,9 +280,12 @@ function Frogger() {
         grid.height = CANVAS_SIZE.height;
         const gridContext = grid.getContext("2d");
 
+        gridContext.shadowBlur = 40;
+        gridContext.shadowColor = "black";
+        
         gridContext.fillStyle = "#161518"; // black road
         gridContext.fillRect(0,0,CANVAS_SIZE.width,CANVAS_SIZE.height);
-
+        
         gridContext.fillStyle = "grey";
         gridContext.fillRect(0, CANVAS_SIZE.height - HOP_DISTANCE.y, CANVAS_SIZE.width, HOP_DISTANCE.y);
         gridContext.fillRect(0, CANVAS_SIZE.height - HOP_DISTANCE.y * 7, CANVAS_SIZE.width, HOP_DISTANCE.y);
@@ -290,10 +293,12 @@ function Frogger() {
         gridContext.fillStyle = "#1a237e"; // water
         gridContext.fillRect(0, 0, CANVAS_SIZE.width, HOP_DISTANCE.y * 6);
         
+        gridContext.shadowBlur = 0;
         gridContext.fillStyle = "green";
         gridContext.fillRect(0, 0, CANVAS_SIZE.width, HOP_DISTANCE.y);
         
         gridContext.fillStyle = "#1a237e"; // water
+        
         
         // SET AND DRAW GOALS
         let goalOffset = 1;
@@ -302,6 +307,7 @@ function Frogger() {
             goalOffset += 4;
         }
         
+        gridContext.shadowBlur = 15;
         // GOAL LANDING PADS
         gridContext.fillStyle = "limegreen";
         for (let i = 0; i < goals.length; i++) {
