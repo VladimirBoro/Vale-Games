@@ -16,29 +16,28 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                .requestMatchers("/login/**", "/register/**", "/logout/**", "/frogger/leaderboard**", 
-                    "/snake/leaderboard/**", "/minesweeper/leaderboard", "/cardmatch/leaderboard-top10", 
-                    "/birdyflap/leaderboard-top10", "/jumpguy/leaderboard**")
-                    .permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(formLogin -> 
-                formLogin
-                .disable()
-            )
-            .sessionManagement(session -> session
-                .maximumSessions(1)
-            )
-            .csrf(AbstractHttpConfigurer::disable);
+        .authorizeHttpRequests(authorizeRequests ->
+            authorizeRequests
+            .requestMatchers("/login/**", "/register/**", "/logout/**", "/frogger/leaderboard**", 
+                "/snake/leaderboard/**", "/minesweeper/leaderboard", "/cardmatch/leaderboard-top10", 
+                "/birdyflap/leaderboard-top10", "/jumpguy/leaderboard**", "/account/profilePicture**")
+            .permitAll()
+            .anyRequest().authenticated()
+        )
+        .formLogin(formLogin -> 
+            formLogin.disable()
+        )
+        .sessionManagement(session -> 
+            session.maximumSessions(1)
+        )
+        .csrf(AbstractHttpConfigurer::disable);
 
-            return http.build();
-        }
-        
-        @Bean
-        public UserDetailsService userDetailsService() {
-            return new InMemoryUserDetailsManager();
-        }
-
+        return http.build();
     }
+    
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new InMemoryUserDetailsManager();
+    }
+
+}

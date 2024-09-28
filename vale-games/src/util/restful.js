@@ -8,7 +8,7 @@ export const getLeaderboard = async (path) => {
             console.log("response", response.data);
             data = response.data;
         })
-        .catch(error => console.log(error));
+        .catch(error => console.log("LEADERBOARD ERROR", error));
 
     return data;
 }
@@ -32,21 +32,21 @@ export const sendLeaderboardData = async (path, username, value, metric) => {
 }
 
 export const fetchProfilePic = (username) => {
-    customAxios.get("/account/profilePicture", {
-        params: {username: username},
-        responseType: "blob"
+    return new Promise((resolve, reject) => {
+        customAxios.get("/account/profilePicture", {
+            params: {username: username},
+            responseType: "blob"
+        })
+        .then(response => {
+            const profilePic = new FileReader();
+    
+            profilePic.onloadend = () => {
+                const base64profilePic = profilePic.result;
+                console.log(base64profilePic);
+                resolve(base64profilePic);
+            }
+            profilePic.readAsDataURL(response.data);
+        })
+        .catch(err => reject("weird!", err));
     })
-    .then(response => {
-        const profilePic = new FileReader();
-
-        profilePic.onloadend = () => {
-            const base64profilePic = profilePic.result;
-            localStorage.setItem("profilePic",  base64profilePic);
-            window.dispatchEvent(new Event("storage"));
-
-        }
-        profilePic.readAsDataURL(response.data);
-        // console.log("setting profile pic NOW.", response.data);
-    })
-    .catch(err => console.log("weird!", err));
 }

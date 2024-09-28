@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 import login from "./login.module.css"
 import customAxios from "../../util/customAxios";
 import { fetchProfilePic } from "../../util/restful";
+import { setCurrentUserProfilePic } from "../../util/util";
 
 
 const Login = () => {
@@ -43,7 +43,9 @@ const Login = () => {
             else {
                 localStorage.setItem("user", postResponse.data);
 
-                await fetchProfilePic(postResponse.data);
+                const pic = await fetchProfilePic(postResponse.data);
+                setCurrentUserProfilePic(pic);
+
                 navigate("/");
                 console.log("logged in!");
             }
@@ -88,7 +90,8 @@ const Login = () => {
         });
         
         if (localStorage.getItem("user") != null) {
-            await fetchProfilePic(localStorage.getItem("user"));
+            const pic = await fetchProfilePic(localStorage.getItem("user"));
+            setCurrentUserProfilePic(pic);
             console.log("logging in!", username, password);
         }
 

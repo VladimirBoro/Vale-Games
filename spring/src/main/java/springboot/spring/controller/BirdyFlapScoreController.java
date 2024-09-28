@@ -21,13 +21,12 @@ public class BirdyFlapScoreController {
     BirdyFlapScoreRepo repo;
 
     @GetMapping("/leaderboard-top10")
-    public Iterable<BirdyFlapScore> getMethodName() {
-        System.out.println("boutta return deez nits");
+    public Iterable<BirdyFlapScore> getLeaderboard() {
         return repo.findTop10ByOrderByScoreDesc();
     }
 
     @PostMapping("/add")
-    public String postMethodName(@RequestParam String username, @RequestParam int score) {
+    public String postScore(@RequestParam String username, @RequestParam int score) {
         String response = "failed adding score";
         
         BirdyFlapScore oldScore = repo.findByUsername(username);

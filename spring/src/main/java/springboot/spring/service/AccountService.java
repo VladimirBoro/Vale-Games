@@ -246,8 +246,15 @@ public class AccountService {
     }
 
     public ResponseEntity<Resource> getProfilePicture(String username) {
-        Account account = accountRepo.findByUsername(username);
-        String pathToPicture = account.getProfile_pic();
+        Account account;
+        
+        int defaultPicNumber = (int)(Math.random() * 6) + 1;
+        String basePath = "./spring/src/main/resources/static/default_profile_pictures";
+        String pathToPicture = basePath + "/default_" + defaultPicNumber + ".png";
+        if (accountRepo.findByUsername(username) != null) {
+            account = accountRepo.findByUsername(username);
+            pathToPicture = account.getProfile_pic();
+        }
         
         try {
             // Define the path to your image folder

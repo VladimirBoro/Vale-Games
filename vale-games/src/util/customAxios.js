@@ -13,12 +13,10 @@ customAxios.interceptors.response.use(
     error => {
         if (localStorage.getItem("user") != null && !error.response) {
             console.log("No server response");
-            // localStorage.removeItem("user");
             localStorage.clear();
             window.location.reload();
         }
         else if (error.response.status === 403) {
-            // localStorage.removeItem("user");
             localStorage.clear();
             window.location.href = "/";
         }

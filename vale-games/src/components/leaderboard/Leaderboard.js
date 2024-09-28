@@ -1,16 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./leaderboard.module.css"
+import { fetchProfilePic } from "../../util/restful";
 
-function Leaderboard({ data, printRow, metric, profilePics }) {
+function Leaderboard({ data, metric }) {
+    const [profilePics, setProfilePics] = useState([]);
+
+    useEffect(() => {
+
+        console.log("fetching...", profilePics);
+
+        const fetchProfilePics = async () => {
+            let pics = [];
+            for (let i = 0; i < data.length; i++) {
+                console.log("USERNAME", data[i].username);
+                pics[i] = await fetchProfilePic(data[i].username);
+            }
+
+            setProfilePics(pics);
+        }
+    
+        fetchProfilePics();
+    }, [data])
+
     let emptyMsg = "";
     if (data && data.length === 0) {
         emptyMsg = "No one on the Leaderboard yet!";
         return;
     }
 
-    // data.map((entry) => {
-    //     entry = [...data, pp: ...profilePics]
-    // });
 
     return (
         <div className={styles.tableContainer}>
@@ -32,7 +49,7 @@ function Leaderboard({ data, printRow, metric, profilePics }) {
                             return (
                                 <tr key={index}>
                                     <td scope="row">
-                                        <img src="" alt="Here is the pic bruh"/>
+                                        <img src={profilePics[index] == null ? null : profilePics[index]} alt={profilePics[index] == null}/>
                                         {entry.username}
                                     </td>
                                     <td>{entry.date}</td>
