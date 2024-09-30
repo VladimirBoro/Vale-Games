@@ -122,9 +122,8 @@ const Home = () => {
                     else if (game.position === 'left' || game.position === 'right') {
                         // left and right games can be clicked to select them to be middle
                         component = (
-                            <Link className={`${styles.middleLink}`}>
+                            <Link key={game.id} className={`${styles.middleLink}`}>
                                 <img 
-                                    key={game.id} 
                                     className={`${styles.artCover} ${styles[game.position]}`} 
                                     src={game.image} 
                                     alt={game.name} 
@@ -136,9 +135,8 @@ const Home = () => {
                     else if (game.position === 'middle') {
                         // Contains link to game presented
                         component = (
-                            <Link to={games.current[currentGame].path} className={`${styles.middleLink}`}>
+                            <Link key={game.id} to={games.current[currentGame].path} className={`${styles.middleLink}`}>
                                 <img 
-                                    key={game.id} 
                                     className={`${styles.artCover} ${styles[game.position]}`} 
                                     src={game.image} 
                                     alt={game.name}
@@ -149,9 +147,8 @@ const Home = () => {
                     else {
                         // leftleft or rightright (which are invisible)
                         component = (
-                            <Link className={`${styles.middleLink}`}>
+                            <Link key={game.id} className={`${styles.middleLink}`}>
                                 <img 
-                                    key={game.id} 
                                     className={`${styles.artCover} ${styles[game.position]}`} 
                                     src={game.image} 
                                     alt={game.name} 

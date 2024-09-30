@@ -47,7 +47,7 @@ function Leaderboard({ data, metric }) {
                                 <tr key={index}>
                                     <td scope="row">
                                         <div className={styles.cell}>
-                                            <img src={profilePics[index] == null ? null : profilePics[index]} alt={profilePics[index] == null}/>
+                                            <img src={profilePics[index] == null ? null : profilePics[index]} alt="Profile Pic"/>
                                             <span>
                                                 {entry.username}
                                             </span>
