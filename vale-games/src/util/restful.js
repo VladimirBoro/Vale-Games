@@ -42,11 +42,20 @@ export const fetchProfilePic = (username) => {
     
             profilePic.onloadend = () => {
                 const base64profilePic = profilePic.result;
-                console.log(base64profilePic);
                 resolve(base64profilePic);
             }
             profilePic.readAsDataURL(response.data);
         })
         .catch(err => reject("weird!", err));
+    })
+}
+
+export const fetchMemberSince = (username) => {
+    return new Promise((resolve, reject) => {
+        customAxios.get("/account/created-at", {
+            params: {username: username}
+        })
+        .then(response => resolve(response.data))
+        .catch(err => reject(err));
     })
 }

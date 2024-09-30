@@ -15,9 +15,7 @@ import Minesweeper from './pages/minesweeper/Minesweeper';
 import Cardmatch from './pages/cardmatch/Cardmatch';
 import JumpGuy from './pages/jumpguy/JumpGuy';
 import customAxios from './util/customAxios';
-import { fetchProfilePic } from './util/restful';
 import './App.css';
-import { setCurrentUserProfilePic } from './util/util';
 
 function App() {
   useEffect(() => {
@@ -37,27 +35,7 @@ function App() {
       }
     }
 
-    const fetchProfilePicture = async (currentUser) => {
-      const pic = await fetchProfilePic(currentUser);
-      await setCurrentUserProfilePic(pic);
-
-      const profilePic = localStorage.getItem("profilePic");  // Wait for the image to be fetched
-      if (profilePic) {
-        console.log("Profile picture fetched!");
-      }
-      else {
-        console.log("Failed to fetch profile picture.");
-      }
-    }
-
     checkSession();
-
-    const currentUser = localStorage.getItem("user");
-    console.log("right b4!!");
-    if (currentUser !== null) {
-      console.log("fetching profile pic!!");
-      fetchProfilePicture(currentUser);
-    }
   }, []);
 
   return (

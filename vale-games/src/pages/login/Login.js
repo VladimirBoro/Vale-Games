@@ -4,8 +4,6 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from "react-router-dom";
 import login from "./login.module.css"
 import customAxios from "../../util/customAxios";
-import { fetchProfilePic } from "../../util/restful";
-import { setCurrentUserProfilePic } from "../../util/util";
 
 
 const Login = () => {
@@ -15,16 +13,15 @@ const Login = () => {
 
     const usernameRef = React.useRef();
     const passwordRef = React.useRef();
-
+    
     // const URL = "http://localhost:8080";
     const URL = process.env.REACT_APP_SERVER_URL;
     const GOOGLE_LOGIN_PATH = process.env.REACT_APP_LOGIN_GOOGLE_PATH;
     const LOGIN_PATH = process.env.REACT_APP_LOGIN_VALEGAMES_PATH;
-
+    
     const handleLoginSuccess = async (response) => {
         const credential = response.credential;
 
-        console.log(credential);
 
         try {
             const postResponse = await customAxios.post("/login/valegames",
@@ -34,20 +31,17 @@ const Login = () => {
                 }
             );
 
-            console.log("postReponse", postResponse.data, postResponse.status);
-
             if (postResponse.status === 201) {
                 console.log("register time");
                 navigate("/registerGoogler", { state: { credential: credential } });
             }
             else {
                 localStorage.setItem("user", postResponse.data);
-
-                const pic = await fetchProfilePic(postResponse.data);
-                setCurrentUserProfilePic(pic);
+                
+                window.dispatchEvent(new Event("storage"));
+                window.dispatchEvent(new Event("profilePic"));
 
                 navigate("/");
-                console.log("logged in!");
             }
         }
         catch (error) {
@@ -61,16 +55,14 @@ const Login = () => {
         console.log("Googler error:", error);
     };
     
-    // TEMPORARY MANUAL LOGIN
+    // MANUAL LOGIN
     const submitLogin = async (event) => {
         event.preventDefault();
         
         const username = usernameRef.current.value;
         const password = passwordRef.current.value;
         
-        console.log("logging in!");
-        
-        await customAxios.post(URL + LOGIN_PATH, 
+        await customAxios.post(LOGIN_PATH, 
             {
                 username: username,
                 password: password,
@@ -82,7 +74,6 @@ const Login = () => {
             localStorage.setItem("user", response.data);
             
             navigate("/");
-            console.log(response.data);
         })
         .catch(error => {
             setUsernameError(true);
@@ -90,11 +81,9 @@ const Login = () => {
         });
         
         if (localStorage.getItem("user") != null) {
-            const pic = await fetchProfilePic(localStorage.getItem("user"));
-            setCurrentUserProfilePic(pic);
-            console.log("logging in!", username, password);
+            window.dispatchEvent(new Event("profilePic"));
+            window.dispatchEvent(new Event("storage"));
         }
-
     }
 
     return (

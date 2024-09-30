@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
 import customAxios from "../../util/customAxios";
 import styles from "./account.module.css";
-import { updateProfile } from "../../util/restful";
+import { fetchMemberSince, updateProfile } from "../../util/restful";
 import { useNavigate } from "react-router-dom";
 import { fetchProfilePic } from "../../util/restful";
 import  TakenUsername  from "./components/TakenUsername";
@@ -18,15 +18,21 @@ function Account() {
     const [image, setImage] = useState(null);
     const [profilePicPreview, setProfilePicPreview] = useState(null);
     const [takenUsername, setTakenUsername] = useState(false);
+    const [memberSince, setMemberSince] = useState("");
 
     // fetch scores
     useEffect(() => {
+        const fetchPreview = async () => {
+            setProfilePicPreview(await fetchProfilePic(username));
+            setMemberSince(await fetchMemberSince(username));
+        }
+        
         setTakenUsername(false);
-        setProfilePicPreview(localStorage.getItem("profilePic"));
+        fetchPreview();
     }, [])
 
-    const editProfile = () => {
-        setProfilePicPreview(localStorage.getItem("profilePic"));
+    const editProfile = async () => {
+        setProfilePicPreview(await fetchProfilePic(username));
         setEditing(!editing);
     }
 
@@ -40,7 +46,6 @@ function Account() {
         .catch(err => console.log(err));
 
         navigate("/");
-        // localStorage.removeItem("user");
         localStorage.clear();
         window.dispatchEvent(new Event("storage"));
     }
@@ -101,22 +106,13 @@ function Account() {
         // set the pic
         console.log("fetching after the update");
         setImage(profilePicPreview);
-        localStorage.setItem("profilePic", profilePicPreview);
         
         window.dispatchEvent(new Event("storage"));
+        window.dispatchEvent(new Event("profilePic"));
+
         setEditing(!editing);
         setTakenUsername(false);
     }
-
-    const printRow = (entry) => {
-        return (
-            <>
-                <th scope="row">{entry.username}</th>
-                <td>{entry.date}</td>
-                <td>{entry.score}</td>
-            </>
-        );
-    };
 
     return (
         <div className={styles.page}>
@@ -129,7 +125,7 @@ function Account() {
                         <TakenUsername taken={takenUsername}/>
                         <label htmlFor="username">Username:</label>
                         <input  name="username" onChange={handleUsernameChange} defaultValue={localStorage.getItem("user")}  id={styles.username}/>
-                        <p>Account created: whenever</p>
+                        <p>Account created: {memberSince}</p>
                         <button onClick={handleUpdate} className={styles.button}>submit</button>
                         <button onClick={editProfile} className={styles.button}>cancel</button>
                     </div>
@@ -137,11 +133,11 @@ function Account() {
             ) : (
                 <div className={styles.form}>
                     <div>
-                        <img src={localStorage.getItem("profilePic")} className={styles.profilePic} alt="User profile picture."/>
+                        <img src={profilePicPreview} className={styles.profilePic} alt="User profile picture."/>
                     </div>
                     <div>
                         <p>Username: {localStorage.getItem("user")}</p>
-                        <p>Account created: whenever</p>
+                        <p>Account created: {memberSince}</p>
                     </div>
 
                     <div> 
