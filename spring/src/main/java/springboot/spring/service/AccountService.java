@@ -67,6 +67,11 @@ public class AccountService {
     private final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private final HttpTransport transport = new NetHttpTransport();   
 
+    public ResponseEntity<?> retrieveCreatedAt(String username) {
+        String createdAt = accountRepo.findCreatedAtByUsername(username);
+        return ResponseEntity.status(HttpStatus.SC_OK).body(createdAt);
+    }
+
     public ResponseEntity<?> login(LoginRequest loginRequest, HttpServletRequest request) {
         ResponseEntity<String> response;
 

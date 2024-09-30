@@ -38,6 +38,11 @@ public class AccountController {
         System.out.println("getting " + username + "'s pp");
         return accountService.getProfilePicture(username);
     }
+
+    @GetMapping("/account/created-at")
+    public ResponseEntity<?> getMethodName(@RequestParam String username) {
+        return accountService.retrieveCreatedAt(username);
+    }
     
     @PostMapping ("/logout/valegames")
     public ResponseEntity<?> logout(HttpServletRequest request) {
