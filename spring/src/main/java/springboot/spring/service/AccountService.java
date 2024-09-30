@@ -250,7 +250,7 @@ public class AccountService {
         
         int defaultPicNumber = (int)(Math.random() * 6) + 1;
         String basePath = "./spring/src/main/resources/static/default_profile_pictures";
-        String pathToPicture = basePath + "/default_" + defaultPicNumber + ".png";
+        String pathToPicture = basePath + "/default_" + 1 + ".png";
         if (accountRepo.findByUsername(username) != null) {
             account = accountRepo.findByUsername(username);
             pathToPicture = account.getProfile_pic();

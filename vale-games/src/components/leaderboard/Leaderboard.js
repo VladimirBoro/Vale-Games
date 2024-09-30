@@ -7,12 +7,9 @@ function Leaderboard({ data, metric }) {
 
     useEffect(() => {
 
-        console.log("fetching...", profilePics);
-
         const fetchProfilePics = async () => {
             let pics = [];
             for (let i = 0; i < data.length; i++) {
-                console.log("USERNAME", data[i].username);
                 pics[i] = await fetchProfilePic(data[i].username);
             }
 
@@ -49,8 +46,12 @@ function Leaderboard({ data, metric }) {
                             return (
                                 <tr key={index}>
                                     <td scope="row">
-                                        <img src={profilePics[index] == null ? null : profilePics[index]} alt={profilePics[index] == null}/>
-                                        {entry.username}
+                                        <div className={styles.cell}>
+                                            <img src={profilePics[index] == null ? null : profilePics[index]} alt={profilePics[index] == null}/>
+                                            <span>
+                                                {entry.username}
+                                            </span>
+                                        </div>
                                     </td>
                                     <td>{entry.date}</td>
                                     <td>{entry.score == null ? entry.time : entry.score}</td>

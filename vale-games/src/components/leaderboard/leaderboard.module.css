@@ -15,8 +15,14 @@ table th {
 th,
 td {
     border: 1px solid var(--white-font-color);
-    /* padding: 1em 3em 1em 5px; */
     padding: 1em 2em;
+}
+
+td img {
+    width: 2em;
+    height: 2em;
+    border-radius: 5em;
+    object-fit: cover;
 }
 
 tbody tr {
@@ -24,12 +30,6 @@ tbody tr {
     text-align: left;
 }
 
-table tr td:first-child::before {
-    content: counter(rowNumber)".";
-    /* text-align: left; */
-    min-width: 10em;
-    margin-right: 0.5em;
-}
 
 tbody tr:nth-child(odd) {
     background-color: #423996be;
@@ -39,6 +39,16 @@ tbody tr:nth-child(even) {
     background-color: #4239967a;
 }
 
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 5px;
+}
+
+.cell::before {
+    content: counter(rowNumber)".";
+}
 .tableContainer {
     width: 500px;
     background-color: var(--window-background-color);
