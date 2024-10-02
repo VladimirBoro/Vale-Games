@@ -26,7 +26,6 @@ const Logout = () => {
         });
         
         navigate("/");
-        // localStorage.removeItem("user");
         localStorage.clear();
         window.dispatchEvent(new Event("storage"));
     };

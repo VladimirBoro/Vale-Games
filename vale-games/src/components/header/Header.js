@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./header.module.css"
 import { fetchProfilePic } from "../../util/restful";
 
-const Header = () => {
+const Header = ({toggleLoginOverlay}) => {
     const [user, setUser] = useState(localStorage.getItem("user"));
     const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic"));
     const [gameTitle, setGameTitle] = useState(localStorage.getItem("currentGame"));
@@ -76,7 +76,9 @@ const Header = () => {
                                 </li>
                             </>
                         ) : (
-                            <li><Link to="/login">Login</Link></li>
+                            <li>
+                                <button onClick={toggleLoginOverlay}> Login </button>
+                            </li>
                         )}
                     </ul>
                 </ul>
