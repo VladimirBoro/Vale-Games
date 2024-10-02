@@ -20,11 +20,9 @@ function Leaderboard({ data, metric }) {
     }, [data])
 
     let emptyMsg = "";
-    if (data && data.length === 0) {
+    if (!data || data.length === 0) {
         emptyMsg = "No one on the Leaderboard yet!";
-        return;
     }
-
 
     return (
         <div className={styles.tableContainer}>
