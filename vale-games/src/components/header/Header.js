@@ -58,7 +58,7 @@ const Header = ({toggleLoginOverlay}) => {
                     </li>
 
                     <li>
-                        <h1 style={{margin: 0}}>
+                        <h1 style={{margin: 0, fontSize: "2em"}}>
                             {gameTitle}
                         </h1>
                     </li>
@@ -72,7 +72,7 @@ const Header = ({toggleLoginOverlay}) => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="/logout">Logout {user}</Link>
+                                    <Link to="/logout" id={styles.logout}>Logout {user}</Link>
                                 </li>
                             </>
                         ) : (

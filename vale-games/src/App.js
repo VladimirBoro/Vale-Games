@@ -51,16 +51,15 @@ function App() {
 
   return (
     <>
-      <LoginOverlay 
-        showOverlay={showOverlay} 
-        typeToDisplay={overlayState} 
-        switchType={switchOverlayState}
-        toggleOverlay={toggleLoginOverlay} 
-      />
 
-      {/* OTHER OVERLAYS HERE TOO, WHICH IS BOTH TYPES OF REGISTERING */}
-    
       <div className="App">
+        <LoginOverlay 
+          showOverlay={showOverlay} 
+          typeToDisplay={overlayState} 
+          switchType={switchOverlayState}
+          toggleOverlay={toggleLoginOverlay} 
+        />
+        
         <Header toggleLoginOverlay={toggleLoginOverlay}/>
         <main className="main">
           <Routes>

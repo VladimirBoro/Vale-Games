@@ -2,6 +2,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+
+  font-family: "Calibri", sans-serif;
 }
 
 .App-logo {

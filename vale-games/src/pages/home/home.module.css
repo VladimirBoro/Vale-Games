@@ -85,33 +85,21 @@
 /* Arrow buttons */
 .arrow, .random {
     all: unset;
-    /* will-change: transform; */
     background: none;
     border: none;
     font-size: 2em;
     color: var(--white-font-color);
     cursor: pointer;
-    /* transform-origin: center; */
-    transition: transform 0.15s ease-in-out;
 }
-
-/* .random {
-    all: unset;
-    background: none;
-    border: none;
-    font-size: 2em;
-    color: var(--white-font-color);
-    transition: transform;
-    cursor: pointer;
-} */
 
 .arrow:hover, .random:hover {
     /* color: ; */
+    background-color: inherit;
 }
 
 .arrow:active, .random:active {
     box-shadow: none;
-    color: #8b67ff;
+    /* color: #8b67ff; */
 }
 
 .gameDetails {
@@ -122,13 +110,16 @@
 .playBtn {
     padding: 10px 20px;
     margin-top: 1em;
-    border-radius: 1em;
+    border-radius: 1.5em;
     background-color: #8b67ff;
-    color: white;
-    border: none;
-    font-size: 1.2em;
+    color: inherit;
+    font-size: 1.1em;
     cursor: pointer;
-    text-decoration: none;
+    transition: 0.25s ease-in-out;
+}
+
+.playBtn:hover {
+    background-color: #b49efc;
 }
 
 .description {

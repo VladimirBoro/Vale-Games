@@ -8,10 +8,6 @@ table {
     counter-reset: rowNumber;
 }
 
-table th {
-    /* padding-left: 1em; */
-}
-
 th,
 td {
     border: 1px solid var(--white-font-color);
@@ -49,6 +45,7 @@ tbody tr:nth-child(even) {
 .cell::before {
     content: counter(rowNumber)".";
 }
+
 .tableContainer {
     width: 500px;
     background-color: var(--window-background-color);

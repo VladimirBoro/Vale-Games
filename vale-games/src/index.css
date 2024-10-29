@@ -24,28 +24,25 @@ ul {
   padding: 0;
 }
 
-button {
-  width:fit-content;
-  border-radius: 1.5em;
+a {
+  text-decoration: none;
 }
 
-/* a, button {
-  background: #2818c0;
-  padding: 0.5em 1em 0.5em 1em;
-  text-align: center;
-  border-radius: 1em;
-  color: rgb(250, 241, 230);
-  font-weight: bold;
-  text-decoration: none;
-  transition: 0.33s;
-  border-style: none;
-  border-color: black;
-} */
-
-/* a:hover, button:hover {
+button {
+  padding: 8px 15px;
+  width:fit-content;
+  border-radius: 1.5em;
+  background-color: #8b67ff;
+  color: white;
+  border: none;
   cursor: pointer;
-  background: #412bff;
-} */
+  text-decoration: none;
+  transition: 0.25s ease-in-out;
+}
+
+button:hover {
+  background-color: #b49efc;
+}
 
 a:active, button:active {
   transition: none;

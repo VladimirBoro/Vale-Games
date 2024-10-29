@@ -33,11 +33,40 @@
 }
 
 .home a {
+    font-weight: bold;
+    color: inherit;
     border: 2px var(--white-font-color) solid;
+    border-radius: 1.5em;
+    padding: 10px;
+}
+
+.home a:active {
+    color: inherit;
+    box-shadow: none;
 }
 
 .home:hover {
     background-color:rgba(240, 248, 255, 0);
+}
+
+#logout {
+    color: inherit;
+    background-color: #8b67ff;
+    padding: 5px 10px;
+    border-radius: 1.5em;
+    transition: 0.25s ease-in-out;
+}
+
+#logout:hover {
+    background-color: #b49efc;
+}
+
+#logout:active {
+    transition: none;
+    box-shadow:
+        inset 2px 2px 1px black,
+        inset 2px 3px 5px rgb(0 0 0 / 30%),
+        inset -2px -3px 5px rgb(255 255 255 / 50%);
 }
 
 #profileLink {
