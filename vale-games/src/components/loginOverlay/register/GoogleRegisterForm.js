@@ -43,7 +43,7 @@ const GoogleRegisterForm = ({ switchType, credential }) => {
     }
 
     const handleFileChange = (e) => {
-        if (e.target.files) {
+        if (e.target.files.length != 0) {
             setImage(e.target.files[0]);
 
             const reader = new FileReader();
@@ -51,6 +51,9 @@ const GoogleRegisterForm = ({ switchType, credential }) => {
                 setPreview(reader.result); // Set the image preview URL
             };
             reader.readAsDataURL(e.target.files[0]); // Read the file as a data URL
+        }
+        else {
+            setPreview(null);
         }
     }
 

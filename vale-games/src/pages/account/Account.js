@@ -26,6 +26,10 @@ function Account() {
             setProfilePicPreview(await fetchProfilePic(username));
             setMemberSince(await fetchMemberSince(username));
         }
+
+        // clear game title in header upon opening page
+        localStorage.setItem("currentGame", "");
+        window.dispatchEvent(new Event("game"));
         
         setTakenUsername(false);
         fetchPreview();
@@ -50,9 +54,14 @@ function Account() {
         window.dispatchEvent(new Event("storage"));
     }
 
-    const handleFileChange = (e) => {
-        if (e.target.files) {
+    const handleFileChange = async (e) => {
+        if (e.target.files.length != 0) {
             setImage(e.target.files[0]);
+        }
+        else {
+            setImage(null);
+            setProfilePicPreview(await fetchProfilePic(username));
+            return;
         }
 
         const profilePic = new FileReader();
@@ -71,7 +80,6 @@ function Account() {
     }
 
     const handleUpdate = async () => {
-        // await updateProfile(image, username);
         const currentUsername = localStorage.getItem("user");
         if (currentUsername === username && image === null) {
             console.log("u gotta update to update mang");

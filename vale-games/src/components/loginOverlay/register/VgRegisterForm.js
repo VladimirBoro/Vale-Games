@@ -55,7 +55,7 @@ function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
     }
 
     const handleFileChange = (e) => {
-        if (e.target.files) {
+        if (e.target.files.length != 0) {
             setImage(e.target.files[0]);
 
             const reader = new FileReader();
@@ -63,6 +63,9 @@ function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
                 setPreview(reader.result); // Set the image preview URL
             };
             reader.readAsDataURL(e.target.files[0]); // Read the file as a data URL
+        }
+        else {
+            setPreview(null);
         }
     }
 
@@ -145,7 +148,7 @@ function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
 
             <div className={login.signUp}>
                 <span>Already Signed Up? </span>
-                <button onClick={handleSignUp}>Log In</button>
+                <button onClick={handleSignUp} style={{padding: "3px 6px", fontSize: "0.75em"}}>Log In</button>
             </div>
         </form>
     )
