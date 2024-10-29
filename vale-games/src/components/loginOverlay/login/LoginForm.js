@@ -16,7 +16,7 @@ const LoginForm = ({switchType, toggleOverlay, setGoogleId}) => {
         const credential = response.credential;
 
         try {
-            const postResponse = await customAxios.post("/styles/valegames",
+            const postResponse = await customAxios.post("/login/valegames",
                 {
                     password: credential,
                     type: "google"
@@ -113,7 +113,7 @@ const LoginForm = ({switchType, toggleOverlay, setGoogleId}) => {
 
             <div className={styles.signUp}>
                 <span>Not a member? </span>
-                <button onClick={handleSignUp}>Sign Up</button>
+                <button onClick={handleSignUp} style={{padding: "3px 6px", fontSize: "0.75em"}}>Sign Up</button>
             </div>
         </div>
     )
