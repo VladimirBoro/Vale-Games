@@ -234,8 +234,8 @@ function JumpGuy() {
     }
 
     const controls = () => {
-        return ["Left Arrow / Right Arrow OR A / D => Move Left and Move Right",
-                "Going off the side of the screen brings you to the opposite side"
+        return [{icon: "Left Arrow / Right Arrow OR A / D", description: " Move Left and Move Right"},
+                {icon: "Tip!", description: "Going off the side of the screen brings you to the opposite side"}
         ]
     }
 

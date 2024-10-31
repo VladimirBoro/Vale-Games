@@ -7,9 +7,13 @@
 
 .summary, .controls {
     width: 500px;
-    text-align: center;
+    text-align: left;
     background-color: var(--window-background-color);
     border-radius: 1em;
+}
+
+.summary h2, .controls h2 {
+    text-align: center;
 }
 
 .summary li {
@@ -21,6 +25,14 @@
 }
 
 .controls {
-    margin: 1em;
-    padding-bottom: 1em;
+    width: fit-content; 
+    margin: auto; 
+    text-align: left; 
+    padding-left: 0; 
+    list-style: none; 
+}
+
+.control {
+    display: flex;
+    gap: 10px;
 }

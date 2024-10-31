@@ -429,7 +429,7 @@ function Frogger() {
     }
 
     const controls = () => {
-        return ["WASD or Arrow Keys => Hop left, right, up, or down"
+        return [{icon: "WASD or Arrow Keys", description: " Hop left, right, up, or down"}
         ]
     }
 

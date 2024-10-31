@@ -125,14 +125,12 @@ function Board({postTime, gg}) {
     return (
             <div className={styles.board}>
                 <div className={styles.head}>
-                    <h2>🚩 --  {mineCount}</h2>
-                    {
-                        gameStarted ? (
-                            <h2>TIME - <Timer initTime={0} startTimer={gameStarted} updateTime={updateTime}/></h2>
-                        ) : (
-                            <h2>TIME - {time}</h2>
-                        )
-                    }
+                    <h2>🚩: {mineCount}</h2>
+                    
+                    
+                            <h2><Timer initTime={0} startTimer={gameStarted} updateTime={updateTime}/></h2>
+                    
+                    
                 </div>
                 {grid.map((singlerow,index1) => {
                     return (

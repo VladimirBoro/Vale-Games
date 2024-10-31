@@ -309,19 +309,14 @@ function Snake() {
     }
 
     const controls = () => {
-        return ["WASD or Arrow Keys => Up, Right, Down, Left"
+        return [{icon: "WASD or Arrow Keys", description: " Up, Right, Down, Left"}
         ]
     }
 
     return (
         <div className={styles.page}>
             <div className={styles.info}>
-                { gameStarted ? (
-                    <h2><Timer initTime={0} startTimer={gameStarted}/></h2>
-                    ) : (
-                        <h2>00:00</h2>
-                    )
-                }
+                <h2><Timer initTime={0} startTimer={gameStarted}/></h2> 
                 <h2>Score: {currentScore}</h2>
             </div>
             

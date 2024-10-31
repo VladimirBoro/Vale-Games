@@ -4,6 +4,7 @@ import { Pipe } from "./pipe";
 import { Birdy } from "./birdy";
 import { Mountains } from "./mountinas";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import { PiMouseLeftClickFill } from "react-icons/pi";
 import GameOver from "../../components/gameover/GameOver";
 import sky from "./images/sky.png";
 import mountainRange from "./images/mountains.png"
@@ -258,8 +259,7 @@ function BirdyFlap () {
     }
 
     const controls = () => {
-        return ["Left Click => Flap upwards"
-        ]
+        return [{icon: <PiMouseLeftClickFill />, description: " Flap upwards"}]
     }
 
     return (

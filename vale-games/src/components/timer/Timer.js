@@ -46,7 +46,7 @@ function Timer ({initTime, startTimer, updateTime = null }) {
 
     return (
         <>
-            <span>{timeDisplay}</span>
+            <span>🕒: {timeDisplay}</span>
         </>
     )
 }

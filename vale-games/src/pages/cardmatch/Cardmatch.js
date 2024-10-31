@@ -6,6 +6,7 @@ import GameOver from "../../components/gameover/GameOver"
 import Leaderboard from "../../components/leaderboard/Leaderboard"
 import { EASY, MEDIUM, HARD } from "./constants";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import { PiMouseLeftClickFill } from "react-icons/pi";
 import HowTo from "../../components/howTo/HowTo";
 
 
@@ -110,14 +111,14 @@ function CardMatch() {
     }
 
     const controls = () => {
-        return ["Left Click a card => Reveal the other side"
+        return [{icon: <PiMouseLeftClickFill />, description: " Reveal card"}
         ]
     }
 
     return (
         <div className={style.table_container}>
             <div className={style.gameStats}>
-                <h2>🕒: <Timer initTime={0} startTimer={gameStarted} updateTime={getTime}/></h2>
+                <h2><Timer initTime={0} startTimer={gameStarted} updateTime={getTime}/></h2>
                 <h2>Difficulty: {difficulty.string}</h2>
                 <h2>❤️: {lives}</h2>
             </div>

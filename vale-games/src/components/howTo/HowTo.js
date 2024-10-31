@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./howTo.module.css";
+import { PiArrowFatRight } from "react-icons/pi";
 
 function HowTo ({summary, controls}) {
     return (
@@ -11,10 +12,12 @@ function HowTo ({summary, controls}) {
 
             <section className={styles.summary}>
                 <h2>Controls</h2>
-                <ul>
+                <ul className={styles.controls}>
                     {controls.map((control, index) => (
-                        <li key={index}>
-                            {control}
+                        <li className={styles.control} key={index}>
+                            <span>{control.icon}</span>
+                            <span> <PiArrowFatRight /></span>
+                            <span>{control.description}</span>
                         </li>
                     ))}
                 </ul>

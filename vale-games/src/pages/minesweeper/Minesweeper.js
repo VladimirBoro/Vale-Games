@@ -5,6 +5,7 @@ import GameOver from '../../components/gameover/GameOver';
 import styles from "./minesweeper.module.css";
 import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
 import { ADD_PATH, LEADERBOARD_PATH } from "./utils/contants.js"
+import { PiMouseLeftClickFill, PiMouseRightClickFill } from "react-icons/pi";
 import HowTo from '../../components/howTo/HowTo.js';
 
 
@@ -59,8 +60,8 @@ function Minesweeper() {
     }
 
     const controls = () => {
-        return ["Left Click Cell => Open it up",
-                "Right Click Cell => Place Flag/Remove Flag"
+        return [{icon: <PiMouseLeftClickFill />, description: " Check cell"},
+                {icon: <PiMouseRightClickFill />, description: " Place Flag/Remove Flag"}
         ]
     }
 
