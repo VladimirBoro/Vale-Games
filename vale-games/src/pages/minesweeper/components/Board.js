@@ -126,11 +126,7 @@ function Board({postTime, gg}) {
             <div className={styles.board}>
                 <div className={styles.head}>
                     <h2>🚩: {mineCount}</h2>
-                    
-                    
-                            <h2><Timer initTime={0} startTimer={gameStarted} updateTime={updateTime}/></h2>
-                    
-                    
+                    <h2><Timer initTime={0} startTimer={gameStarted} stopTimer={gameOver.current} updateTime={updateTime}/></h2>
                 </div>
                 {grid.map((singlerow,index1) => {
                     return (
@@ -141,7 +137,6 @@ function Board({postTime, gg}) {
                         </div>
                     )
                 })}
-                {/* <button style={{position:'absolute', top:'50%', bottom:'50%', transform:'translate(-50%, -50%)', width:'50%'}}>Easy</button> */}
                 <div className={styles.options}>
                     <button onClick={() => changeDifficulty(contants.easyGame)} >Easy</button>
                     <button onClick={() => changeDifficulty(contants.mediumGame)} >Medium</button>

@@ -118,7 +118,7 @@ function CardMatch() {
     return (
         <div className={style.table_container}>
             <div className={style.gameStats}>
-                <h2><Timer initTime={0} startTimer={gameStarted} updateTime={getTime}/></h2>
+                <h2><Timer initTime={0} startTimer={gameStarted} stopTimer={gameOver} updateTime={getTime}/></h2>
                 <h2>Difficulty: {difficulty.string}</h2>
                 <h2>❤️: {lives}</h2>
             </div>

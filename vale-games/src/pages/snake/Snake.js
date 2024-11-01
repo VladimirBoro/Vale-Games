@@ -316,7 +316,7 @@ function Snake() {
     return (
         <div className={styles.page}>
             <div className={styles.info}>
-                <h2><Timer initTime={0} startTimer={gameStarted}/></h2> 
+                <h2><Timer initTime={0} startTimer={gameStarted} stopTimer={gameOver}/></h2> 
                 <h2>Score: {currentScore}</h2>
             </div>
             

@@ -436,7 +436,7 @@ function Frogger() {
     return (
         <div className={styles.page}>
             <div className={styles.head}>
-                <h2><Timer initTime={0} startTimer={gameStarted}/></h2>
+                <h2><Timer initTime={0} startTimer={gameStarted} stopTimer={gameOver}/></h2>
                 <h2>❤️ {lives}</h2>
                 <h2>Score: {score}</h2>
             </div>
