@@ -1,5 +1,6 @@
 .window {
-    border: 2px solid black;
+    border: 1px solid var(--white-font-color);
+    border-radius: 1em;
     background-color: var(--window-background-color);
     position: absolute;
     top: 50%;
