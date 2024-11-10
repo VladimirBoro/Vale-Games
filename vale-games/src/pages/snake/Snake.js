@@ -10,17 +10,16 @@ function Snake() {
     const ADD_SCORE_PATH = process.env.REACT_APP_SNAKE_ADD_PATH;
     const LEADERBOARD_PATH = process.env.REACT_APP_SNAKE_LEADERBOARD_PATH;
 
-    const CANVAS_SIZE = 740;
+    const CANVAS_SIZE = 500;
 
     const SNAKE_SPEED = 20;
     const SNAKE_SIZE = 20;
-    const FRAME_INTERVAL = 60;
+    const FRAME_INTERVAL = 70;
     const LEFT = 0;
     const RIGHT = 1;
     const UP = 2;
     const DOWN = 3;
 
-    // 
     const DIRECTION_OPPS = {
         0: RIGHT,
         1: LEFT,
@@ -36,6 +35,7 @@ function Snake() {
     const snakeBody = useRef([]);
     const foodPosition = useRef({x: 0, y: 0});
     const foodEaten = useRef(true);
+    const canvasCtx = useRef();
    
     // states
     const [gameStarted, setGameStarted] = useState(false);
@@ -51,8 +51,8 @@ function Snake() {
         let canvas = ref.current;
         canvas.width = CANVAS_SIZE;
         canvas.height = CANVAS_SIZE; 
-        let ctx = canvas.getContext('2d');
-        clearScreen(ctx);
+        canvasCtx.current = canvas.getContext('2d');
+        clearScreen();
         fetchScores();
     }, []);
         
@@ -79,9 +79,9 @@ function Snake() {
             let canvas = ref.current;
             canvas.width = CANVAS_SIZE;
             canvas.height = CANVAS_SIZE; 
-            let ctx = canvas.getContext('2d');
-            clearScreen(ctx);
-            drawSnake(ctx);
+            canvasCtx.current = canvas.getContext('2d');
+            clearScreen(canvasCtx.current);
+            drawSnake(canvasCtx.current);
             
             let intervalId = 0;
             let requestId = 0;
@@ -89,17 +89,26 @@ function Snake() {
             // main loop handling rendering and logic
             function mainLoop() {
                 // clear canvas for next frame
-                clearScreen(ctx);
+                clearScreen(canvasCtx.current);
 
                 // move and draw the snake
-                drawSnake(ctx);
-                drawFood(ctx);
+                drawSnake();     
+                drawFood();
 
                 eatFood(); // check for food collision
                 eatSelf(); // check for self collision
                 hitWall(canvas);
                 
                 if (foodEaten.current) {
+                    placeFood(canvas);
+                }
+                
+                const isBadSpawn = snakeBody.current.some(obj => {
+                    return obj.x === foodPosition.current.x && obj.y === foodPosition.current.y;
+                })
+
+                if (isBadSpawn) {
+                    console.log("collesion");
                     placeFood(canvas);
                 }
                 
@@ -156,19 +165,20 @@ function Snake() {
         dragBody(); // move body with head
     }
     
-    function drawSnake(ctx) {
+    function drawSnake() {
         // draw the head
-        ctx.fillStyle = "green";
-        ctx.strokeStyle = "limegreen"
-        ctx.rect(snakeHead.current.x, snakeHead.current.y, SNAKE_SIZE, SNAKE_SIZE);
-        ctx.fill();
-        ctx.stroke();
+        canvasCtx.current.beginPath();
+        canvasCtx.current.fillStyle = "green";
+        canvasCtx.current.strokeStyle = "limegreen";
+        canvasCtx.current.rect(snakeHead.current.x, snakeHead.current.y, SNAKE_SIZE, SNAKE_SIZE);
+        canvasCtx.current.fill();
+        canvasCtx.current.stroke();
         
         // drag body along behind the head
         for (let i = 0; i < snakeBody.current.length; i++) {
-            ctx.rect(snakeBody.current[i].x, snakeBody.current[i].y, SNAKE_SIZE, SNAKE_SIZE);
-            ctx.fill();
-            ctx.stroke();
+            canvasCtx.current.rect(snakeBody.current[i].x, snakeBody.current[i].y, SNAKE_SIZE, SNAKE_SIZE);
+            canvasCtx.current.fill();
+            canvasCtx.current.stroke();
         }
     }
 
@@ -209,34 +219,28 @@ function Snake() {
         const x = (Math.floor(Math.random() * (canvas.width / SNAKE_SIZE)) * SNAKE_SIZE);
         const y = (Math.floor(Math.random() * (canvas.height / SNAKE_SIZE)) * SNAKE_SIZE);
         
-        while (snakeBody.current.includes([x, y])) {
-            x = (Math.floor(Math.random() * (canvas.width / SNAKE_SIZE)) * SNAKE_SIZE);
-            y = (Math.floor(Math.random() * (canvas.height / SNAKE_SIZE)) * SNAKE_SIZE);
-        }
 
         foodPosition.current = {x: x, y: y};
-        
         foodEaten.current = false;
     }
 
-    function drawFood(ctx) {
-        ctx.fillStyle = "red";
-        ctx.strokeStyle = "red";
-        // ctx.fillRect(foodPosition.current.x, foodPosition.current.y, SNAKE_SIZE, SNAKE_SIZE); 
+    function drawFood() {
         const x = foodPosition.current.x;
         const y = foodPosition.current.y;
 
-        ctx.beginPath();
-        ctx.arc(x + 6, y + 7, 5, 0, Math.PI * 2);
-        ctx.arc(x + 15, y + 7, 5, 0, Math.PI * 2);
-  
-        ctx.moveTo(x + 10, y + 20);
-        ctx.lineTo(x, y + 7);
-        ctx.lineTo(x + 21, y + 7);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        canvasCtx.current.fillStyle = "red";
+        canvasCtx.current.strokeStyle = "red";
 
+        canvasCtx.current.beginPath();
+        canvasCtx.current.arc(x + 6, y + 7, 5, 0, Math.PI * 2);
+        canvasCtx.current.arc(x + 15, y + 7, 5, 0, Math.PI * 2);
+  
+        canvasCtx.current.moveTo(x + 10, y + 20);
+        canvasCtx.current.lineTo(x, y + 7);
+        canvasCtx.current.lineTo(x + 21, y + 7);
+        canvasCtx.current.closePath();
+        canvasCtx.current.fill();
+        canvasCtx.current.stroke();
     }
 
     // add postions to array
@@ -269,13 +273,13 @@ function Snake() {
         }
     }
     
-    function clearScreen(ctx) {
+    function clearScreen() {
         // clear canvas for next frame
-        ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+        canvasCtx.current.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
             
         // background
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+        canvasCtx.current.fillStyle = "black";
+        canvasCtx.current.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
     }
 
     function startGame() {
