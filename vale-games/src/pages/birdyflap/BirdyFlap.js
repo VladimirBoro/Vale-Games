@@ -145,8 +145,8 @@ function BirdyFlap () {
         pipesRef.current = [];
         setGameOver(false);
         setScore(0);
+        pauseGame();
         spawnBirdy();
-        
     }
     
     const pauseGame = () => {
@@ -189,13 +189,7 @@ function BirdyFlap () {
         birdyRef.current.update();
 
         if (birdyRef.current.isHit() && !gameOver) {
-            console.log("im hit!");
-            
             setGameOver(true);
-        }
-        
-        if (birdyRef.current.isDead()) {
-            pauseGame();
         }
     }
 
