@@ -17,14 +17,15 @@ function CardMatch() {
     const [lives, setLives] = useState(1);
     const [matchedCount, setMatchedCount] = useState(difficulty.pairs);
     const [leaderboard, setLeaderboard] = useState([]);
+    const [disabled, setDisabled] = useState(false); // disables click effect of flipping cards
 
     const gameWon = useRef(false);
-    const disabled = useRef(false);
     const time = useRef("");
 
     useEffect(() => {
         localStorage.setItem("currentGame", "Card Match");
         window.dispatchEvent(new Event("game"));
+        setLives(difficulty.lives);
     }, [])
 
     useEffect(() => {
@@ -34,8 +35,6 @@ function CardMatch() {
 
         fetchLeaderboard();
         setMatchedCount(difficulty.pairs);
-        setLives(difficulty.lives);
-
     }, [gameOver]);
 
     // LOSE CONDITION
@@ -66,7 +65,7 @@ function CardMatch() {
         console.log("won!", won);
         setGameOver(true);
         setGameStarted(false);
-        disabled.current = true;
+        setDisabled(true);
         gameWon.current = won;
         postTime();
     }
@@ -76,16 +75,13 @@ function CardMatch() {
     }
 
     const resetGame = () => {
-        console.log("reset!");
-        // time.current = "";
         setGameStarted(false);
-        setGameOver(false);
+        setTimeout(setGameOver, 150, false);
         setLives(difficulty.lives);
-        disabled.current = false;
+        setDisabled(false);
     }
 
     const handleDifficultyButton = (mode) => {
-        console.log("setter done!", mode);
         resetGame();
         setDifficulty(mode);
         setMatchedCount(mode.pairs);
@@ -123,7 +119,7 @@ function CardMatch() {
                 <h2>❤️: {lives}</h2>
             </div>
 
-            <Table difficulty={difficulty} gameEnded={gameOver} disable={disabled.current} loseLife={loseLife} startGame={startGame} matchFound={matchFound}/>
+            <Table difficulty={difficulty} gameEnded={gameOver} disable={disabled} loseLife={loseLife} startGame={startGame} matchFound={matchFound}/>
 
             {
                 gameOver ? (

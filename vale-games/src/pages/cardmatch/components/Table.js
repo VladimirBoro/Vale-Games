@@ -14,7 +14,6 @@ function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound
     const table = useRef([]);
 
     useEffect(() => {
-        // console.log("disabled?", disable);
         if (disable) {
             disabled.current = true;
         }
@@ -24,7 +23,7 @@ function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound
             initGame();
         }
 
-    }, [difficulty, gameEnded, disable])
+    }, [difficulty, disable])
 
     // Check selected cards for a match
     useEffect(() => {
@@ -36,7 +35,6 @@ function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound
     const initGame = () => {
         createTable(difficulty.pairs);
         shuffleTable(table.current);
-        console.log("TABLE", table.current);
         setLives(difficulty.lives);
         setMatches(difficulty.pairs);
     }
@@ -129,7 +127,7 @@ function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound
     return (
         <div className={`${tablecss.table} ${difficulty.string === "Hard" ? `${tablecss.large}` : ""}`}>
             {table.current.map((card, index1) => {
-                return <Card data={card} cardOne={cardOne} disabled={disabled.current} key={index1} flipCard={flipCard}/>
+                return <Card data={card} flipCard={flipCard} disabled={disabled.current} gameEnded={gameEnded} gameStarted={startGame} key={index1} />
             })}
         </div>
     );
