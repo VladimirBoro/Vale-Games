@@ -22,7 +22,7 @@ td img {
 }
 
 tbody tr {
-    counter-increment: rowNumber;
+    /* counter-increment: rowNumber; */
     text-align: left;
 }
 
@@ -43,7 +43,7 @@ tbody tr:nth-child(even) {
 }
 
 .cell::before {
-    content: counter(rowNumber)".";
+    /* content: counter(rowNumber)"."; */
 }
 
 .tableContainer {
@@ -54,5 +54,5 @@ tbody tr:nth-child(even) {
     margin-bottom: 5em;
     display: flex;
     justify-content: center;
-    padding-bottom: 1em;
+    padding: 0 1em 2em 1em ;
 }

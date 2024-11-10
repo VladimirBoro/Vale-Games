@@ -32,6 +32,7 @@ function Leaderboard({ data, metric }) {
                 <table>
                     <thead>
                         <tr>
+                            <th>Rank</th>
                             <th scope="col">
                                 Player
                             </th>
@@ -43,6 +44,9 @@ function Leaderboard({ data, metric }) {
                         {data.map(function(entry, index) {
                             return (
                                 <tr key={index}>
+                                    <td style={{textAlign: "center"}}>
+                                        {index + 1}
+                                    </td>
                                     <td scope="row">
                                         <div className={styles.cell}>
                                             <img src={profilePics[index] == null ? null : profilePics[index]} alt="Profile Pic"/>
@@ -52,7 +56,7 @@ function Leaderboard({ data, metric }) {
                                         </div>
                                     </td>
                                     <td>{entry.date}</td>
-                                    <td>{entry.score == null ? entry.time : entry.score}</td>
+                                    <td style={{textAlign: "center"}}>{entry.score == null ? entry.time : entry.score}</td>
                                 </tr>
                             )
                         })}
