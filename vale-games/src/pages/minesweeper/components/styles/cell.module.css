@@ -1,11 +1,18 @@
 @media (min-width: 0px) {
     .cell {
+        width: 30px;
+        height:30px;
+    }
+}
+
+@media (min-width: 1250px) {
+    .cell {
         width: 35px;
         height:35px;
     }
 }
 
-@media (min-width: 1500px) {
+@media (min-width: 1700px) {
     .cell {
         width: 40px;
         height:40px;
@@ -16,5 +23,12 @@
     .cell {
         width: 45px;
         height:45px;
+    }
+}
+
+@media (min-width: 2500px) {
+    .cell {
+        width: 50px;
+        height:50px;
     }
 }

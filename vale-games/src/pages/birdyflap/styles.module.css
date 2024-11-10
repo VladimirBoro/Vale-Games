@@ -18,3 +18,17 @@
 .head h2 {
     margin: 0;
 }
+
+@media (min-width: 0px) {
+    .canvas {
+        width: 700px;
+        height: 700px;
+    }
+}
+
+@media (min-width: 2250px) {
+    .canvas {
+        width: 900px;
+        height: 900px;
+    }
+}

@@ -326,7 +326,7 @@ function Snake() {
             
             <canvas 
                 ref={ref}
-                style={{width: '740px', height: '740px'}}
+                className={styles.canvas}
             />
 
             {

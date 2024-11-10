@@ -261,7 +261,7 @@ function BirdyFlap () {
             <div className={styles.head}>
                 <h2>Score: {score}</h2>
             </div>
-            <canvas style={{marginBottom: "3em"}} ref={canvasRef} />
+            <canvas style={{marginBottom: "3em"}} className={styles.canvas} ref={canvasRef} />
             <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard data={leaderboard} metric={"Score"}/>
             { gameOver ? (

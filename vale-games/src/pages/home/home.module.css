@@ -93,7 +93,6 @@
 }
 
 .arrow:hover, .random:hover {
-    /* color: ; */
     background-color: inherit;
 }
 
@@ -126,4 +125,15 @@
     margin-bottom: 10px;
     font-size: 1.1em;
     color: #faf1e6;
+}
+
+@media (min-width: 2250px) {
+    .artCover, .middleLink {
+        width: 500px;
+        height: 500px;
+    }
+
+    .carousel {
+        height: 600px;
+    }
 }
