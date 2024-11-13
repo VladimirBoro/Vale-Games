@@ -26,8 +26,12 @@ public class SnakeScoreController {
 
     @GetMapping(path = "/leaderboard")
     public @ResponseBody Iterable<SnakeScore> getSnakeScores() {
-        System.out.println("getting scores...");
         return snakeScoreRepo.findTop10ByOrderByScoreDesc();
+    }
+
+    @GetMapping(path = "/leaderboard-top10")
+    public @ResponseBody Iterable<SnakeScore> getSnakeScoresTop10() {
+        return snakeScoreRepo.findAllByOrderByScoreDesc();
     }
 
     @PostMapping(path = "/add") 

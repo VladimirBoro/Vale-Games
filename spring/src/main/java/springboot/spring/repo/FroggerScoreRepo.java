@@ -9,5 +9,5 @@ import springboot.spring.entities.FroggerScore;
 public interface FroggerScoreRepo extends JpaRepository<FroggerScore, Long> {
     public FroggerScore findByUsername(String username);
     public List<FroggerScore> findTop10ByOrderByScoreDesc();
-    // public List<FroggerScore> findAllByScoreDesc();
+    public List<FroggerScore> findAllByOrderByScoreDesc();
 }

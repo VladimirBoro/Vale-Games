@@ -21,8 +21,13 @@ public class BirdyFlapScoreController {
     BirdyFlapScoreRepo repo;
 
     @GetMapping("/leaderboard-top10")
-    public Iterable<BirdyFlapScore> getLeaderboard() {
+    public Iterable<BirdyFlapScore> getLeaderboardTop10() {
         return repo.findTop10ByOrderByScoreDesc();
+    }
+
+    @GetMapping("/leaderboard")
+    public Iterable<BirdyFlapScore> getLeaderboard() {
+        return repo.findAllByOrderByScoreDesc();
     }
 
     @PostMapping("/add")

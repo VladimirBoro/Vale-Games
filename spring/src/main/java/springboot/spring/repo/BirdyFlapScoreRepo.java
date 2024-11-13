@@ -9,5 +9,5 @@ import springboot.spring.entities.BirdyFlapScore;
 public interface BirdyFlapScoreRepo extends JpaRepository<BirdyFlapScore, Long> {
     public BirdyFlapScore findByUsername(String username);
     public List<BirdyFlapScore> findTop10ByOrderByScoreDesc();
-    // public List<BirdyFlapScore> findAllByScoreDesc();
+    public List<BirdyFlapScore> findAllByOrderByScoreDesc();
 }

@@ -35,7 +35,6 @@ public class AccountController {
 
     @GetMapping("/account/profilePicture")
     public ResponseEntity<Resource> getProfilePicture(@RequestParam String username) {
-        System.out.println("getting " + username + "'s pp");
         return accountService.getProfilePicture(username);
     }
 

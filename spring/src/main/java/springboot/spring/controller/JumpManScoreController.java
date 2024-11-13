@@ -20,13 +20,17 @@ public class JumpManScoreController {
     JumpGuyScoreRepo repo;
 
     @GetMapping("/leaderboard-top10")
-    public Iterable<JumpGuyScore> getMethodName() {
-        System.out.println("boutta return deez nits");
+    public Iterable<JumpGuyScore> getLeaderboardTop10() {
         return repo.findTop10ByOrderByScoreDesc();
     }
 
+    @GetMapping("/leaderboard")
+    public Iterable<JumpGuyScore> getLeaderboard() {
+        return repo.findAllByOrderByScoreDesc();
+    }
+
     @PostMapping("/add")
-    public String postMethodName(@RequestParam String username, @RequestParam int score) {
+    public String postScore(@RequestParam String username, @RequestParam int score) {
         String response = "failed adding score";
         
         JumpGuyScore oldScore = repo.findByUsername(username);

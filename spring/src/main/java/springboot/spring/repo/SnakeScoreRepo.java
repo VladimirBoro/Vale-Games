@@ -11,4 +11,5 @@ import springboot.spring.entities.SnakeScore;
 public interface SnakeScoreRepo extends JpaRepository<SnakeScore, Long> {
     public SnakeScore findByUsername(String username);
     public List<SnakeScore> findTop10ByOrderByScoreDesc();
+    public List<SnakeScore> findAllByOrderByScoreDesc();
 }

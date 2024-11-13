@@ -59,6 +59,6 @@ public class CardMatchScoreController {
 
     @GetMapping("/leaderboard")
     public @ResponseBody Iterable<CardMatchScore> getLeaderboard() {
-        return cardMatchScoreRepo.findAll();
+        return cardMatchScoreRepo.findAllByOrderByTime();
     }
 }

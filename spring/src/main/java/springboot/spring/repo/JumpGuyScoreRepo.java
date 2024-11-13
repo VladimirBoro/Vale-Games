@@ -9,4 +9,5 @@ import springboot.spring.entities.JumpGuyScore;
 public interface JumpGuyScoreRepo extends JpaRepository<JumpGuyScore, Long> {
     public JumpGuyScore findByUsername(String username);
     public List<JumpGuyScore> findTop10ByOrderByScoreDesc();
+    public List<JumpGuyScore> findAllByOrderByScoreDesc();
 }

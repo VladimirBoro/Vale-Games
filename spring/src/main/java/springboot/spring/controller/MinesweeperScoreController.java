@@ -59,6 +59,6 @@ public class MinesweeperScoreController {
 
     @GetMapping("/leaderboard")
     public @ResponseBody Iterable<MinesweeperScore> getLeaderboard() {
-        return repo.findAll();
+        return repo.findAllByOrderByTime();
     }
 }
