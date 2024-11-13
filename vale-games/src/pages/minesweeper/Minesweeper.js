@@ -3,43 +3,33 @@ import Board from './components/Board';
 import Leaderboard from '../../components/leaderboard/Leaderboard';
 import GameOver from '../../components/gameover/GameOver';
 import styles from "./minesweeper.module.css";
-import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
-import { ADD_PATH, LEADERBOARD_PATH } from "./utils/contants.js"
+import { sendLeaderboardData } from "../../util/restful";
+import { ADD_PATH } from "./utils/contants.js"
 import { PiMouseLeftClickFill, PiMouseRightClickFill } from "react-icons/pi";
 import HowTo from '../../components/howTo/HowTo.js';
 
 
 function Minesweeper() {
-    const [times, setTimes] = useState([]);
     const [gameOver, setgameOver] = useState(false);
+    const [isScoreSent, setIsScoreSent] = useState(false);
 
     const time = useRef("");
     const restart = useRef(null);
     const gameLost = useRef(false);
     
-    const fetchLeaderboard = async () => {
-        console.log(LEADERBOARD_PATH);
-        setTimes(await getLeaderboard(LEADERBOARD_PATH));
-    }
-
     useEffect(() => {
         localStorage.setItem("currentGame", "Minesweeper");
         window.dispatchEvent(new Event("game"));
     }, [])
 
-    useEffect(() => {
-        fetchLeaderboard();
-    }, [gameOver]);
-
-
     // POST user's time to server db
     const postTime = async (time, username) => {
         await sendLeaderboardData(ADD_PATH, username, time, "time");
+        setTimeout(setIsScoreSent, 500, !isScoreSent);
     }
 
     // params: bool, string, function
     const gg = (gameL, timed, resetGame) => {
-        console.log("ggs...", gameLost);
         setgameOver(true);
         gameLost.current = gameL;
         time.current = timed;
@@ -72,7 +62,7 @@ function Minesweeper() {
                 <HowTo summary={summary()} controls={controls()}/>
             </div>
 
-            <Leaderboard data={times} metric={"Time"}/>
+            <Leaderboard metric={"Time"} gameName={"minesweeper"} refetchFlag={isScoreSent} />
             { gameOver ? (
                     <GameOver lost={gameLost.current} metric="Time" value={time.current} tryAgain={hideGameOver}/>
                 ) : (

@@ -42,8 +42,14 @@ tbody tr:nth-child(even) {
     gap: 5px;
 }
 
-.cell::before {
-    /* content: counter(rowNumber)"."; */
+#showAll {
+    all: unset;
+    margin-top: 1em;
+    cursor: pointer;
+}
+
+#showAll:hover {
+    color: grey;
 }
 
 .tableContainer {

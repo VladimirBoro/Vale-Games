@@ -1,12 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { getLeaderboard, fetchProfilePic } from "../../util/restful";
 import styles from "./leaderboard.module.css"
-import { fetchProfilePic } from "../../util/restful";
 
-function Leaderboard({ data, metric }) {
+function Leaderboard({ metric, gameName, refetchFlag }) {
+    const [data, setData] = useState([]);
+    const [showWholeLeaderboard, setShowWholeLeaderboard] = useState(false);
     const [profilePics, setProfilePics] = useState([]);
 
-    useEffect(() => {
+    const showMore = useRef(false);
+    const showMoreMessage = useRef("Show More");
 
+    useEffect(() => {
+        console.log("flag", refetchFlag);
+
+        const fetchLeaderboard = async () => {
+            if (showWholeLeaderboard) {
+                console.log("SHOW ALL");
+                setData(await getLeaderboard(`/${gameName}/leaderboard`));
+            }
+            else {
+                console.log("fetching fetching...");
+                setData(await getLeaderboard(`/${gameName}/leaderboard-top10`));
+            }
+
+        }
+        
+        fetchLeaderboard();
+    }, [showWholeLeaderboard, refetchFlag])
+
+    useEffect(() => {
         const fetchProfilePics = async () => {
             let pics = [];
             for (let i = 0; i < data.length; i++) {
@@ -15,13 +37,24 @@ function Leaderboard({ data, metric }) {
 
             setProfilePics(pics);
         }
-    
+        
         fetchProfilePics();
     }, [data])
 
     let emptyMsg = "";
     if (!data || data.length === 0) {
         emptyMsg = "No one on the Leaderboard yet!";
+    }
+    
+    const show = () => {
+        showMore.current = !showMore.current;
+        if (showMore.current) {
+            showMoreMessage.current = "Hide";
+        }
+        else {
+            showMoreMessage.current = "Show More";
+        }
+        setShowWholeLeaderboard(!showWholeLeaderboard);
     }
 
     return (
@@ -62,6 +95,7 @@ function Leaderboard({ data, metric }) {
                         })}
                     </tbody>
                 </table>
+            <button onClick={show} id={styles.showAll}>{showMoreMessage.current}</button>
             </div>
         </div>
     );

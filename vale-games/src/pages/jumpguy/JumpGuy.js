@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CANVAS, DIRECTIONS, GUY } from "./constants";
-import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import { sendLeaderboardData } from "../../util/restful";
 import styles from "./styles.module.css";
 import Guy from "./guy";
 import PlatformFactory from "./platforms/platformFactory";
@@ -15,7 +15,7 @@ function JumpGuy() {
     const [gameOver, setGameOver] = useState(false);
     const [hideStartButton, setHideStartButton] = useState(false);
     const [score, setScore] = useState(0);
-    const [leaderboard, setLeaderboard] = useState([]);
+    const [isScoreSent, setIsScoreSent] = useState(false);
     
     const canvasRef = useRef(null);
     const jumpGuyRef = useRef(null);
@@ -84,8 +84,6 @@ function JumpGuy() {
         const context = canvas.getContext("2d");
         
         const jumpGuy = jumpGuyRef.current;
-
-        fetchLeaderboard();
 
         clearCanvas(context);
         cloudFactory.current.drawClouds(context);
@@ -209,12 +207,9 @@ function JumpGuy() {
         setGameStarted(true);
     }
 
-    const fetchLeaderboard = async () => {
-        setLeaderboard(await getLeaderboard("/jumpguy/leaderboard-top10"));
-    }
-
     const submitScore = (username) => {
         sendLeaderboardData("/jumpguy/add", username, score, "score");
+        setTimeout(setIsScoreSent, 500, !isScoreSent);
     }
 
     const loseGame = () => {
@@ -252,7 +247,7 @@ function JumpGuy() {
                 <button onClick={toggleHitbox}>Show Hitbox</button>
             </div>
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} metric={"score"}/>
+            <Leaderboard metric={"score"} gameName={"jumpguy"} refetchFlag={isScoreSent} />
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (

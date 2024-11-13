@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import React, { useState, useRef, useEffect } from "react";
+import { sendLeaderboardData } from "../../util/restful";
 import styles from "./styles.module.css"
 import Timer from "../../components/timer/Timer";
 import Leaderboard from "../../components/leaderboard/Leaderboard";
@@ -40,8 +40,8 @@ function Snake() {
     // states
     const [gameStarted, setGameStarted] = useState(false);
     const [gameOver, setGameOver] = useState(false);
-    const [scores, setScores] = useState([]);
     const [currentScore, setCurrentScore] = useState(1);
+    const [isScoreSent, setIsScoreSent] = useState(false);
 
     // fetch scores and show canvas when page opens
     useEffect(() => {
@@ -53,7 +53,7 @@ function Snake() {
         canvas.height = CANVAS_SIZE; 
         canvasCtx.current = canvas.getContext('2d');
         clearScreen();
-        fetchScores();
+
     }, []);
         
     // Event listener for keyboard input
@@ -125,13 +125,9 @@ function Snake() {
         }
     }, [gameStarted]);
     
-    const fetchScores = useCallback(async () => {
-        setScores(await getLeaderboard(LEADERBOARD_PATH));
-    }, [scores]);
-
     const sendScore = async (username) => {
-        await sendLeaderboardData(ADD_SCORE_PATH, username, snakeBody.current.length, "score")
-        fetchScores();
+        await sendLeaderboardData(ADD_SCORE_PATH, username, snakeBody.current.length, "score");
+        setTimeout(setIsScoreSent, 500, !isScoreSent);
     }
 
     function translateSnake() { 
@@ -338,7 +334,7 @@ function Snake() {
             }
             <button onClick={startGame} className={styles.startButton}>start</button>
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={scores} metric={"Score"}/>
+            <Leaderboard metric={"Score"} gameName={"snake"} refetchFlag={isScoreSent}/>
         </div>
     );
 };

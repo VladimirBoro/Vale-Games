@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { HOP_DIRECTIONS, IDLE_ANIMATION, LANES, ANIMATIONS, GRID_DIMENSIONS, HOP_DISTANCE, CANVAS_SIZE } from "./contants/constants";
-import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import { GRID_DIMENSIONS, HOP_DISTANCE, CANVAS_SIZE } from "./contants/constants";
+import { sendLeaderboardData } from "../../util/restful";
 import frogSpriteSheet from "./sprites/frog/frog.png";
 import Timer from "../../components/timer/Timer";
 import GameOver from "../../components/gameover/GameOver";
@@ -19,7 +19,7 @@ function Frogger() {
     const [goals, setGoals] = useState([]);
     const [score, setScore] = useState(0);
     const [lives, setLives] = useState(3);
-    const [leaderboard, setLeaderboard] = useState([]);
+    const [isScoreSent, setIsScoreSent] = useState(false);
 
     const canvasRef = useRef(); // canvas dom reference
     const contextRef = useRef();
@@ -62,8 +62,6 @@ function Frogger() {
             contextRef.current.shadowColor = "black";
             contextRef.current.shadowBlur = 15;
             
-            fetchLeaderboard();
-
             // create frog
             const frogSpriteSheetImg = new Image();
             frogSpriteSheetImg.src = frogSpriteSheet;
@@ -126,7 +124,6 @@ function Frogger() {
     useEffect(() => {
         let animFrame;
 
-        fetchLeaderboard();
         updateGoals();
         drawBackground();
         
@@ -380,12 +377,10 @@ function Frogger() {
         
         if (username !== null) {
             sendLeaderboardData("frogger/add", username, score, "score");
+            setTimeout(setIsScoreSent, 500, !isScoreSent);
         }
     }
 
-    const fetchLeaderboard = async () => {
-        setLeaderboard(await getLeaderboard("/frogger/leaderboard-top10"));
-    }
 
     const loseHeart = () => {
         console.log("-1 life");
@@ -451,7 +446,7 @@ function Frogger() {
                 )}
             </div>
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} metric={"Score"}/>
+            <Leaderboard metric={"Score"} gameName={"frogger"} refetchFlag={isScoreSent} />
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (

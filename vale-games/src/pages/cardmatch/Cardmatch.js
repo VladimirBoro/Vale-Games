@@ -5,7 +5,7 @@ import Timer from "../../components/timer/Timer"
 import GameOver from "../../components/gameover/GameOver"
 import Leaderboard from "../../components/leaderboard/Leaderboard"
 import { EASY, MEDIUM, HARD } from "./constants";
-import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import { sendLeaderboardData } from "../../util/restful";
 import { PiMouseLeftClickFill } from "react-icons/pi";
 import HowTo from "../../components/howTo/HowTo";
 
@@ -16,7 +16,7 @@ function CardMatch() {
     const [gameStarted, setGameStarted] = useState(false);
     const [lives, setLives] = useState(1);
     const [matchedCount, setMatchedCount] = useState(difficulty.pairs);
-    const [leaderboard, setLeaderboard] = useState([]);
+    const [isScoreSent, setIsScoreSent] = useState([]);
     const [disabled, setDisabled] = useState(false); // disables click effect of flipping cards
 
     const gameWon = useRef(false);
@@ -29,11 +29,6 @@ function CardMatch() {
     }, [])
 
     useEffect(() => {
-        const fetchLeaderboard = async () => {
-            setLeaderboard(await getLeaderboard("/cardmatch/leaderboard-top10"));
-        }
-
-        fetchLeaderboard();
         setMatchedCount(difficulty.pairs);
     }, [gameOver]);
 
@@ -58,11 +53,11 @@ function CardMatch() {
         let username = localStorage.getItem("user");
         if (username && gameWon.current) {
             await sendLeaderboardData("/cardmatch/add", username, time.current, "time");
+            setTimeout(setIsScoreSent, 500, !isScoreSent);
         }
     }
 
     const handleGameOver = (won) => {
-        console.log("won!", won);
         setGameOver(true);
         setGameStarted(false);
         setDisabled(true);
@@ -136,7 +131,7 @@ function CardMatch() {
             </div>
 
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} metric="Time"/>
+            <Leaderboard metric={"Time"} gameName={"cardmatch"} refetchFlag={isScoreSent}/>
         </div>
     );
 }

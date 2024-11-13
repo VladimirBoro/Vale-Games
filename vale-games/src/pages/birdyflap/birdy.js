@@ -51,7 +51,6 @@ export class Birdy {
     }
 
     die() {
-        console.log("IM DEAD 💀")
         this.dead = true;
     }
 

@@ -3,7 +3,7 @@ import { CANVAS } from "./constants";
 import { Pipe } from "./pipe";
 import { Birdy } from "./birdy";
 import { Mountains } from "./mountinas";
-import { getLeaderboard, sendLeaderboardData } from "../../util/restful";
+import { sendLeaderboardData } from "../../util/restful";
 import { PiMouseLeftClickFill } from "react-icons/pi";
 import GameOver from "../../components/gameover/GameOver";
 import sky from "./images/sky.png";
@@ -17,7 +17,7 @@ function BirdyFlap () {
     const [gameOver, setGameOver] = useState(false);
     const [score, setScore] = useState(0);
     const [gamePaused, setGamePaused] = useState(true);
-    const [leaderboard, setLeaderboard] = useState([]);
+    const [isScoreSent, setIsScoreSent] = useState(false);
     
     const skyImage = new Image();
     skyImage.src = sky;
@@ -67,7 +67,6 @@ function BirdyFlap () {
         context.shadowBlur = 10;
         context.shadowColor = "black";
 
-        fetchLeaderboard();
 
         let animationFrame;
         const gameLoop = () => {
@@ -113,7 +112,6 @@ function BirdyFlap () {
     
     const spawnBirdy = () => {
         birdyRef.current = new Birdy();
-        console.log("new bird new me", birdyRef.current); 
     }
 
     const randomPipeSpawn = () => {
@@ -234,16 +232,13 @@ function BirdyFlap () {
         }
     }
 
-    const fetchLeaderboard = async () => {
-        setLeaderboard(await getLeaderboard("/birdyflap/leaderboard-top10"));
-    }
 
     const sendScore = async () => {
         let username = localStorage.getItem("user");
-        console.log("sending...", username, score);
 
         if (username !== null) {
             sendLeaderboardData("/birdyflap/add", username, score, "score");
+            setTimeout(setIsScoreSent, 500, !isScoreSent);
         }
     }
 
@@ -263,7 +258,7 @@ function BirdyFlap () {
             </div>
             <canvas style={{marginBottom: "3em"}} className={styles.canvas} ref={canvasRef} />
             <HowTo summary={summary()} controls={controls()}/>
-            <Leaderboard data={leaderboard} metric={"Score"}/>
+            <Leaderboard metric={"Score"} gameName={"birdyflap"} refetchFlag={isScoreSent} />
             { gameOver ? (
                     <GameOver lost={true} metric="Score" value={score} tryAgain={resetGame}/>
                 ) : (
