@@ -19,8 +19,8 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(authorizeRequests ->
             authorizeRequests
             .requestMatchers("/login/**", "/register/**", "/logout/**", "/frogger/leaderboard**", 
-                "/snake/leaderboard/**", "/minesweeper/leaderboard", "/cardmatch/leaderboard-top10", 
-                "/birdyflap/leaderboard-top10", "/jumpguy/leaderboard**", "/account/profilePicture**")
+                "/snake/leaderboard/**", "/minesweeper/leaderboard**", "/cardmatch/leaderboard**", 
+                "/birdyflap/leaderboard**", "/jumpguy/leaderboard**", "/account/profilePicture**")
             .permitAll()
             .anyRequest().authenticated()
         )
