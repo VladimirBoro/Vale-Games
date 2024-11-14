@@ -3,24 +3,31 @@ import { CardObject } from "../util/card"
 import Card from "./Card";
 import tablecss from "../styles/table.module.css";
 
-function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound }) {
+function Table({ difficulty, gameEnded, gameStarted, reset, disable, loseLife, startGame, matchFound }) {
     const [cardOne, setCardOne] = useState(null);
     const [cardTwo, setCardTwo] = useState(null);
     const [lives, setLives] = useState(difficulty.lives);
     const [matches, setMatches] = useState(difficulty.pairs);
     
-    const gameStarted = useRef(false);
     const disabled = useRef(false);
     const table = useRef([]);
+
+    useEffect(() => {
+        initGame();
+    }, [])
+
+    useEffect(() => {
+        if (reset) {
+            initGame();
+        }
+    }, [reset])
 
     useEffect(() => {
         if (disable) {
             disabled.current = true;
         }
         else {
-            console.log("MODE:", difficulty, lives);
             disabled.current = false;
-            initGame();
         }
 
     }, [difficulty, disable])
@@ -82,14 +89,12 @@ function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound
         disabled.current = false;
         
         if (cardOne.value === cardTwo.value) {
-            console.log("match!");
             table.current[cardOneIndex].matched = true;
             table.current[cardTwoIndex].matched = true;
             matchFound();
             setMatches(prev => prev - 1);
         }
         else {
-            console.log("miss!");
             table.current[cardOneIndex].revealed = false;
             table.current[cardTwoIndex].revealed = false;
             loseLife();
@@ -106,7 +111,7 @@ function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound
         }
 
         // Start game if not started already
-        if (!gameStarted.current) {
+        if (!gameStarted) {
             startGame();
         }
 
@@ -127,7 +132,7 @@ function Table({ difficulty, gameEnded, disable, loseLife, startGame, matchFound
     return (
         <div className={`${tablecss.table} ${difficulty.string === "Hard" ? `${tablecss.large}` : ""}`}>
             {table.current.map((card, index1) => {
-                return <Card data={card} flipCard={flipCard} disabled={disabled.current} gameEnded={gameEnded} gameStarted={startGame} key={index1} />
+                return <Card data={card} flipCard={flipCard} disabled={disabled.current} gameEnded={gameEnded} reset={reset} key={index1} />
             })}
         </div>
     );

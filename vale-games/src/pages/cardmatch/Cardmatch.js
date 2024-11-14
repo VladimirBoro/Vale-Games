@@ -14,6 +14,7 @@ function CardMatch() {
     const [difficulty, setDifficulty] = useState(EASY);
     const [gameOver, setGameOver] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
+    const [resetFlag, setResetFlag] = useState(false);
     const [lives, setLives] = useState(1);
     const [matchedCount, setMatchedCount] = useState(difficulty.pairs);
     const [isScoreSent, setIsScoreSent] = useState([]);
@@ -59,21 +60,25 @@ function CardMatch() {
 
     const handleGameOver = (won) => {
         setGameOver(true);
+        setResetFlag(false);
         setGameStarted(false);
         setDisabled(true);
         gameWon.current = won;
         postTime();
     }
-
+    
     const startGame = () => {
+        setResetFlag(false);
         setGameStarted(true);
     }
 
     const resetGame = () => {
+        console.log("resetting");
+        setResetFlag(true);
+        setDisabled(false);
         setGameStarted(false);
         setTimeout(setGameOver, 150, false);
         setLives(difficulty.lives);
-        setDisabled(false);
     }
 
     const handleDifficultyButton = (mode) => {
@@ -114,7 +119,7 @@ function CardMatch() {
                 <h2>❤️: {lives}</h2>
             </div>
 
-            <Table difficulty={difficulty} gameEnded={gameOver} disable={disabled} loseLife={loseLife} startGame={startGame} matchFound={matchFound}/>
+            <Table difficulty={difficulty} gameEnded={gameOver} gameStarted={gameStarted} reset={resetFlag} disable={disabled} loseLife={loseLife} startGame={startGame} matchFound={matchFound}/>
 
             {
                 gameOver ? (
