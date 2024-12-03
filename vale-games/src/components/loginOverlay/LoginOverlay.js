@@ -8,11 +8,10 @@ import { OVERLAY_STATE } from "./constants";
 function LoginOverlay({showOverlay, typeToDisplay, switchType, toggleOverlay}) {
     const [displayOverlay, setDisplayOverlay] = useState(showOverlay);
     const [googleCredential, setGoogleCredential] = useState(null);
-    
-    useEffect(() => {
-        console.log(displayOverlay, "yyeeep", typeToDisplay);
-        setDisplayOverlay(showOverlay);
 
+    useEffect(() => {
+        setGoogleCredential(null);
+        setDisplayOverlay(showOverlay);
     }, [showOverlay])
 
     const googleRegister = (cred) => {
