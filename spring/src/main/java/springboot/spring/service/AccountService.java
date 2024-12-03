@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.http.HttpStatus;
@@ -94,7 +95,6 @@ public class AccountService {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
-        System.out.println(username + " " + password);
         AccountDigest user = accountDigestRepo.findByUsername(username);
         
         // invalid username or password
@@ -148,7 +148,6 @@ public class AccountService {
             System.out.println("User ID: " + userId);
     
             // Get profile information from payload
-            // String email = payload.getEmail();
             boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
             if (emailVerified) {
                 sub = (String) payload.get("sub");
@@ -176,9 +175,31 @@ public class AccountService {
 
         return response;
     }
+
+    private void printRequestDetails(HttpServletRequest request) {
+        // Print all headers
+        System.out.println("Request Headers:");
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            System.out.println(headerName + ": " + request.getHeader(headerName));
+        }
+
+        // Print session ID
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            System.out.println("Session ID: " + session.getId());
+        } else {
+            System.out.println("No session associated with the request.");
+        }
+
+        // Print request method and URL
+        System.out.println("Request Method: " + request.getMethod());
+        System.out.println("Request URL: " + request.getRequestURL().toString());
+    }
     
     public void registerUser(String username, String credential, MultipartFile image, String type) {
-        // RETURN SOME TYPE OF ERROR RESPONSE (422?)
+        // RETURN SOME TYPE OF ERROR RESPONSE (422)
         if (accountRepo.existsByUsername(username)) {
             System.out.println("user already exists!");
             throw new UsernameAlreadyExistsException("username " + username + " already exists");
@@ -186,12 +207,10 @@ public class AccountService {
 
         System.out.println("TYPE " + type);
         if (type.equals("google")) {
-            System.out.println("googly");
             googleRegister(username, credential, image);
         }
         else
         {
-            System.out.println("locally");
             valeGamesRegister(username, credential, image);
         }
 
@@ -199,7 +218,7 @@ public class AccountService {
         boolean isCustomPic = true;
         if (image == null) {
             int defaultPicNumber = (int)(Math.random() * 6) + 1;
-            String basePath = "./spring/src/main/resources/static/default_profile_pictures";
+            String basePath = System.getenv("PROFILE_PICTURE_PATH");
             isCustomPic = false;
             imageLocation = basePath + "/default_" + defaultPicNumber + ".png";
         }
@@ -253,16 +272,16 @@ public class AccountService {
     public ResponseEntity<Resource> getProfilePicture(String username) {
         Account account;
         
-        int defaultPicNumber = (int)(Math.random() * 6) + 1;
-        String basePath = "./spring/src/main/resources/static/default_profile_pictures";
+        String basePath = System.getenv("PROFILE_PICTURE_PATH");
         String pathToPicture = basePath + "/default_" + 1 + ".png";
+
         if (accountRepo.findByUsername(username) != null) {
             account = accountRepo.findByUsername(username);
             pathToPicture = account.getProfile_pic();
         }
         
         try {
-            // Define the path to your image folder
+            // Define the path to image folder
             Path imagePath = Paths.get(pathToPicture).normalize();
             Resource resource = new UrlResource(imagePath.toUri());
 
@@ -301,7 +320,7 @@ public class AccountService {
             }
 
             accountRepo.delete(account);
-            return "yuh";
+            return "deleted " + username;
         }
         catch (Exception e) {
             return "error";
@@ -363,8 +382,8 @@ public class AccountService {
             String imageExtension = currentPicturePath.substring(currentPicturePath.lastIndexOf("."));
             String newName = newUsername + "_profilePic" + imageExtension;
             
-            String basePath = currentPicturePath.substring(0, currentPicturePath.lastIndexOf("\\"));
-            String newPicturePath = basePath + "\\" + newName;
+            String basePath = currentPicturePath.substring(0, currentPicturePath.lastIndexOf("/"));
+            String newPicturePath = basePath + "/" + newName;
             account.setProfile_pic(newPicturePath);
             
             Path path = Paths.get(currentPicturePath);
