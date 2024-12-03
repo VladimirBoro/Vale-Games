@@ -3,8 +3,8 @@ import card from "../styles/card.module.css"
 
 function Card({ data, flipCard, disabled, gameEnded, reset }) {
     const cardRef = useRef(null);
-    const cardFaceColors = ["#4f3b78", "#2c5d63", "#a21232", "#f5b553", "#000000", "#ff2e63", 
-        "#4592af", "#d59bf6", "#d9b650", "#2eb872"];
+    const cardFaceColors = ["#4f3b78", "#2c5d63", "#a21232", "#f5c653", "#000000", "#ff2e63", 
+        "#af7245", "#f69bbb", "#6d8704", "#71dca6"];
     
     const flip = () => {
         // prohibit flips under these conditions

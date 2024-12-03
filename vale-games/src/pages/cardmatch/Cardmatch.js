@@ -78,6 +78,7 @@ function CardMatch() {
         setDisabled(false);
         setGameStarted(false);
         setTimeout(setGameOver, 150, false);
+        setTimeout(setResetFlag, 150, false);
         setLives(difficulty.lives);
     }
 
