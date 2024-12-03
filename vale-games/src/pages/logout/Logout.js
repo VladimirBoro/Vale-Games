@@ -1,12 +1,11 @@
 import React from "react";
-import axios from "axios";
+import customAxios from '../../util/customAxios';
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styles from "./logout.module.css"
 
 
 const Logout = () => {
-    // const URL = "http://localhost:8080";
     const URL = process.env.REACT_APP_SERVER_URL;
     const LOGOUT_EXTENSTION = process.env.REACT_APP_LOGOUT_PATH;
 
@@ -15,9 +14,7 @@ const Logout = () => {
     const logoutHandler = async (event) => {
         event.preventDefault();
 
-        console.log("wtf");
-        
-        await axios.post(URL + LOGOUT_EXTENSTION, null, { withCredentials: true })
+        await customAxios.post(LOGOUT_EXTENSTION)
         .then(response => {
             console.log("success!", response);
         })
