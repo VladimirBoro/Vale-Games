@@ -10,17 +10,14 @@ import  TakenUsername  from "./components/TakenUsername";
 function Account() {
     const navigate = useNavigate(); 
 
-    const URL = process.env.REACT_APP_SERVER_URL;
-    const PATH = process.env.REACT_APP_PLAYER_SCORES;
-
     const [editing, setEditing] = useState(false);
     const [username, setUsername] = useState(localStorage.getItem("user"));
     const [image, setImage] = useState(null);
     const [profilePicPreview, setProfilePicPreview] = useState(null);
+    const [isProfilePicChanged, setIsProfilePicChanged] = useState(false);
     const [takenUsername, setTakenUsername] = useState(false);
     const [memberSince, setMemberSince] = useState("");
 
-    // fetch scores
     useEffect(() => {
         const fetchPreview = async () => {
             setProfilePicPreview(await fetchProfilePic(username));
@@ -36,7 +33,11 @@ function Account() {
     }, [])
 
     const editProfile = async () => {
-        setProfilePicPreview(await fetchProfilePic(username));
+        if (editing && isProfilePicChanged) {
+            setProfilePicPreview(await fetchProfilePic(username));
+            setIsProfilePicChanged(false);
+        }
+
         setEditing(!editing);
     }
 
@@ -56,6 +57,7 @@ function Account() {
 
     const handleFileChange = async (e) => {
         if (e.target.files.length != 0) {
+            setIsProfilePicChanged(true);
             setImage(e.target.files[0]);
         }
         else {
@@ -75,7 +77,6 @@ function Account() {
     }
 
     const handleUsernameChange = (e) => {
-        console.log(e.target.value);
         setUsername(e.target.value);
     }
 
@@ -86,7 +87,6 @@ function Account() {
             return;
         }
 
-        console.log(localStorage.getItem("user"));
         const formData = new FormData();
         formData.append("oldUsername", localStorage.getItem("user"));
         formData.append("newUsername", username);
@@ -114,6 +114,7 @@ function Account() {
         // set the pic
         console.log("fetching after the update");
         setImage(profilePicPreview);
+        setIsProfilePicChanged(false);
         
         window.dispatchEvent(new Event("storage"));
         window.dispatchEvent(new Event("profilePic"));
