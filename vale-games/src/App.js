@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 import { OVERLAY_STATE } from './components/loginOverlay/constants';
 import Home from "./pages/home/Home";
 import LoginOverlay from "./components/loginOverlay/LoginOverlay";
-import Logout from "./pages/logout/Logout";
 import Account from "./pages/account/Account";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -51,7 +50,6 @@ function App() {
 
   return (
     <>
-
       <div className="App">
         <LoginOverlay 
           showOverlay={showOverlay} 
@@ -71,7 +69,6 @@ function App() {
             <Route path='/game/cardmatch' element={<Cardmatch />} />
             <Route path='/game/jumpguy' element={<JumpGuy />} />
             <Route path='/account' element={<Account />} />
-            <Route path='/logout' element={<Logout />} />
           </Routes>
         </main>
         <Footer />
