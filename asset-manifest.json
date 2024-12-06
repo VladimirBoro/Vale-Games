@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/Vale-Games/static/css/main.2b490444.css",
+    "main.js": "/Vale-Games/static/js/main.6a6af846.js",
+    "static/media/card back black.png": "/Vale-Games/static/media/card back black.b2113f64a377d0a83c83.png",
+    "static/media/JumpGuy.png": "/Vale-Games/static/media/JumpGuy.33d95e1677921aafa551.png",
+    "static/media/cardmatch.png": "/Vale-Games/static/media/cardmatch.c469696c0eba69c77438.png",
+    "static/media/frogger.png": "/Vale-Games/static/media/frogger.8f0bbeb760659b1f62c0.png",
+    "static/media/jumpguy.png": "/Vale-Games/static/media/jumpguy.131f88ec635df82d8b8d.png",
+    "static/media/minesweeper.png": "/Vale-Games/static/media/minesweeper.4caac4321cc2a4b7f2e5.png",
+    "static/media/frog.png": "/Vale-Games/static/media/frog.4c7f83bc2cc3d5b8929b.png",
+    "static/media/birdyflap.png": "/Vale-Games/static/media/birdyflap.5bd438ab35ab76d40d9a.png",
+    "static/media/mountains.png": "/Vale-Games/static/media/mountains.0e9db13460969bbcf10c.png",
+    "static/media/jumpguyclouds.png": "/Vale-Games/static/media/jumpguyclouds.bab9a901a3a1ba0e7459.png",
+    "index.html": "/Vale-Games/index.html",
+    "main.2b490444.css.map": "/Vale-Games/static/css/main.2b490444.css.map",
+    "main.6a6af846.js.map": "/Vale-Games/static/js/main.6a6af846.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2b490444.css",
+    "static/js/main.6a6af846.js"
+  ]
+}
