@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import styles from "./header.module.css"
 import { fetchProfilePic } from "../../util/restful";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import customAxios from '../../util/customAxios';
+import styles from "./header.module.css"
 
 const Header = ({toggleLoginOverlay}) => {
     const [user, setUser] = useState(localStorage.getItem("user"));
     const [profilePic, setProfilePic] = useState(localStorage.getItem("profilePic"));
     const [gameTitle, setGameTitle] = useState(localStorage.getItem("currentGame"));
+    
+    const LOGOUT_EXTENSTION = process.env.REACT_APP_LOGOUT_PATH;
+    const navigate = useNavigate(); 
 
     // event listener for when to get profile pic image from server
     useEffect(() => {
@@ -49,6 +54,22 @@ const Header = ({toggleLoginOverlay}) => {
         }
     }, [])
 
+    const logoutHandler = async (event) => {
+        event.preventDefault();
+
+        await customAxios.post(LOGOUT_EXTENSTION)
+        .then(response => {
+            console.log("success!", response);
+        })
+        .catch(error => {
+            console.log("ERROR", error);
+        });
+        
+        navigate("/");
+        localStorage.clear();
+        window.dispatchEvent(new Event("storage"));
+    };
+
     return (
         <header className={styles.header}>
             <nav>
@@ -72,7 +93,7 @@ const Header = ({toggleLoginOverlay}) => {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="/logout" id={styles.logout}>Logout {user}</Link>
+                                    <button onClick={logoutHandler}> Logout </button>
                                 </li>
                             </>
                         ) : (
