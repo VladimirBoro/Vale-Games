@@ -3,7 +3,9 @@
     justify-content: center;
 }
 
-.form {
+.form, .deleteForm {
+    width: 250px;
+    height: 325px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,6 +14,15 @@
     border-radius: 1em;
     text-align: center;
     gap: 5px;
+}
+
+.deleteForm {
+    justify-content: center;
+    padding: 0 1em;
+}
+
+.deleteOptions {
+    column-gap: 5px;
 }
 
 .profilePic {
@@ -28,4 +39,12 @@
 
 #username {
     margin-top: 0.5em;
+}
+
+@media (min-width: 2250px) {
+    .form {
+        width: 275px;
+        height: 358px;
+        font-size: larger;
+    }
 }
