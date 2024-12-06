@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Vale-Games/static/css/main.2b490444.css",
-    "main.js": "/Vale-Games/static/js/main.6a6af846.js",
+    "main.js": "/Vale-Games/static/js/main.59386855.js",
     "static/media/card back black.png": "/Vale-Games/static/media/card back black.b2113f64a377d0a83c83.png",
     "static/media/JumpGuy.png": "/Vale-Games/static/media/JumpGuy.33d95e1677921aafa551.png",
     "static/media/cardmatch.png": "/Vale-Games/static/media/cardmatch.c469696c0eba69c77438.png",
@@ -14,10 +14,10 @@
     "static/media/jumpguyclouds.png": "/Vale-Games/static/media/jumpguyclouds.bab9a901a3a1ba0e7459.png",
     "index.html": "/Vale-Games/index.html",
     "main.2b490444.css.map": "/Vale-Games/static/css/main.2b490444.css.map",
-    "main.6a6af846.js.map": "/Vale-Games/static/js/main.6a6af846.js.map"
+    "main.59386855.js.map": "/Vale-Games/static/js/main.59386855.js.map"
   },
   "entrypoints": [
     "static/css/main.2b490444.css",
-    "static/js/main.6a6af846.js"
+    "static/js/main.59386855.js"
   ]
 }
