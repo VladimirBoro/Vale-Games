@@ -126,7 +126,7 @@ function Snake() {
     }, [gameStarted]);
     
     const sendScore = async (username) => {
-        await sendLeaderboardData(ADD_SCORE_PATH, username, snakeBody.current.length, "score");
+        await sendLeaderboardData(ADD_SCORE_PATH, username, snakeBody.current.length + 1, "score");
         setTimeout(setIsScoreSent, 500, !isScoreSent);
     }
 
