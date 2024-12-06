@@ -23,6 +23,5 @@ public class Account {
     private String created_at;
     private boolean pictureCustom;
     private String profile_pic;
-
-    // PATH TO PROFILE PIC HERE
+    private boolean deleted;
 }

@@ -232,6 +232,7 @@ public class AccountService {
         account.setCreated_at(dateUtil.getDate());
         account.setProfile_pic(imageLocation);
         account.setPictureCustom(isCustomPic);
+        account.setDeleted(false);
         accountRepo.save(account);
     }
 
@@ -275,8 +276,8 @@ public class AccountService {
         String basePath = System.getenv("PROFILE_PICTURE_PATH");
         String pathToPicture = basePath + "/default_" + 1 + ".png";
 
-        if (accountRepo.findByUsername(username) != null) {
-            account = accountRepo.findByUsername(username);
+        account = accountRepo.findByUsername(username);
+        if (account != null && !account.isDeleted()) {
             pathToPicture = account.getProfile_pic();
         }
         
@@ -319,7 +320,8 @@ public class AccountService {
                 accountOauth2Repo.delete(accountOauth2);
             }
 
-            accountRepo.delete(account);
+            account.setDeleted(true);
+            accountRepo.save(account);
             return "deleted " + username;
         }
         catch (Exception e) {
