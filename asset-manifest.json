@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.26a08667.css",
-    "main.js": "/static/js/main.47c8522d.js",
+    "main.css": "/static/css/main.d11eeb0d.css",
+    "main.js": "/static/js/main.fb48d311.js",
     "static/media/card back black.png": "/static/media/card back black.b2113f64a377d0a83c83.png",
     "static/media/JumpGuy.png": "/static/media/JumpGuy.33d95e1677921aafa551.png",
     "static/media/cardmatch.png": "/static/media/cardmatch.c469696c0eba69c77438.png",
@@ -13,11 +13,11 @@
     "static/media/mountains.png": "/static/media/mountains.0e9db13460969bbcf10c.png",
     "static/media/jumpguyclouds.png": "/static/media/jumpguyclouds.bab9a901a3a1ba0e7459.png",
     "index.html": "/index.html",
-    "main.26a08667.css.map": "/static/css/main.26a08667.css.map",
-    "main.47c8522d.js.map": "/static/js/main.47c8522d.js.map"
+    "main.d11eeb0d.css.map": "/static/css/main.d11eeb0d.css.map",
+    "main.fb48d311.js.map": "/static/js/main.fb48d311.js.map"
   },
   "entrypoints": [
-    "static/css/main.26a08667.css",
-    "static/js/main.47c8522d.js"
+    "static/css/main.d11eeb0d.css",
+    "static/js/main.fb48d311.js"
   ]
 }
