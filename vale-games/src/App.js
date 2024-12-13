@@ -61,14 +61,14 @@ function App() {
         <Header toggleLoginOverlay={toggleLoginOverlay}/>
         <main className="main">
           <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/game/birdyflap' element={<BirdyFlap />} />
-            <Route path='/game/snake' element={<Snake />} />
-            <Route path='/game/frogger' element={<Frogger />} />
-            <Route path='/game/minesweeper' element={<Minesweeper />} />
-            <Route path='/game/cardmatch' element={<Cardmatch />} />
-            <Route path='/game/jumpguy' element={<JumpGuy />} />
-            <Route path='/account' element={<Account />} />
+            <Route path={process.env.REACT_APP_HOME} element={<Home />} />
+            <Route path={process.env.REACT_APP_FLAPPYBAT} element={<BirdyFlap />} />
+            <Route path={process.env.REACT_APP_SNAKE} element={<Snake />} />
+            <Route path={process.env.REACT_APP_FROGGER} element={<Frogger />} />
+            <Route path={process.env.REACT_APP_MINESWEEPER} element={<Minesweeper />} />
+            <Route path={process.env.REACT_APP_CARDMATCH} element={<Cardmatch />} />
+            <Route path={process.env.REACT_APP_JUMPGUY} element={<JumpGuy />} />
+            <Route path={process.env.REACT_APP_ACCOUNT} element={<Account />} />
           </Routes>
         </main>
         <Footer />

@@ -19,7 +19,7 @@ function Delete({changeState}) {
         .then(response => console.log(response.data))
         .catch(err => console.log(err));
 
-        navigate("/");
+        navigate(`${process.env.REACT_APP_HOME}`);
         localStorage.clear();
         window.dispatchEvent(new Event("storage"));
     }

@@ -10,12 +10,12 @@ import jumpGuyImage from "./images/jumpguy.png";
 
 const Home = () => {
     const games = useRef([
-        { id: 1, name: 'Snake', image: snakeImage, path: '/game/snake', description: 'A classic snake game!', position: 'leftleft'},
-        { id: 2, name: 'Frogger', image: froggerImage, path: '/game/frogger', description: 'Help the frog cross the road!', position: 'left' },
-        { id: 3, name: 'Minesweeper', image: minesweeperImage, path: '/game/minesweeper', description: 'Find the safe zones, but look out for mines!', position: 'middle' },
-        { id: 4, name: 'Card Match', image: cardmatchImage, path: '/game/cardmatch', description: 'Match all the pairs cards!', position: 'right' },
-        { id: 5, name: 'Flappy Bat', image: birdyFlapImage, path: '/game/birdyflap', description: 'Fly through as many barriers as you can!', position: 'rightright' },
-        { id: 6, name: 'Jump Guy', image: jumpGuyImage, path: '/game/jumpguy', description: 'Jump up the platforms high into the clouds!', position: '' },
+        { id: 1, name: 'Snake', image: snakeImage, path: `${process.env.REACT_APP_SNAKE}`, description: 'A classic snake game!', position: 'leftleft'},
+        { id: 2, name: 'Frogger', image: froggerImage, path: `${process.env.REACT_APP_FROGGER}`, description: 'Help the frog cross the road!', position: 'left' },
+        { id: 3, name: 'Minesweeper', image: minesweeperImage, path: `${process.env.REACT_APP_MINESWEEPER}`, description: 'Find the safe zones, but look out for mines!', position: 'middle' },
+        { id: 4, name: 'Card Match', image: cardmatchImage, path: `${process.env.REACT_APP_CARDMATCH}`, description: 'Match all the pairs cards!', position: 'right' },
+        { id: 5, name: 'Flappy Bat', image: birdyFlapImage, path: `${process.env.REACT_APP_FLAPPYBAT}`, description: 'Fly through as many barriers as you can!', position: 'rightright' },
+        { id: 6, name: 'Jump Guy', image: jumpGuyImage, path: `${process.env.REACT_APP_JUMPGUY}`, description: 'Jump up the platforms high into the clouds!', position: '' },
     ]);
 
     const [currentGame, setCurrentGame] = useState(2);

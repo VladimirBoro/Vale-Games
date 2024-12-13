@@ -65,7 +65,7 @@ const Header = ({toggleLoginOverlay}) => {
             console.log("ERROR", error);
         });
         
-        navigate("/");
+        navigate(`${process.env.REACT_APP_HOME}`);
         localStorage.clear();
         window.dispatchEvent(new Event("storage"));
     };
@@ -75,7 +75,7 @@ const Header = ({toggleLoginOverlay}) => {
             <nav>
                 <ul className={styles.nav}>
                     <li className={styles.home}>
-                        <Link to="/" >Vale Games</Link>
+                        <Link to={process.env.REACT_APP_HOME} >Vale Games</Link>
                     </li>
 
                     <li>
@@ -88,7 +88,7 @@ const Header = ({toggleLoginOverlay}) => {
                         { user ? (
                             <>
                                 <li>
-                                    <Link to="/account" id={styles.profileLink}>
+                                    <Link to={process.env.REACT_APP_ACCOUNT} id={styles.profileLink}>
                                         <img src={profilePic} className={styles.profilePic}></img>
                                     </Link>
                                 </li>
