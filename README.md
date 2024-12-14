@@ -11,7 +11,7 @@
 - [Usage](#usage)
 
 ## Demo
-This project is still under development and will be up and available soon!
+https://valegames.online
 
 ## Features
 - **Multiple Games**: Play a variety of games, each with unique mechanics.
