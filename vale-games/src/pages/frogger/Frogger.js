@@ -179,7 +179,7 @@ function Frogger() {
             levelClearFrameCount.current++;
         }
 
-        if (levelClearFrameCount.current % 15 == 0) {
+        if (levelClearFrameCount.current % 15 === 0) {
             shouldDisplayLevelCleared.current = !shouldDisplayLevelCleared.current;
         }
         else if (levelClearFrameCount.current >= 75) {

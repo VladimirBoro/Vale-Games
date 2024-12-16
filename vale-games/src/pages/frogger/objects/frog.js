@@ -86,7 +86,7 @@ class Frog {
         if (this.#dying) {
             this.#frameCounts.dying++;
             
-            if (this.#frameCounts.dying % 15 == 0) {
+            if (this.#frameCounts.dying % 15 === 0) {
                 this.#frameIndices.dying++;
             }
             
@@ -98,7 +98,7 @@ class Frog {
         }
         else if (this.#hopping) {
             this.#frameCounts.hopping++;
-            if (this.#frameCounts.hopping % 2 != 0) {
+            if (this.#frameCounts.hopping % 2 !== 0) {
                 return;
             }
             
@@ -117,7 +117,7 @@ class Frog {
             // idle frames
             this.#frameCounts.idle++;
             
-            if (this.#frameCounts.idle % 15 == 0) {
+            if (this.#frameCounts.idle % 15 === 0) {
                 this.#frameIndices.idle++;
                 this.#frameIndices.idle %= 3;
             }
@@ -201,6 +201,8 @@ class Frog {
             spriteFrame = ANIMATIONS.IDLE[currentFrameIndex];
         }
 
+        context.shadowColor = "black";
+        context.shadowBlur = 10;
         context.drawImage(this.#spriteSheet, spriteFrame[0], spriteFrame[1], spriteFrame[2], spriteFrame[3],
             x, y, this.#width + stretchWidth, this.#height + stretchHeight);
 

@@ -7,7 +7,6 @@ import ConfirmPassword from "./ConfirmPassword";
 import customAxios from "../../../util/customAxios";
 
 function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
-    const URL = process.env.REACT_APP_SERVER_URL;
     const REGISTER_PATH = process.env.REACT_APP_REGISTER_VALEGAMES_PATH;
 
     const [usernameError, setUsernameError] = useState(false);
@@ -55,7 +54,7 @@ function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
     }
 
     const handleFileChange = (e) => {
-        if (e.target.files.length != 0) {
+        if (e.target.files.length !== 0) {
             setImage(e.target.files[0]);
 
             const reader = new FileReader();

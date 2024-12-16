@@ -75,7 +75,7 @@ function Table({ difficulty, gameEnded, gameStarted, reset, disable, loseLife, s
     const findCardIndex = (id) => {
         const tableLength = table.current.length;
         for (let i = 0; i < tableLength; i++) {
-            if (table.current[i].id == id) {
+            if (table.current[i].id === id) {
                 return i;
             }
         }

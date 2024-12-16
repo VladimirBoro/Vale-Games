@@ -1,5 +1,4 @@
 import Platform from "./platform";
-import { CANVAS } from "../constants";
 
 class DestroyPlatform extends Platform {
     id;

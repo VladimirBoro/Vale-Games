@@ -88,11 +88,11 @@ class Guy {
         // update the sprite frame 
         this.#currentFrameCount++;
         
-        if (this.#falling && this.#currentFrameCount % 15 == 0) {
+        if (this.#falling && this.#currentFrameCount % 15 === 0) {
             this.#spriteFallFrame++;
             this.#spriteFallFrame %= 2;
         }
-        else if (this.#currentFrameCount % 7 == 0) {
+        else if (this.#currentFrameCount % 7 === 0) {
             this.#spriteJumpFrame++;
         }
 
@@ -139,7 +139,7 @@ class Guy {
     }
 
     move (direction) {
-        if (direction == DIRECTIONS.left) {
+        if (direction === DIRECTIONS.left) {
             // move guy to the left
             this.#x -= this.#sideSpeed;
             this.#direction = -1;

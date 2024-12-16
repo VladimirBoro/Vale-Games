@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import loginStyle from "../styles.module.css";
 import styles from "./register.module.css";
 import customAxios from "../../../util/customAxios";
@@ -43,7 +43,7 @@ const GoogleRegisterForm = ({ switchType, credential }) => {
     }
 
     const handleFileChange = (e) => {
-        if (e.target.files.length != 0) {
+        if (e.target.files.length !== 0) {
             setImage(e.target.files[0]);
 
             const reader = new FileReader();
@@ -77,7 +77,7 @@ const GoogleRegisterForm = ({ switchType, credential }) => {
                 />
                 <div className={loginStyle.form}>
                     <p>Profile Picture</p>
-                    <img src={preview} alt="Profile Picture" className={styles.preview}/>
+                    <img src={preview} alt="User Avatar" className={styles.preview}/>
                     <input type="file" onChange={handleFileChange} accept="image/png, image/jpeg"/>
                 </div>
                 <button type="submit">Register</button>

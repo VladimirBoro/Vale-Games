@@ -8,7 +8,6 @@ import HowTo from "../../components/howTo/HowTo";
 
 function Snake() {
     const ADD_SCORE_PATH = process.env.REACT_APP_SNAKE_ADD_PATH;
-    const LEADERBOARD_PATH = process.env.REACT_APP_SNAKE_LEADERBOARD_PATH;
 
     const CANVAS_SIZE = 500;
 
@@ -136,7 +135,7 @@ function Snake() {
             const newDirection = directionQueue.current.shift();
 
             // do not accept direction if it direct opposite of current direction
-            if (DIRECTION_OPPS[snakeDirection.current] != newDirection) {
+            if (DIRECTION_OPPS[snakeDirection.current] !== newDirection) {
                 snakeDirection.current = newDirection;
             }
         }

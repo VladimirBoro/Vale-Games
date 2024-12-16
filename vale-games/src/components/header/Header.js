@@ -28,7 +28,7 @@ const Header = ({toggleLoginOverlay}) => {
         return () => {
             window.removeEventListener("profilePic", handleProfilePicChange);
         };
-    }, [])
+    }, [user])
 
     useEffect(() => {
         const handleStorageChange = () => {
@@ -79,7 +79,7 @@ const Header = ({toggleLoginOverlay}) => {
                     </li>
 
                     <li>
-                        <h1 style={{margin: 0, fontSize: "2em"}}>
+                        <h1>
                             {gameTitle}
                         </h1>
                     </li>
@@ -89,7 +89,7 @@ const Header = ({toggleLoginOverlay}) => {
                             <>
                                 <li>
                                     <Link to={process.env.REACT_APP_ACCOUNT} id={styles.profileLink}>
-                                        <img src={profilePic} className={styles.profilePic}></img>
+                                        <img src={profilePic} className={styles.profilePic} alt="User Avatar"></img>
                                     </Link>
                                 </li>
                                 <li>

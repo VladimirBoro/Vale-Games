@@ -10,7 +10,7 @@ function Default({changeState, profilePic, memberSince}) {
     return (
         <div className={styles.form}>
             <div>
-                <img src={profilePic} className={styles.profilePic} alt="User profile picture."/>
+                <img src={profilePic} className={styles.profilePic} alt="User Avatar"/>
             </div>
             <div>
                 <p>Username: {localStorage.getItem("user")}</p>

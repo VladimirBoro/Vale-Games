@@ -27,7 +27,7 @@ function Account() {
 
     // callback that will be passed down to state components
     const changeState = async (mode) => {
-        if (mode == ACCOUNT_PAGE_STATE.DEFAULT) {
+        if (mode === ACCOUNT_PAGE_STATE.DEFAULT) {
             setProfilePic(await fetchProfilePic(localStorage.getItem("user")));
         }
 
@@ -42,6 +42,8 @@ function Account() {
                 return <Edit changeState={changeState} profilePic={profilePic} memberSince={memberSince}/>
             case ACCOUNT_PAGE_STATE.DELETE:
                 return <Delete changeState={changeState}/>
+            default:
+                console.error("error with page state!", pageState);
         }
     }
 

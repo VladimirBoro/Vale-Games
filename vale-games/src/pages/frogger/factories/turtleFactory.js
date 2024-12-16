@@ -1,4 +1,3 @@
-import { Car } from "../objects/car.js";
 import { CANVAS_SIZE, HOP_DISTANCE } from "../contants/constants.js";
 import Lane from "./lane.js";
 import { Turtle } from "../objects/turtle.js";

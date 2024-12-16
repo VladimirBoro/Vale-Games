@@ -21,7 +21,7 @@ function Edit({changeState, profilePic, memberSince}) {
     }
 
     const handleFileChange = async (e) => {
-        if (e.target.files.length != 0) {
+        if (e.target.files.length !== 0) {
             setImage(e.target.files[0]);
         }
         else {
@@ -83,7 +83,7 @@ function Edit({changeState, profilePic, memberSince}) {
 
     return (
         <div className={styles.form}>
-            <img src={profilePicPreview} className={styles.profilePic} alt="User profile picture."/>
+            <img src={profilePicPreview} className={styles.profilePic} alt="User Avatar"/>
             <input type="file" onChange={handleFileChange} accept="image/png, image/jpeg"/>    
             
             <div>

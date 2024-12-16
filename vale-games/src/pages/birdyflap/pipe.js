@@ -28,8 +28,7 @@ export class Pipe {
 
     score(birdy) {
         const birdyTopLeft = birdy.getPosition();
-        if (birdyTopLeft.x > this.position.x + this.width 
-            && birdyTopLeft.y > 0 && this.scored == false) {
+        if (birdyTopLeft.x > this.position.x + this.width && birdyTopLeft.y > 0 && this.scored === false) {
             this.scored = true;
             return true;
         }

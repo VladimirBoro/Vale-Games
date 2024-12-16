@@ -2,7 +2,6 @@ import Platform from "./platform";
 import MovingPlatform from "./movingPlatform";
 import BouncyPlatform from "./bouncyPlatform";
 import DestroyPlatform from "./destroyPlatform";
-import FalsePlatform from "./falsePlatform";
 import { PLATFORM_TYPE, PLATFORM_ROLES, CANVAS, PLATFORM } from "../constants";
 
 class PlatformFactory {
