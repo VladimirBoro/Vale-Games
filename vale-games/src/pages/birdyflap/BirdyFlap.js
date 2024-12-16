@@ -64,8 +64,6 @@ function BirdyFlap () {
         canvas.width = CANVAS.width; 
         canvas.height = CANVAS.height;
         let context = canvas.getContext("2d"); 
-        context.shadowBlur = 10;
-        context.shadowColor = "black";
 
 
         let animationFrame;

@@ -4,7 +4,6 @@
     align-items: center;
 }
 
-
 .gameStats {
     width: fit-content;
     gap: 5em;
@@ -15,6 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    font-size: small;
 }
 
 .gameStats h2 {
@@ -25,6 +25,13 @@
     position: relative;
     padding: 1em;
     width: 200px;
+    gap: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+}
+
+@media (min-width: 750px) {
+    .gameStats {
+        font-size: medium;
+    }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { getLeaderboard, fetchProfilePic } from "../../util/restful";
+import { isMobile } from "react-device-detect";
 import styles from "./leaderboard.module.css"
 
 function Leaderboard({ metric, gameName, refetchFlag }) {
@@ -26,7 +27,7 @@ function Leaderboard({ metric, gameName, refetchFlag }) {
         }
         
         fetchLeaderboard();
-    }, [showWholeLeaderboard, refetchFlag])
+    }, [showWholeLeaderboard, refetchFlag, gameName])
 
     useEffect(() => {
         const fetchProfilePics = async () => {
@@ -65,22 +66,22 @@ function Leaderboard({ metric, gameName, refetchFlag }) {
                 <table>
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th scope="col">
+                            <th className={`${isMobile ? styles.mobileSpacing : ""}`}>Rank</th>
+                            <th className={`${isMobile ? styles.mobileSpacing : ""}`} scope="col">
                                 Player
                             </th>
-                            <th scope="col">Date</th>
-                            <th scope="col">{metric}</th>
+                            <th className={`${isMobile ? styles.mobileSpacing : ""}`} scope="col">Date</th>
+                            <th className={`${isMobile ? styles.mobileSpacing : ""}`} scope="col">{metric}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {data.map(function(entry, index) {
                             return (
                                 <tr key={index}>
-                                    <td style={{textAlign: "center"}}>
+                                    <td className={`${isMobile ? styles.mobileSpacing : ""}`} style={{textAlign: "center"}}>
                                         {index + 1}
                                     </td>
-                                    <td scope="row">
+                                    <td className={`${isMobile ? styles.mobileSpacing : ""}`}>
                                         <div className={styles.cell}>
                                             <img src={profilePics[index] == null ? null : profilePics[index]} alt="Profile Pic"/>
                                             <span>
@@ -88,8 +89,8 @@ function Leaderboard({ metric, gameName, refetchFlag }) {
                                             </span>
                                         </div>
                                     </td>
-                                    <td>{entry.date}</td>
-                                    <td style={{textAlign: "center"}}>{entry.score == null ? entry.time : entry.score}</td>
+                                    <td className={`${isMobile ? styles.mobileSpacing : ""}`}>{entry.date}</td>
+                                    <td className={`${isMobile ? styles.mobileSpacing : ""}`} style={{textAlign: "center"}}>{entry.score == null ? entry.time : entry.score}</td>
                                 </tr>
                             )
                         })}

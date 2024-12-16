@@ -36,6 +36,10 @@ export class Mountains {
     }
 
     draw(context) {
+        context.save()
+        context.shadowBlur = 10;
+        context.shadowColor = "black";
         context.drawImage(this.image, -this.position, 0, 500, 400, 0, 0, CANVAS.width, CANVAS.height);
+        context.restore();
     }
 }

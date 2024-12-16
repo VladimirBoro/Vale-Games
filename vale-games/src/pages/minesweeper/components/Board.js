@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react';
 import CreateBoard from '../utils/CreateBoard';
 import { revealed } from "../utils/Reveal";
+import { isMobile } from "react-device-detect";
 import Cell from './Cell';
 import Timer from "../../../components/timer/Timer"
 import styles from './styles/board.module.css';
@@ -138,9 +139,9 @@ function Board({postTime, gg}) {
                     )
                 })}
                 <div className={styles.options}>
-                    <button onClick={() => changeDifficulty(contants.easyGame)} >Easy</button>
-                    <button onClick={() => changeDifficulty(contants.mediumGame)} >Medium</button>
-                    <button onClick={() => changeDifficulty(contants.hardGame)} >Hard</button>
+                    {!isMobile && <button onClick={() => changeDifficulty(contants.easyGame)} >Easy</button>}
+                    {!isMobile && <button onClick={() => changeDifficulty(contants.mediumGame)} >Medium</button>}
+                    {!isMobile && <button onClick={() => changeDifficulty(contants.hardGame)} >Hard</button>}
                     <button onClick={resetGame}>Restart</button>
                 </div>
             </div>

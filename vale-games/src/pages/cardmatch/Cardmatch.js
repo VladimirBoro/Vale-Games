@@ -7,6 +7,7 @@ import Leaderboard from "../../components/leaderboard/Leaderboard"
 import { EASY, MEDIUM, HARD } from "./constants";
 import { sendLeaderboardData } from "../../util/restful";
 import { PiMouseLeftClickFill } from "react-icons/pi";
+import { isMobile } from "react-device-detect";
 import HowTo from "../../components/howTo/HowTo";
 
 
@@ -131,9 +132,9 @@ function CardMatch() {
             }
 
             <div className={style.button_container}>
-                <button onClick={() => handleDifficultyButton(EASY)}> Easy </button>
-                <button onClick={() => handleDifficultyButton(MEDIUM)}> Medium </button>
-                <button onClick={() => handleDifficultyButton(HARD)}> Hard </button>
+                {!isMobile && <button onClick={() => handleDifficultyButton(EASY)}> Easy </button>}
+                {!isMobile && <button onClick={() => handleDifficultyButton(MEDIUM)}> Medium </button>}
+                {!isMobile && <button onClick={() => handleDifficultyButton(HARD)}> Hard </button>}
             </div>
 
             <HowTo summary={summary()} controls={controls()}/>

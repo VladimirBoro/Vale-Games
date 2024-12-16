@@ -57,10 +57,7 @@ function Frogger() {
             canvas.width = CANVAS_SIZE.width;
             canvas.height = CANVAS_SIZE.height;
             contextRef.current = canvas.getContext("2d");
-            // draw everything with shadowblur, it looks nice
             contextRef.current.strokeStyle = "white";
-            contextRef.current.shadowColor = "black";
-            contextRef.current.shadowBlur = 15;
             
             // create frog
             const frogSpriteSheetImg = new Image();
@@ -81,11 +78,9 @@ function Frogger() {
         // tab out event listener
         const handleVisibilityChange = () => {
             if (document.visibilityState === "hidden") {
-                console.log("u cant see me!")
                 screenInFocus.current = false;
             }
             else {
-                console.log("document is here!");
                 screenInFocus.current = true;
             }
         }
@@ -277,7 +272,7 @@ function Frogger() {
         grid.height = CANVAS_SIZE.height;
         const gridContext = grid.getContext("2d");
 
-        gridContext.shadowBlur = 40;
+        gridContext.shadowBlur = 30;
         gridContext.shadowColor = "black";
         
         gridContext.fillStyle = "#161518"; // black road

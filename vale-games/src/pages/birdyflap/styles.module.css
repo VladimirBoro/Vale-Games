@@ -21,6 +21,13 @@
 
 @media (min-width: 0px) {
     .canvas {
+        width: 365px;
+        height: 365px;
+    }
+}
+
+@media (min-width: 750px) {
+    .canvas {
         width: 700px;
         height: 700px;
     }

@@ -107,9 +107,6 @@ class PlatformFactory {
     }
 
     drawPlatforms(context) {
-        context.shadowBlur = 10;
-        context.shadowColor = "black";
-        context.strokeStyle = "black";
         this.#platforms.forEach(platform => {
             platform.draw(context);
         })

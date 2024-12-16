@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { isMobile, isTablet } from "react-device-detect";
 import styles from "./home.module.css";
 import snakeImage from "./images/snake.png";
 import minesweeperImage from "./images/minesweeper.png";
@@ -9,7 +10,7 @@ import birdyFlapImage from "./images/birdyflap.png";
 import jumpGuyImage from "./images/jumpguy.png";
 
 const Home = () => {
-    const games = useRef([
+    const [games, setGames] = useState([
         { id: 1, name: 'Snake', image: snakeImage, path: `${process.env.REACT_APP_SNAKE}`, description: 'A classic snake game!', position: 'leftleft'},
         { id: 2, name: 'Frogger', image: froggerImage, path: `${process.env.REACT_APP_FROGGER}`, description: 'Help the frog cross the road!', position: 'left' },
         { id: 3, name: 'Minesweeper', image: minesweeperImage, path: `${process.env.REACT_APP_MINESWEEPER}`, description: 'Find the safe zones, but look out for mines!', position: 'middle' },
@@ -17,13 +18,24 @@ const Home = () => {
         { id: 5, name: 'Flappy Bat', image: birdyFlapImage, path: `${process.env.REACT_APP_FLAPPYBAT}`, description: 'Fly through as many barriers as you can!', position: 'rightright' },
         { id: 6, name: 'Jump Guy', image: jumpGuyImage, path: `${process.env.REACT_APP_JUMPGUY}`, description: 'Jump up the platforms high into the clouds!', position: '' },
     ]);
-
     const [currentGame, setCurrentGame] = useState(2);
     const [selectingRandom, setSelectingRandom] = useState(false);
-
+    
     useEffect(() => {
         localStorage.setItem("currentGame", "");
         window.dispatchEvent(new Event("game"));
+
+        if (isMobile || isTablet) {
+            setGames([
+                { id: 1, name: 'Minesweeper', image: minesweeperImage, path: `${process.env.REACT_APP_MINESWEEPER}`, description: 'Find the safe zones, but look out for mines!', position: 'leftleft' },
+                { id: 2, name: 'Card Match', image: cardmatchImage, path: `${process.env.REACT_APP_CARDMATCH}`, description: 'Match all the pairs cards!', position: 'left' },
+                { id: 3, name: 'Flappy Bat', image: birdyFlapImage, path: `${process.env.REACT_APP_FLAPPYBAT}`, description: 'Fly through as many barriers as you can!', position: 'middle' },
+                { id: 4, name: 'Minesweeper', image: minesweeperImage, path: `${process.env.REACT_APP_MINESWEEPER}`, description: 'Find the safe zones, but look out for mines!', position: 'right' },
+                { id: 5, name: 'Card Match', image: cardmatchImage, path: `${process.env.REACT_APP_CARDMATCH}`, description: 'Match all the pairs cards!', position: 'rightright' },
+                { id: 6, name: 'Flappy Bat', image: birdyFlapImage, path: `${process.env.REACT_APP_FLAPPYBAT}`, description: 'Fly through as many barriers as you can!', position: '' },
+            ]);
+        }
+        
     }, [])
 
     const handleRandomClick = () => {
@@ -52,9 +64,9 @@ const Home = () => {
             return;
         }
 
-        setCurrentGame((prev) => (prev === 0 ? games.current.length - 1 : prev - 1));
+        setCurrentGame((prev) => (prev === 0 ? games.length - 1 : prev - 1));
 
-        games.current.forEach(game => {
+        games.forEach(game => {
             switch (game.position) {
                 case 'leftleft':
                     game.position = 'left';
@@ -82,9 +94,9 @@ const Home = () => {
             return;
         }
 
-        setCurrentGame((prev) => (prev === games.current.length - 1 ? 0 : prev + 1));
+        setCurrentGame((prev) => (prev === games.length - 1 ? 0 : prev + 1));
 
-        games.current.forEach(game => {
+        games.forEach(game => {
             switch (game.position) {
                 case 'leftleft':
                     game.position = '';
@@ -110,10 +122,10 @@ const Home = () => {
     return (
         <div className={styles.carouselContainer}>
     
-            <h1>{games.current[currentGame].name}</h1>
+            <h1>{games[currentGame].name}</h1>
     
             <div className={styles.carousel}>
-                {games.current.map((game) => {
+                {games.map((game) => {
                     let component; 
 
                     if (game.position === '') {
@@ -135,7 +147,7 @@ const Home = () => {
                     else if (game.position === 'middle') {
                         // Contains link to game presented
                         component = (
-                            <Link key={game.id} to={games.current[currentGame].path} className={`${styles.middleLink}`}>
+                            <Link key={game.id} to={games[currentGame].path} className={`${styles.middleLink}`}>
                                 <img 
                                     className={`${styles.artCover} ${styles[game.position]}`} 
                                     src={game.image} 
@@ -163,7 +175,7 @@ const Home = () => {
 
             <div className={styles.description}>
                 <p>
-                    {games.current[currentGame].description}
+                    {games[currentGame].description}
                 </p>
             </div>
 
@@ -173,9 +185,7 @@ const Home = () => {
                 <button className={styles.arrow} onClick={handleRightClick}>→</button>
             </div>
 
-            <Link to={games.current[currentGame].path} className={styles.playBtn}>
-                Play!
-            </Link>
+            {!isMobile && <Link to={games[currentGame].path} className={styles.playBtn}>Play!</Link>}
 
         </div>
     );

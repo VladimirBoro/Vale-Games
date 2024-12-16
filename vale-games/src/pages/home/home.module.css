@@ -2,9 +2,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
-    width: 80%;
-    margin: auto;
+    width: 100%;
+    padding: 3em 0;
 }
 
 .carouselContainer h1 {
@@ -16,7 +15,7 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 500px;
+    height: 290px;
     position: relative;
     overflow: hidden;
 }
@@ -26,8 +25,8 @@
     padding: 0%;
     background: none ;
     cursor: pointer;
-    width: 400px;
-    height: 400px;
+    width: 240px;
+    height: 240px;
     object-fit: cover;
     border-radius: 3em;
     position: absolute;
@@ -35,8 +34,8 @@
 
 .artCover  {
     border: 3px solid var(--white-font-color);
-    width: 400px;
-    height: 400px;
+    width: 240px;
+    height: 240px;
     object-fit: cover;
     border-radius: 3em;
     position: absolute;
@@ -98,7 +97,6 @@
 
 .arrow:active, .random:active {
     box-shadow: none;
-    /* color: #8b67ff; */
 }
 
 .gameDetails {
@@ -123,10 +121,43 @@
 
 .description {
     margin-bottom: 10px;
-    font-size: 1.1em;
+    font-size: 0.9em;
     color: #faf1e6;
 }
 
+/* tablet */
+@media (min-width: 750px) {
+    .artCover, .middleLink {
+        width: 520px;
+        height: 510px;
+    }
+
+    .carouselContainer {
+        padding: 0;
+    }
+
+    .carousel {
+        height: 570px;
+    }
+
+    .description {
+        font-size: 1.1em;
+    }
+}
+
+/* 23ish inch */
+@media (min-width: 1100px) {
+    .artCover, .middleLink {
+        width: 400px;
+        height: 400px;
+    }
+
+    .carousel {
+        height: 500px;
+    }
+}
+
+/* big boys */
 @media (min-width: 2250px) {
     .artCover, .middleLink {
         width: 500px;

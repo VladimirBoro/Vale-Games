@@ -89,7 +89,6 @@ function JumpGuy() {
         cloudFactory.current.drawClouds(context);
         platformFactory.current.drawPlatforms(context);
         jumpGuy.draw(context);
-        console.log("right after init drawing");
 
         let animationId;
          
