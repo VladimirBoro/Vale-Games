@@ -93,6 +93,10 @@ function Frogger() {
     // INPUT HANDLER
     useEffect(() => {
         const handleKeyDown = (event) => {
+            if (gameStarted) {
+                event.preventDefault();
+            }
+            
             const keyPress = event.keyCode;
             frogRef.current.hop(keyPress);
 

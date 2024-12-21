@@ -39,17 +39,25 @@ function JumpGuy() {
         const jumpGuy = jumpGuyRef.current;
 
         const handleKeyDown = (event) => {
+            if (gameStarted) {
+                event.preventDefault();
+            }
+            
             let key = event.key;
             if (key === "ArrowLeft" || key === "a" || key === "A") {
                 jumpGuy.movingLeft = true;
-
+                
             }
             else if (key === "ArrowRight" || key === "d" || key === "D") {
                 jumpGuy.movingRight = true;
             }
         }
-
+        
         const handleKeyUp = (event) => {
+            if (gameStarted) {
+                event.preventDefault();
+            }
+
             let key = event.key;
             if (key === "ArrowLeft" || key === "a" || key === "A") {
                 jumpGuy.movingLeft = false;
@@ -66,7 +74,7 @@ function JumpGuy() {
             window.removeEventListener("keydown", handleKeyDown);
             window.removeEventListener("keyup", handleKeyUp);
         }
-    }, []);
+    }, [gameStarted]);
 
     useEffect(() => {
         const username = localStorage.getItem("user");

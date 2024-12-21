@@ -46,9 +46,11 @@ function BirdyFlap () {
         initGame();
 
         canvasRef.current.addEventListener("mousedown", onClick);
-
+        window.addEventListener("keydown", onSpacebar);
+        
         return () => {
             document.body.removeEventListener("mousedown", onClick);
+            window.removeEventListener("keydown", onSpacebar);
         };
     }, [])
 
@@ -220,6 +222,14 @@ function BirdyFlap () {
 
         if (!gameStarted) {
             drawStartText(context);
+        }
+    }
+
+    const onSpacebar = (event) => {
+        if (event.key === " " || event.code === "Space") {
+            pauseGame();
+            event.preventDefault();
+            birdyRef.current.flap();
         }
     }
 
