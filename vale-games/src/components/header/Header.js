@@ -59,7 +59,7 @@ const Header = ({toggleLoginOverlay}) => {
 
         await customAxios.post(LOGOUT_EXTENSTION)
         .then(response => {
-            console.log("success!", response);
+            console.log(response);
         })
         .catch(error => {
             console.log("ERROR", error);

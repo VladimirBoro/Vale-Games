@@ -20,7 +20,6 @@ function LoginOverlay({showOverlay, typeToDisplay, switchType, toggleOverlay}) {
     }
 
     const renderForm = () => {
-        console.log(typeToDisplay, "TYPE", googleCredential);
         switch (typeToDisplay) {
             case OVERLAY_STATE.LOGIN:
                 return <LoginForm switchType={switchType} toggleOverlay={toggleOverlay} setGoogleId={googleRegister}/>;

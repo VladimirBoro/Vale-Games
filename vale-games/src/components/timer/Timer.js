@@ -7,7 +7,6 @@ function Timer ({initTime, startTimer, stopTimer, updateTime = null }) {
 
     useEffect(() => {
         if (!startTimer && !stopTimer) {
-            console.log("RESET THE TIME", stopTimer);
             setTimeDisplay("00:00");
         }
 

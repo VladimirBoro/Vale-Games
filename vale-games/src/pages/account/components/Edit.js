@@ -42,7 +42,6 @@ function Edit({changeState, profilePic, memberSince}) {
     const handleUpdate = async () => {
         const currentUsername = localStorage.getItem("user");
         if (currentUsername === username && image === null) {
-            console.log("u gotta update to update mang");
             return;
         }
 
@@ -71,7 +70,6 @@ function Edit({changeState, profilePic, memberSince}) {
         }
         
         // set the pic
-        console.log("fetching after the update");
         setImage(profilePicPreview);
         
         window.dispatchEvent(new Event("storage"));

@@ -5,7 +5,6 @@ export const getLeaderboard = async (path) => {
 
     await customAxios.get(path)
         .then(response => {
-            console.log("response", response.data);
             data = response.data;
         })
         .catch(error => console.log("LEADERBOARD ERROR", error));

@@ -12,15 +12,11 @@ function Leaderboard({ metric, gameName, refetchFlag }) {
     const showMoreMessage = useRef("Show More");
 
     useEffect(() => {
-        console.log("flag", refetchFlag);
-
         const fetchLeaderboard = async () => {
             if (showWholeLeaderboard) {
-                console.log("SHOW ALL");
                 setData(await getLeaderboard(`/${gameName}/leaderboard`));
             }
             else {
-                console.log("fetching fetching...");
                 setData(await getLeaderboard(`/${gameName}/leaderboard-top10`));
             }
 
