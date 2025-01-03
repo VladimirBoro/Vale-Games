@@ -251,7 +251,7 @@ function JumpGuy() {
             </div>
             <div className={styles.button}>
                 <StartButton hideButton={hideStartButton} startGame={startGame} />
-                <button onClick={toggleHitbox}>Show Hitbox</button>
+                {/* <button onClick={toggleHitbox}>Show Hitbox</button> */}
             </div>
             <HowTo summary={summary()} controls={controls()}/>
             <Leaderboard metric={"score"} gameName={"jumpguy"} refetchFlag={isScoreSent} />

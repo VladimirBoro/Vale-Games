@@ -436,8 +436,8 @@ function Frogger() {
             </div>
             <canvas ref={canvasRef} className={styles.canvas}/>
             <div className={styles.buttons}>
-                <button onClick={handleGridPress}> Testing Grid </button>
-                <button onClick={handleHitboxPress}> Hitboxes </button>
+                {/* <button onClick={handleGridPress}> Testing Grid </button> */}
+                {/* <button onClick={handleHitboxPress}> Hitboxes </button> */}
                 {gameStarted ? (
                     <></>
                 ) : (
