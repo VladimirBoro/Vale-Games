@@ -5,6 +5,7 @@ import login from "../styles.module.css";
 import styles from "./register.module.css";
 import ConfirmPassword from "./ConfirmPassword";
 import customAxios from "../../../util/customAxios";
+import placeholderPic from "../../../assets/images/default_1.png";
 
 function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
     const REGISTER_PATH = process.env.REACT_APP_REGISTER_VALEGAMES_PATH;
@@ -12,7 +13,7 @@ function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
     const [usernameError, setUsernameError] = useState(false);
     const [matching, setMatching] = useState(true);
     const [image, setImage] = useState(null);
-    const [preview, setPreview] = useState(null);
+    const [preview, setPreview] = useState(placeholderPic);
 
     const usernameRef = useRef("");
     const passwordRef = useRef("");
@@ -139,7 +140,7 @@ function VgRegisterForm({switchType, toggleOverlay, setGoogleId}) {
             </div>
             <div>
                 <p>Profile Picture</p>
-                <img src={preview} alt="dope profile pic" className={styles.preview}/>
+                <img src={preview} alt="profile picture placeholder" className={styles.preview}/>
                 <input type="file" onChange={handleFileChange} accept="image/png, image/jpeg"/>
             </div>
 
