@@ -3,11 +3,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* background: radial-gradient(rgba(136, 53, 212, 0.753), black); */
-  /* background: linear-gradient(135deg, #423996, #423996);  */
   background-color: var(--main-background-color);
   color: var(--white-font-color);
-  /* font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
   display: flex;
   flex-direction: column;
   height: 100%;
